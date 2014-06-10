@@ -1,0 +1,18 @@
+{# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ #                         Copyright (C) 2014 Chuan Ji                         #
+ #                             All Rights Reserved                             #
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ # AsciiDoc editor component template. #}
+
+<div id="asciidoc-editor">
+  <div id="asciidoc-source-container">
+    <textarea id="asciidoc-source"></textarea>
+  </div>
+  <div id="asciidoc-output-container">
+    <div id="asciidoc-output">&nbsp;</div>
+  </div>
+</div>
+
+<script type="application/dart"
+        src="{{ url_for('static', filename='asciidoc_editor.dart') }}"></script>
+<script src="{{ url_for('static', filename='dart.js') }}"></script>

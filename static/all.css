@@ -11,6 +11,7 @@
  Base styles for the site.
 */
 body, html {
+  font-family: sans-serif;
   font-size: 16px;
   height: 100%;
   margin: 0;
@@ -22,6 +23,20 @@ body, html {
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  Styles for home page.
 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Styles for the AsciiDoc editor component.
+*/
+#asciidoc-editor {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
 #asciidoc-source-container,
 #asciidoc-output-container {
   border: 1px solid #bbb;
@@ -34,9 +49,12 @@ body, html {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-#asciidoc-source {
+#asciidoc-source,
+#asciidoc-output {
   height: 100%;
   width: 100%;
+  overflow: auto;
+  padding: 1em;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }

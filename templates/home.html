@@ -11,15 +11,6 @@
           href="{{ url_for('static', filename='all.css') }}">
   </head>
   <body>
-    <div id="asciidoc-source-container">
-      <textarea id="asciidoc-source"></textarea>
-    </div>
-    <div id="asciidoc-output-container">
-      <div id="asciidoc-output">&nbsp;</div>
-    </div>
-
-    <script type="application/dart"
-            src="{{ url_for('static', filename='home.dart') }}"></script>
-    <script src="{{ url_for('static', filename='dart.js') }}"></script>
+    {% include 'asciidoc_editor.html' %}
   </body>
 </html>
