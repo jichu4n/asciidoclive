@@ -1,3 +1,4 @@
 name: asciidoc_editor
 dependencies:
+  browser: any
   crypto: any

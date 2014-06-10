@@ -27,7 +27,7 @@ function BuildDartFiles() {
     cd "$DART_DIR";
     pub get;
     pub build src;
-    cp build/src/* "$STATIC_DIR" )
+    cp -R build/src/* "$STATIC_DIR" )
 }
 
 

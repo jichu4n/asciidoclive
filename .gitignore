@@ -3,6 +3,7 @@
 .sass-cache
 *.dart.js*
 *.precompiled.js
+static/
 dart/build
 dart/packages
 dart/pubspec.lock
