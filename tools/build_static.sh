@@ -5,31 +5,33 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Script to build static files for the site.
 
-set -x
-
+# Directory paths.
 ROOT_DIR=$(realpath "$(dirname $0)/..")
 SCSS_DIR="$ROOT_DIR/scss"
 STATIC_DIR="$ROOT_DIR/static"
 
+
 # Build SCSS files in the SCSS dir to CSS files in the static dir.
 function BuildScssFiles() {
-  scss \
+  ( set -x; scss \
       --update \
-      "$SCSS_DIR:$STATIC_DIR"
+      "$SCSS_DIR:$STATIC_DIR" )
 }
 
 
 # Build Dart files in the static dir.
 function BuildDartFiles() {
-  find \
+  (set -x; find \
       "$STATIC_DIR" \
       -name '*.dart' \
       -exec \
       dart2js \
       '{}' \
       -o '{}.js' \
-      ';'
+      ';' )
 }
 
-BuildScssFiles
-BuildDartFiles
+
+TIMEFORMAT=$'\033[32m[ %Us ]\033[m'
+time BuildScssFiles
+time BuildDartFiles
