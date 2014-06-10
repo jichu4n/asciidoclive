@@ -10,10 +10,10 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-from lib import server_lib
+from lib import app_server_lib
 
 # Export application object following the WSGI specification.
-application = server_lib.app
+application = app_server_lib.app
 
 
 # Serve a dev HTTP server if directly invoked.
