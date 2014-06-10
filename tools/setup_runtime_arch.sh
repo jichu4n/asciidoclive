@@ -33,3 +33,5 @@ InstallPackage asciidoc
 InstallPackage python
 InstallPackage python-flask
 InstallPackage mod_wsgi
+InstallPackage dart
+InstallPackage ruby-sass
