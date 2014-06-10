@@ -2,7 +2,7 @@
 #                         Copyright (C) 2014 Chuan Ji                         #
 #                             All Rights Reserved                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-"""API backend implementation library."""
+"""Main web app server library."""
 
 import json
 import flask

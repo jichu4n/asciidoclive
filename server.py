@@ -3,17 +3,17 @@
 #                         Copyright (C) 2014 Chuan Ji                         #
 #                             All Rights Reserved                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-"""WSGI container for the API server and debug server binary."""
+"""WSGI container for the server and the debug server binary."""
 
 # Add directory containing this file to PYTHONPATH.
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-from lib import api_server_lib
+from lib import server_lib
 
 # Export application object following the WSGI specification.
-application = api_server_lib.app
+application = server_lib.app
 
 
 # Serve a dev HTTP server if directly invoked.
