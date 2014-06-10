@@ -1,0 +1,25 @@
+{# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ #                         Copyright (C) 2014 Chuan Ji                         #
+ #                             All Rights Reserved                             #
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ # Home page template. #}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>asciidocLive</title>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='all.css') }}">
+  </head>
+  <body>
+    <div id="asciidoc-source-container">
+      <textarea id="asciidoc-source"></textarea>
+    </div>
+    <div id="asciidoc-output-container">
+      <div id="asciidoc-output">&nbsp;</div>
+    </div>
+
+    <script type="application/dart"
+            src="{{ url_for('static', filename='home.dart') }}"></script>
+    <script src="{{ url_for('static', filename='dart.js') }}"></script>
+  </body>
+</html>

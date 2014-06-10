@@ -1,0 +1,34 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Styles for home page.
+*/
+
+//==============================================================================
+//                               Settings 
+//==============================================================================
+$COLUMN_MIN_WIDTH: 30em;
+
+
+//==============================================================================
+//                                Styles
+//==============================================================================
+#asciidoc-source-container,
+#asciidoc-output-container {
+  border: 1px solid #bbb;
+  float: left;
+  height: 99.5%;
+  min-width: $COLUMN_MIN_WIDTH;
+  width: 50%;
+  padding: 0;
+
+  @include BorderBox();
+}
+
+#asciidoc-source {
+  height: 100%;
+  width: 100%;
+
+  @include BorderBox();
+}

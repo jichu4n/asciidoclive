@@ -28,6 +28,12 @@ def _CrashingLoggingFatalFn(*args, **kwargs):
 
 logging.fatal = _CrashingLoggingFatalFn
 
+# Absolute path to the root directory of the application.
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Path to directory containing Jinja2 templates.
+TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
+# Path to directory containing static files.
+STATIC_DIR = os.path.join(ROOT_DIR, 'static')
 # Data directory path.
 DATA_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),

@@ -1,0 +1,30 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Base styles for the site.
+*/
+
+//==============================================================================
+//                               Environment 
+//==============================================================================
+// Set box-sizing to border-box.
+@mixin BorderBox() {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+//==============================================================================
+//                                  Styles
+//==============================================================================
+
+body, html {
+  // Default font settings.
+  font-size: 16px;
+  // Take up full browser height.
+  height: 100%;
+  // Clear default margins.
+  margin: 0;
+  padding: 0;
+}

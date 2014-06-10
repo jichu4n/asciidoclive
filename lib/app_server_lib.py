@@ -4,16 +4,25 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 """Main web app server library."""
 
-import json
 import flask
+import json
 
 from lib import asciidoc_lib
+from lib import env_lib
 
 
 # The WSGI app object.
 # pylint: disable=invalid-name
-app = flask.Flask(__name__)
+app = flask.Flask(
+    __name__,
+    template_folder=env_lib.TEMPLATES_DIR,
+    static_folder=env_lib.STATIC_DIR)
 # pylint: enable=invalid-name
+
+
+@app.route('/')
+def RenderHome():
+  return flask.render_template('home.html')
 
 
 @app.route('/api/v1/asciidoc-to-html', methods=['POST'])
