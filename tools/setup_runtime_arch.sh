@@ -34,4 +34,6 @@ InstallPackage python
 InstallPackage python-flask
 InstallPackage mod_wsgi
 InstallPackage dart
+InstallPackage vim-dart-plugin
 InstallPackage ruby-sass
+InstallPackage python-sh

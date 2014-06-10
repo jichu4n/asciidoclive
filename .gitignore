@@ -1,3 +1,5 @@
 .*.swp
 *.pyc
 .sass-cache
+*.dart.js*
+*.dart.precompiled.js
