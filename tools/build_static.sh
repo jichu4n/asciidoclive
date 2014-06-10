@@ -8,27 +8,26 @@
 # Directory paths.
 ROOT_DIR=$(realpath "$(dirname $0)/..")
 SCSS_DIR="$ROOT_DIR/scss"
+DART_DIR="$ROOT_DIR/dart"
 STATIC_DIR="$ROOT_DIR/static"
 
 
 # Build SCSS files in the SCSS dir to CSS files in the static dir.
 function BuildScssFiles() {
-  ( set -x; scss \
-      --update \
-      "$SCSS_DIR:$STATIC_DIR" )
+  ( set -x;
+    scss \
+        --update \
+        "$SCSS_DIR:$STATIC_DIR" )
 }
 
 
 # Build Dart files in the static dir.
 function BuildDartFiles() {
-  (set -x; find \
-      "$STATIC_DIR" \
-      -name '*.dart' \
-      -exec \
-      dart2js \
-      '{}' \
-      -o '{}.js' \
-      ';' )
+  ( set -x;
+    cd "$DART_DIR";
+    pub get;
+    pub build src;
+    cp build/src/* "$STATIC_DIR" )
 }
 
 

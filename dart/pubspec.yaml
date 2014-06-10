@@ -1,0 +1,3 @@
+name: asciidoc_editor
+dependencies:
+  crypto: any

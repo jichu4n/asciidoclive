@@ -2,4 +2,7 @@
 *.pyc
 .sass-cache
 *.dart.js*
-*.dart.precompiled.js
+*.precompiled.js
+dart/build
+dart/packages
+dart/pubspec.lock
