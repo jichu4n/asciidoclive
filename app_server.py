@@ -13,7 +13,9 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from lib import app_server_lib
 
 # Export application object following the WSGI specification.
+# pylint: disable=invalid-name
 application = app_server_lib.app
+# pylint: enable=invalid-name
 
 
 # Serve a dev HTTP server if directly invoked.

@@ -27,7 +27,7 @@ _ASCIIDOC_COMMAND = [
 ] + [
     '--conf-file=%s' % file_path
     for file_path in _ASCIIDOC_CONFIG_FILE_PATHS
-] + [ '-' ]
+] + ['-']
 
 
 def RunAsciiDoc(text):

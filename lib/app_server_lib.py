@@ -8,14 +8,15 @@ import json
 import flask
 
 from lib import asciidoc_lib
-from lib import env_lib
 
 
 # The WSGI app object.
+# pylint: disable=invalid-name
 app = flask.Flask(__name__)
+# pylint: enable=invalid-name
 
 
-@app.route('/asciidoc-to-html', methods=['POST'])
+@app.route('/api/v1/asciidoc-to-html', methods=['POST'])
 def AsciiDocToHtml():
   """Handler for AsciiDoc to HTML conversion.
 
