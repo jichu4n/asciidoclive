@@ -36,4 +36,6 @@ InstallPackage mod_wsgi
 InstallPackage dart
 InstallPackage vim-dart-plugin
 InstallPackage ruby-sass
-InstallPackage python-sh
+InstallPackage mongodb
+InstallPackage python-mongoengine-git
+InstallPackage python-flask-mongoengine

@@ -4,11 +4,15 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 """Library for converting AsciiDoc markup to HTML."""
 
+import hashlib
 import logging
+import mongoengine
 import os
+import time
 import subprocess
 
 from lib import env_lib
+from lib import models_lib
 
 # AsciiDoc config files. The default HTML config files do not work when safe
 # mode is enabled; hence, we use our own customized config file.
@@ -29,14 +33,20 @@ _ASCIIDOC_COMMAND = [
     for file_path in _ASCIIDOC_CONFIG_FILE_PATHS
 ] + ['-']
 
+# If another process is concurrently running AsciiDoc on the same text, we block
+# until that run has finished and reuse its results rather than re-run AsciiDoc.
+# This constant specifies how long (in seconds) we wait before re-checking if
+# the other process has finished.
+_CONCURRENT_RUN_POLL_INTERVAL = 0.1
 
-def RunAsciiDoc(text):
+
+def _RunAsciiDoc(text):
   """Executes AsciiDoc for the given text.
 
   Args:
     text: a piece of text in AsciiDoc format.
   Returns:
-    A tuple (asciidoc_return_code, asciidoc_stdout, asciidoc_stderr) containing
+    A tuple (return_code, stdout_output, stderr_output) containing
     the result of the run.
   """
   # Avoid running AsciiDoc if there is no content.
@@ -53,10 +63,62 @@ def RunAsciiDoc(text):
       stdout=subprocess.PIPE,
       stderr=subprocess.PIPE,
       universal_newlines=False) as asciidoc_proc:
-    (asciidoc_stdout, asciidoc_stderr) = asciidoc_proc.communicate(
+    (stdout_output, stderr_output) = asciidoc_proc.communicate(
         text.encode('utf-8'))
-    asciidoc_stdout = asciidoc_stdout.decode('utf-8').strip()
-    asciidoc_stderr = asciidoc_stderr.decode('utf-8').strip()
-    if asciidoc_stderr:
-      logging.debug('AsciiDoc STDERR:\n%s', asciidoc_stderr)
-    return (asciidoc_proc.returncode, asciidoc_stdout, asciidoc_stderr)
+    stdout_output = stdout_output.decode('utf-8').strip()
+    stderr_output = stderr_output.decode('utf-8').strip()
+    if stderr_output:
+      logging.debug('AsciiDoc STDERR:\n%s', stderr_output)
+    return (asciidoc_proc.returncode, stdout_output, stderr_output)
+
+
+def GetAsciiDocResult(text):
+  """Returns the result of running AsciiDoc for the given text.
+
+  This will fetch cached results if available. It will commit the result to the
+  cache.
+
+  Args:
+    asciidoc_cache_collection: a PyMongo collection where AsciiDoc run results
+        are cached.
+    text: a piece of text in AsciiDoc format.
+  Returns:
+    A tuple (return_code, stdout_output, stderr_output) containing
+    the result of a run of AsciiDoc for the text.
+  """
+  text = text.strip()
+  text_sha1_digest = hashlib.sha1(text.encode('utf-8')).hexdigest()
+  cached_result = models_lib.CachedAsciiDocResult()
+  cached_result.text_sha1_digest = text_sha1_digest
+  try:
+    # MongoDB guarantees that this is atomic. This will raise a NotUniqueError
+    # if a cached result is available or another process is running AsciiDoc on
+    # the same text.
+    cached_result.save()
+    # If we got here, no cached result is available and no one else is running
+    # AsciiDoc on the same text.
+    logging.debug('Inserting into cache: %s', text_sha1_digest)
+    (cached_result.return_code,
+     cached_result.stdout_output,
+     cached_result.stderr_output) = _RunAsciiDoc(text)
+    cached_result.run_ts = int(time.time())
+    cached_result.save()
+    return (cached_result.return_code,
+            cached_result.stdout_output,
+            cached_result.stderr_output)
+  except mongoengine.errors.NotUniqueError:
+    # If we got here, either a cached result is available or another process is
+    # currently running AsciiDoc on the same text.
+    while True:
+      logging.debug('Fetching from cache: %s', text_sha1_digest)
+      cached_result = (
+          models_lib.CachedAsciiDocResult.objects(
+            text_sha1_digest=text_sha1_digest)
+          .first())
+      if cached_result.run_ts is None:
+        time.sleep(_CONCURRENT_RUN_POLL_INTERVAL)
+      else:
+        return (
+            cached_result.return_code,
+            cached_result.stdout_output,
+            cached_result.stderr_output)

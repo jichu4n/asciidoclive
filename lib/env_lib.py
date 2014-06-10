@@ -4,17 +4,23 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 """Set up common execution environment for our scripts."""
 
+from flask.ext import mongoengine
 import logging
 import os
 import sys
 import traceback
 
 
+# Log file path.
+LOG_FILE_PATH = '/var/log/asciidoclive/app_server.log'
+_LOG_FILE_LOGGING_HANDLER = logging.FileHandler(LOG_FILE_PATH)
+_CONSOLE_LOGGING_HANDLER = logging.StreamHandler(sys.stderr)
 # Set up logging.
 logging.basicConfig(
     level=logging.DEBUG,
     style='{',
-    format='{levelname:.1}{asctime} {filename}:{lineno}] {message}')
+    format='{levelname:.1}{asctime} {filename}:{lineno}] {message}',
+    handlers=(_LOG_FILE_LOGGING_HANDLER, _CONSOLE_LOGGING_HANDLER))
 
 _DEFAULT_LOGGING_FATAL_FN = logging.fatal
 def _CrashingLoggingFatalFn(*args, **kwargs):
@@ -38,3 +44,8 @@ STATIC_DIR = os.path.join(ROOT_DIR, 'static')
 DATA_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
     'data')
+
+# MongoDB database name.
+DB_NAME = 'asciidoclive'
+# MongoEngine handle.
+DB = mongoengine.MongoEngine()

@@ -5,6 +5,7 @@
 """Main web app server library."""
 
 import flask
+import flask.ext.mongoengine
 import json
 
 from lib import asciidoc_lib
@@ -17,6 +18,11 @@ app = flask.Flask(
     __name__,
     template_folder=env_lib.TEMPLATES_DIR,
     static_folder=env_lib.STATIC_DIR)
+app.config.update(
+    MONGODB_SETTINGS={
+        'DB': env_lib.DB_NAME,
+    })
+env_lib.DB.init_app(app)
 # pylint: enable=invalid-name
 
 
@@ -40,11 +46,11 @@ def AsciiDocToHtml():
         }
   """
   text = flask.request.form.get('text', '')
-  (asciidoc_return_code, asciidoc_stdout, asciidoc_stderr) = (
-      asciidoc_lib.RunAsciiDoc(text))
+  (return_code, stdout_output, stderr_output) = (
+      asciidoc_lib.GetAsciiDocResult(text))
   response = {
-      'success': asciidoc_return_code == 0,
-      'html': asciidoc_stdout,
-      'error_message': asciidoc_stderr,
+      'success': return_code == 0,
+      'html': stdout_output,
+      'error_message': stderr_output,
   }
   return json.dumps(response)
