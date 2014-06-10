@@ -57,5 +57,6 @@ def RunAsciiDoc(text):
         text.encode('utf-8'))
     asciidoc_stdout = asciidoc_stdout.decode('utf-8').strip()
     asciidoc_stderr = asciidoc_stderr.decode('utf-8').strip()
-    logging.debug('AsciiDoc STDERR:\n%s', asciidoc_stderr)
+    if asciidoc_stderr:
+      logging.debug('AsciiDoc STDERR:\n%s', asciidoc_stderr)
     return (asciidoc_proc.returncode, asciidoc_stdout, asciidoc_stderr)

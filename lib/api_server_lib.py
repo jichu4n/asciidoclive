@@ -2,7 +2,7 @@
 #                         Copyright (C) 2014 Chuan Ji                         #
 #                             All Rights Reserved                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-"""Web server backend implementation."""
+"""API backend implementation library."""
 
 import json
 import flask
@@ -38,8 +38,3 @@ def AsciiDocToHtml():
       'error_message': asciidoc_stderr,
   }
   return json.dumps(response)
-
-
-# Serve a dev HTTP server if directly invoked.
-if __name__ == '__main__':
-  app.run('0.0.0.0', debug=True)
