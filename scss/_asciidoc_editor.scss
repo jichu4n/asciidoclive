@@ -67,7 +67,7 @@ $OUTPUT_H_PADDING: 20px;
 
     #asciidoc-source {
       font-family: $MONOSPACE_FONT;
-      font-size: 95%;
+      font-size: 90%;
     }
 
     #asciidoc-output {
@@ -79,4 +79,8 @@ $OUTPUT_H_PADDING: 20px;
     }
 
   }
+}
+
+.hidden {
+  display: none;
 }

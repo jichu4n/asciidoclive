@@ -150,11 +150,7 @@ class AsciiDocEditor {
       return;
     }
 
-    e.returnValue = (
-        'If you leave this page, all data you have entered on this page '
-        'will be lost. Please make sure to save any data you would like '
-        'to keep by copying it from this page and saving it on your '
-        'computer.');
+    e.returnValue = _unloadConfirmationMessage;
   }
 
   // URL of the AsciiDoc API.
@@ -174,6 +170,12 @@ class AsciiDocEditor {
   // DOM components.
   final String _SOURCE_NODE_ID = 'asciidoc-source';
   final DivElement _outputNode = querySelector('#asciidoc-output');
+  final String _unloadConfirmationMessage = (
+      querySelector('#unload-confirmation-message').text
+      .replaceAllMapped(
+          new RegExp(r'([^\n])\n([^\n])', multiLine: true),
+          (Match m) => '${m[1]} ${m[2]}')
+      .replaceAll(new RegExp(r'[ ]+'), ' '));
 
   // Handle to Ace editor object.
   JsObject _aceEditor = null;
