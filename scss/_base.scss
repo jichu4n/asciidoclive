@@ -27,8 +27,9 @@ html, body {
   font-family: sans-serif;
   font-size: 16px;
   // Take up full browser height.
-  height: 100%;
+  min-height: 100%;
   // Clear default margins.
   margin: 0;
   padding: 0;
 }
+

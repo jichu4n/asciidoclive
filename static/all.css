@@ -13,7 +13,7 @@
 html, body {
   font-family: sans-serif;
   font-size: 16px;
-  height: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0; }
 
@@ -23,14 +23,23 @@ html, body {
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  Styles for the page header.
 */
+#body_wrapper {
+  padding: 44px 0 0 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
 #header {
   height: 44px;
+  margin: -44px 0 0 0;
   padding: 6px 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  background-color: #55a943;
-  color: #55a943; }
+  background-color: #496fb0;
+  color: white; }
   #header ul {
     list-style-type: none;
     margin: 0;
@@ -57,6 +66,8 @@ html, body {
 #asciidoc-editor {
   height: 100%;
   width: 100%;
+  background-color: #f1f1f1;
+  padding: 8px;
   overflow: auto;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

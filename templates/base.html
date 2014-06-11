@@ -20,8 +20,10 @@
   </head>
 
   <body>
-    {% include 'header.html' %}
-    {% block main %}{% endblock main %}
+    <div id="body_wrapper">
+      {% include 'header.html' %}
+      {% block main %}{% endblock main %}
+    </div>
   </body>
 
 </html>

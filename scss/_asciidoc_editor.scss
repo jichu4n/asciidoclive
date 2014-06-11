@@ -8,8 +8,9 @@
 //==============================================================================
 //                               Settings 
 //==============================================================================
-$COLUMN_MIN_WIDTH: 30em;
-
+$UI_BG_COLOR: #f1f1f1;
+$UI_MARGIN: 8px;
+$COLUMN_MIN_WIDTH: 15em;
 
 //==============================================================================
 //                                Styles
@@ -17,6 +18,10 @@ $COLUMN_MIN_WIDTH: 30em;
 #asciidoc-editor {
   height: 100%;
   width: 100%;
+
+  background-color: $UI_BG_COLOR;
+
+  padding: $UI_MARGIN;
 
   // Contain floating children.
   overflow: auto;

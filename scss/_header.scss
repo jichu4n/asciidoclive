@@ -8,8 +8,8 @@
 //==============================================================================
 //                               Environment 
 //==============================================================================
-$HEADER_BG_COLOR: #55a943;
-$HEADER_FG_COLOR: #55a943;
+$HEADER_BG_COLOR: #496fb0;
+$HEADER_FG_COLOR: #fff;
 $HEADER_HEIGHT: 44px;
 $HEADER_V_PADDING: 6px;
 $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
@@ -18,8 +18,18 @@ $LOGO_V_PADDING: 4px;
 //==============================================================================
 //                                Styles
 //==============================================================================
+#body_wrapper {
+  padding: $HEADER_HEIGHT 0 0 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 #header {
   height: $HEADER_HEIGHT;
+  margin: -$HEADER_HEIGHT 0 0 0;
   padding: $HEADER_V_PADDING 5px;
   @include BorderBox();
 
