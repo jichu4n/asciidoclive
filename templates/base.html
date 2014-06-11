@@ -5,10 +5,13 @@
  # Base page template. #}
 <!DOCTYPE html>
 <html>
-
   <head>
-
     <meta charset="UTF-8">
+
+    {% block redirect_crawlers %}
+      {# Direct search engine crawlers to the static version. #}
+      <meta name="fragment" content="!">
+    {% endblock redirect_crawlers %}
 
     <title>{% block title %}{% endblock title %}</title>
 
@@ -16,14 +19,12 @@
           href="{{ url_for('static', filename='all.css') }}">
 
     {% block head_extra %}{% endblock head_extra %}
-
   </head>
 
   <body>
     <div id="body_wrapper">
-      {% include 'header.html' %}
+      {% block header %}{% include 'header.html' %}{% endblock header %}
       {% block main %}{% endblock main %}
     </div>
   </body>
-
 </html>

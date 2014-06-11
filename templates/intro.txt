@@ -11,10 +11,10 @@ editor*.
 What's AsciiDoc?
 ~~~~~~~~~~~~~~~~~
 
-AsciiDoc is a text document format for writing notes, documentation, articles,
-books, ebooks, slideshows, web pages, man pages and blogs, or whatever the \***
-you want. AsciiDoc files can be translated to many formats including HTML, PDF,
-EPUB, and man page.
+AsciiDoc is a human-readable text document format for writing notes,
+documentation, articles, books, ebooks, slideshows, web pages, man pages and
+blogs, and more. AsciiDoc files can be translated to many formats including
+HTML, PDF, EPUB, and man page.
 
 To learn more, visit the AsciiDoc home page at
 http://www.methods.co.nz/asciidoc/.

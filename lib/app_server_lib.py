@@ -28,7 +28,13 @@ env_lib.DB.init_app(app)
 
 @app.route('/')
 def RenderEditor():
-  return flask.render_template('editor.html')
+  """Handler for the main editor page."""
+  if '_escaped_fragment_' in flask.request.args:
+    # Static version for search engine crawlers.
+    template = 'static.html'
+  else:
+    template = 'editor.html'
+  return flask.render_template(template)
 
 
 @app.route('/api/v1/asciidoc-to-html', methods=['POST'])
