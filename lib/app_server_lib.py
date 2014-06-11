@@ -46,11 +46,18 @@ def AsciiDocToHtml():
         }
   """
   text = flask.request.form.get('text', '')
-  (return_code, stdout_output, stderr_output) = (
-      asciidoc_lib.GetAsciiDocResult(text))
-  response = {
-      'success': return_code == 0,
-      'html': stdout_output,
-      'error_message': stderr_output,
-  }
+  if len(text) > env_lib.MAX_SOURCE_TEXT_SIZE:
+    response = {
+        'success': False,
+        'html': '',
+        'error_message': 'Maximum text size exceeded.',
+    }
+  else:
+    (return_code, stdout_output, stderr_output) = (
+        asciidoc_lib.GetAsciiDocResult(text))
+    response = {
+        'success': return_code == 0,
+        'html': stdout_output,
+        'error_message': stderr_output,
+    }
   return json.dumps(response)

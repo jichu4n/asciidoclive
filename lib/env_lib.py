@@ -49,3 +49,6 @@ DATA_DIR = os.path.join(
 DB_NAME = 'asciidoclive'
 # MongoEngine handle.
 DB = mongoengine.MongoEngine()
+
+# Maximum source text size allowed, in bytes.
+MAX_SOURCE_TEXT_SIZE = 32 * 1024

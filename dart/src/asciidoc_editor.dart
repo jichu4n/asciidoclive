@@ -29,6 +29,10 @@ class AsciiDocEditor {
     // _aceEditor.callMethod('setTheme', ['ace/theme/monokai']);
     _aceEditorSession.callMethod(
         'setMode', ['ace/mode/asciidoc']);
+    _aceEditorSession.callMethod(
+        'setUseWrapMode', [true]);
+    _aceEditorSession.callMethod(
+        'setWrapLimitRange', [80, 80]);
     // Register event handler for source text.
     _aceEditorSession.callMethod(
         'on', ['change', _onSourceTextChange]);
@@ -110,7 +114,11 @@ class AsciiDocEditor {
 
   // Updates the output for the source text.
   void _Update() {
-    final String sourceText = _aceEditor.callMethod('getValue');
+    String sourceText = _aceEditor.callMethod('getValue');
+    if (sourceText.length > _MAX_SOURCE_TEXT_SIZE) {
+      print('Warning: source text too large, truncating.');
+      sourceText = sourceText.substring(0, _MAX_SOURCE_TEXT_SIZE);
+    }
     if (sourceText == _sourceTextAtLastUpdate) {
       return;
     }
@@ -156,6 +164,9 @@ class AsciiDocEditor {
   static const Duration _UPDATE_INTERVAL = const Duration(milliseconds: 3000);
   // The amount of time to wait before updating after a source text change.
   static const Duration _UPDATE_DELAY = const Duration(milliseconds: 600);
+
+  // The maximum source text size supported, in bytes.
+  static const int _MAX_SOURCE_TEXT_SIZE = 32 * 1024;
 
   // Client-side cache. Maps SHA1 checksum of source text to server response.
   static Map<String, Map> _responseCache = new Map<String, Map>();
