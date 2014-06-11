@@ -10,6 +10,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:html';
 import 'dart:js';
+import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:utf/utf.dart';
 
@@ -19,12 +20,14 @@ class AsciiDocEditor {
   // Constructor.
   AsciiDocEditor() {
     // Save demo source text.
-    final DivElement sourceNode = querySelector('#${_SOURCE_NODE_ID}');
-    _demoSourceText = sourceNode.text.trim();
+    _sourceNode = querySelector('#${_SOURCE_NODE_ID}');
+    _demoSourceText = _sourceNode.text.trim();
 
     // Initialize editor.
     _aceEditor = context['ace'].callMethod(
         'edit', [_SOURCE_NODE_ID]);
+    // For manual debugging in the console.
+    context['aceEditor'] = _aceEditor;
     _aceEditorSession = _aceEditor.callMethod('getSession');
     // _aceEditor.callMethod('setTheme', ['ace/theme/monokai']);
     _aceEditorSession.callMethod(
@@ -36,8 +39,14 @@ class AsciiDocEditor {
     // Register event handler for source text.
     _aceEditorSession.callMethod(
         'on', ['change', _onSourceTextChange]);
+    _aceEditorSession.callMethod(
+        'on', ['changeScrollTop',
+               (e, t) => _setOutputScrollRatio(_sourceScrollRatio)]);
     // Set focus on editor now.
     _aceEditor.callMethod('focus');
+    // Register event handler for output.
+    _outputNode.onScroll.listen(
+        (e) => _setSourceScrollRatio(_outputScrollRatio));
 
     // Construct node validator for output HTML.
     NodeValidatorBuilder builder = new NodeValidatorBuilder.common();
@@ -155,6 +164,37 @@ class AsciiDocEditor {
     e.returnValue = _unloadConfirmationMessage;
   }
 
+  // Returns the scroll size of the source.
+  _ScrollSize get _sourceScrollSize {
+    final num sourceContentHeight =
+        _aceEditorSession.callMethod('getDocument').callMethod('getLength') *
+        _aceEditor['renderer']['lineHeight'];
+    return new _ScrollSize(_sourceNode.clientHeight, sourceContentHeight);
+  }
+  // Returns the scroll size of the output.
+  _ScrollSize get _outputScrollSize
+      => new _ScrollSize(_outputNode.clientHeight, _outputNode.scrollHeight);
+
+  // Returns the scroll position of the source.
+  num get _sourceScrollRatio
+      => _sourceScrollSize.toScrollRatio(
+             _aceEditorSession.callMethod('getScrollTop'));
+
+  // Returns the scroll position of the output.
+  num get _outputScrollRatio
+      => _outputScrollSize.toScrollRatio(_outputNode.scrollTop);
+
+  // Sets the scroll position of the source.
+  void _setSourceScrollRatio(num scrollRatio) {
+    _aceEditorSession.callMethod(
+        'setScrollTop', [_sourceScrollSize.toScrollTop(scrollRatio)]);
+  }
+
+  // Sets the scroll position of the output.
+  void _setOutputScrollRatio(num scrollRatio) {
+    _outputNode.scrollTop = _outputScrollSize.toScrollTop(scrollRatio);
+  }
+
   // URL of the AsciiDoc API.
   static final String _ASCIIDOC_TO_HTML_URI = '/api/v1/asciidoc-to-html';
 
@@ -171,6 +211,7 @@ class AsciiDocEditor {
 
   // DOM components.
   final String _SOURCE_NODE_ID = 'asciidoc-source';
+  DivElement _sourceNode = null;
   final DivElement _outputNode = querySelector('#asciidoc-output');
   final String _unloadConfirmationMessage = (
       querySelector('#unload-confirmation-message').text
@@ -203,6 +244,28 @@ class AsciiDocEditor {
 class _AllowAllUriPolicy implements UriPolicy {
   @override
   bool allowsUri(String uri) => true;
+}
+
+// A struct holding data used for scroll ratio/position computation for an
+// element.
+class _ScrollSize {
+  // Height of the viewport, i.e., the visible portion of the element.
+  num viewportHeight;
+  // Height of the content in the element, i.e. the scrollHeight.
+  num contentHeight;
+
+  // The maximum possible scrollTop value for this element.
+  num get maxScrollTop => max(0, contentHeight - viewportHeight);
+  // Converts a scrollTop value to a scroll position ratio (between 0 and 1).
+  num toScrollRatio(num scrollTop) =>
+      maxScrollTop > 0 ?
+      scrollTop / maxScrollTop :
+      1.0;
+  // Converts a scroll position ration to a concrete scrollTop value.
+  num toScrollTop(num scrollRatio) => scrollRatio * maxScrollTop;
+
+  // Constructor.
+  _ScrollSize(this.viewportHeight, this.contentHeight);
 }
 
 
