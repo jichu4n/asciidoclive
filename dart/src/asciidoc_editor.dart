@@ -18,6 +18,10 @@ class AsciiDocEditor {
 
   // Constructor.
   AsciiDocEditor() {
+    // Save demo source text.
+    final DivElement sourceNode = querySelector('#${_SOURCE_NODE_ID}');
+    _demoSourceText = sourceNode.text.trim();
+
     // Initialize editor.
     _aceEditor = context['ace'].callMethod(
         'edit', [_SOURCE_NODE_ID]);
@@ -133,8 +137,13 @@ class AsciiDocEditor {
 
   // Callback invoked when the user attempts to close the window.
   void _onBeforeUnload(BeforeUnloadEvent e) {
+    final String sourceText = _aceEditor.callMethod('getValue');
+    if (sourceText.trim() == _demoSourceText) {
+      return;
+    }
+
     e.returnValue = (
-        'If you leave this page, all text you have entered on this page '
+        'If you leave this page, all data you have entered on this page '
         'will be lost. Please make sure to save any data you would like '
         'to keep by copying it from this page and saving it on your '
         'computer.');
@@ -167,6 +176,8 @@ class AsciiDocEditor {
   HttpRequest _httpRequest = null;
   // The source text retrieved during the previous update.
   String _sourceTextAtLastUpdate = null;
+  // The original demo text.
+  String _demoSourceText = null;
 
   // Timer for executing _Update.
   Timer _updateTimer = null;
