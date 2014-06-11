@@ -97,6 +97,6 @@ it was the age of foolishness...
 
 * Images:
 +
-image:http://i.imgur.com/AEkqoRn.jpg[alt="not bad.",width=128,height=128]
+image:https://i.imgur.com/AEkqoRn.jpg[alt="not bad.",width=128,height=128]
 
 * Pass-through: pass:[&lt;div align="center"&gt;&lt;b&gt;pass through content&lt;/b&gt;&lt;/div&gt;]
