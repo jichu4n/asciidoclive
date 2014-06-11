@@ -19,16 +19,15 @@ from lib import models_lib
 _ASCIIDOC_CONFIG_FILE_PATHS = [
     '/etc/asciidoc/asciidoc.conf',
     os.path.join(env_lib.DATA_DIR, 'html5.conf'),
+    os.path.join(env_lib.DATA_DIR, 'source-highlight-filter.conf'),
 ]
 # The AsciiDoc command line.
 _ASCIIDOC_COMMAND = [
-    '/usr/bin/python2',
-    '-S',
-    '-E',
-    '/usr/bin/asciidoc.py',
+    '/usr/bin/asciidoc',
     '--out-file=-',
     '--backend=html5',
     '--no-header-footer',
+    '--attribute=source-highlighter=pygments',
     '--safe',
     '--no-conf',
 ] + [

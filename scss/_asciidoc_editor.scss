@@ -6,6 +6,7 @@
 */
 
 @import '_asciidoc.scss';
+@import '_pygments.scss';
 
 //==============================================================================
 //                               Settings 
@@ -74,6 +75,7 @@ $OUTPUT_H_PADDING: 20px;
       padding: 0 $OUTPUT_H_PADDING;
 
       @include AsciiDocOutputStyles();
+      @include PygmentsOutputStyles();
     }
 
   }
