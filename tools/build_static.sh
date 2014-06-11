@@ -38,6 +38,14 @@ function CopyAssets() {
 
 
 TIMEFORMAT=$'\033[32m[ %Us ]\033[m'
-time BuildScssFiles
-time BuildDartFiles
-time CopyAssets
+while true; do
+  time BuildScssFiles
+  time CopyAssets
+  time BuildDartFiles
+  echo
+  echo -n 'Rebuild? [Y/n] '
+  read r
+  if [ -n "$r" ] && [ "$r" != 'y' ]; then
+    break
+  fi
+done

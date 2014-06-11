@@ -8,11 +8,12 @@
 //==============================================================================
 //                               Environment 
 //==============================================================================
-$HEADER_HEIGHT: 40px;
+$HEADER_BG_COLOR: #55a943;
+$HEADER_FG_COLOR: #55a943;
+$HEADER_HEIGHT: 44px;
 $HEADER_V_PADDING: 6px;
 $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
-
-$LOGO_V_PADDING: 3px;
+$LOGO_V_PADDING: 4px;
 
 //==============================================================================
 //                                Styles
@@ -20,12 +21,13 @@ $LOGO_V_PADDING: 3px;
 #header {
   height: $HEADER_HEIGHT;
   padding: $HEADER_V_PADDING 5px;
+  @include BorderBox();
 
-  background-color: #55a943;
+  background-color: $HEADER_BG_COLOR;
+  color: $HEADER_FG_COLOR;
 
   ul {
     list-style-type: none;
-    line-height: $HEADER_INNER_HEIGHT;
     // Without margin: 0, there is a weird gap at the top of the page :-/
     margin: 0;
     padding: 0;
@@ -33,11 +35,11 @@ $LOGO_V_PADDING: 3px;
     li {
       // All list items on one line.
       display: inline;
+
+      line-height: $HEADER_INNER_HEIGHT;
     }
 
     li#logo {
-      padding: $LOGO_V_PADDING 0;
-
       img {
         height: $HEADER_INNER_HEIGHT - 2 * $LOGO_V_PADDING;
         vertical-align: middle;

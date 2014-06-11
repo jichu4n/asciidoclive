@@ -24,21 +24,23 @@ html, body {
  Styles for the page header.
 */
 #header {
-  height: 40px;
+  height: 44px;
   padding: 6px 5px;
-  background-color: #55a943; }
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #55a943;
+  color: #55a943; }
   #header ul {
     list-style-type: none;
-    line-height: 28px;
     margin: 0;
     padding: 0; }
     #header ul li {
-      display: inline; }
-    #header ul li#logo {
-      padding: 3px 0; }
-      #header ul li#logo img {
-        height: 22px;
-        vertical-align: middle; }
+      display: inline;
+      line-height: 32px; }
+    #header ul li#logo img {
+      height: 24px;
+      vertical-align: middle; }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                         Copyright (C) 2014 Chuan Ji                         *
