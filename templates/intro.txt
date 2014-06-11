@@ -1,8 +1,8 @@
 Welcome to AsciiDocLIVE!
 ------------------------
 
-AsciiDocLIVE is a free online http://www.methods.co.nz/asciidoc/[AsciiDoc]
-editor.
+AsciiDocLIVE is a *free online http://www.methods.co.nz/asciidoc/[AsciiDoc]
+editor*.
 
 * Just type AsciiDoc source text into the *left* pane,
 * ...and the live preview appears in the *right* pane!

@@ -37,6 +37,9 @@ class AsciiDocEditor {
 
     // Start request timer.
     _Update();
+
+    // Set up events.
+    window.onBeforeUnload.listen(_onBeforeUnload);
   }
 
   // Returns the SHA1 digest of a string.
@@ -126,6 +129,15 @@ class AsciiDocEditor {
 
     _sourceTextAtLastUpdate = sourceText;
     _updateTimer = new Timer(_UPDATE_INTERVAL, _Update);
+  }
+
+  // Callback invoked when the user attempts to close the window.
+  void _onBeforeUnload(BeforeUnloadEvent e) {
+    e.returnValue = (
+        'If you leave this page, all text you have entered on this page '
+        'will be lost. Please make sure to save any data you would like '
+        'to keep by copying it from this page and saving it on your '
+        'computer.');
   }
 
   // URL of the AsciiDoc API.
