@@ -99,7 +99,7 @@ class AsciiDocEditor {
 
   // Updates the output for the source text.
   void _Update() {
-    final String sourceText = _sourceNode.value;
+    final String sourceText = _sourceNode.value.trim();
     if (sourceText == _sourceTextAtLastUpdate) {
       return;
     }
