@@ -93,10 +93,10 @@ it was the age of foolishness...
 
 * Links:
 ** http://asciidoclive.com/[AsciiDocLIVE] is awesome!
-** Go to <<cheat-sheet, top of cheat sheet>>
+** Go to &lt;&lt;cheat-sheet, top of cheat sheet&gt;&gt;
 
 * Images:
 +
 image:http://i.imgur.com/AEkqoRn.jpg[alt="not bad.",width=128,height=128]
 
-* Pass-through: pass:[<div align="center"><b>pass through content</b></div>]
+* Pass-through: pass:[&lt;div align="center"&gt;&lt;b&gt;pass through content&lt;/b&gt;&lt;/div&gt;]
