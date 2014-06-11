@@ -22,7 +22,10 @@ _ASCIIDOC_CONFIG_FILE_PATHS = [
 ]
 # The AsciiDoc command line.
 _ASCIIDOC_COMMAND = [
-    '/usr/bin/asciidoc',
+    '/usr/bin/python2',
+    '-S',
+    '-E',
+    '/usr/bin/asciidoc.py',
     '--out-file=-',
     '--backend=html5',
     '--no-header-footer',
@@ -98,11 +101,15 @@ def GetAsciiDocResult(text):
     # If we got here, no cached result is available and no one else is running
     # AsciiDoc on the same text.
     logging.debug('Inserting into cache: %s', text_sha1_digest)
+    asciidoc_start_time = time.time()
     (cached_result.return_code,
      cached_result.stdout_output,
      cached_result.stderr_output) = _RunAsciiDoc(text)
-    cached_result.run_ts = int(time.time())
+    asciidoc_end_time = time.time()
+    cached_result.run_ts = int(asciidoc_end_time)
+    cached_result.run_time = asciidoc_end_time - asciidoc_start_time
     cached_result.save()
+    logging.debug('AsciiDoc run time: %.03fs', cached_result.run_time)
     return (cached_result.return_code,
             cached_result.stdout_output,
             cached_result.stderr_output)

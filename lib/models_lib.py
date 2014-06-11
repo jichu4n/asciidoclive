@@ -27,6 +27,8 @@ class CachedAsciiDocResult(DB.Document):
   stderr_output = DB.StringField()
   # Timestamp at which this run finished.
   run_ts = DB.IntField()
+  # The number of seconds AsciiDoc took to complete.
+  run_time = DB.FloatField()
 
   meta = {
       'collection': 'cached_asciidoc_results',
