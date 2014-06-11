@@ -9,6 +9,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:html';
+import 'dart:js';
 import 'package:crypto/crypto.dart';
 import 'package:utf/utf.dart';
 
@@ -17,13 +18,16 @@ class AsciiDocEditor {
 
   // Constructor.
   AsciiDocEditor() {
+    // Initialize editor.
+    _aceEditor = context['ace'].callMethod(
+        'edit', [_SOURCE_NODE_ID]);
+    _aceEditorSession = _aceEditor.callMethod('getSession');
+    // _aceEditor.callMethod('setTheme', ['ace/theme/monokai']);
+    _aceEditorSession.callMethod(
+        'setMode', ['ace/mode/asciidoc']);
     // Register event handler for source text.
-    _sourceNode
-        ..onChange.listen(_onSourceTextChange) 
-        ..onKeyDown.listen(_onSourceTextChange)
-        ..onKeyUp.listen(_onSourceTextChange)
-        ..onCut.listen(_onSourceTextChange)
-        ..onPaste.listen(_onSourceTextChange);
+    _aceEditorSession.callMethod(
+        'on', ['change', _onSourceTextChange]);
 
     // Construct node validator for output HTML.
     NodeValidatorBuilder builder = new NodeValidatorBuilder.common();
@@ -79,7 +83,7 @@ class AsciiDocEditor {
   }
 
   // Event handler for source text change.
-  void _onSourceTextChange(Event e) {
+  void _onSourceTextChange(JsObject e, JsObject t) {
     _updateTimer.cancel();
     _updateTimer = new Timer(_UPDATE_DELAY, _Update);
   }
@@ -99,7 +103,7 @@ class AsciiDocEditor {
 
   // Updates the output for the source text.
   void _Update() {
-    final String sourceText = _sourceNode.value.trim();
+    final String sourceText = _aceEditor.callMethod('getValue');
     if (sourceText == _sourceTextAtLastUpdate) {
       return;
     }
@@ -136,8 +140,13 @@ class AsciiDocEditor {
   static Map<String, Map> _responseCache = new Map<String, Map>();
 
   // DOM components.
-  final TextAreaElement _sourceNode = querySelector('#asciidoc-source');
+  final String _SOURCE_NODE_ID = 'asciidoc-source';
   final DivElement _outputNode = querySelector('#asciidoc-output');
+
+  // Handle to Ace editor object.
+  JsObject _aceEditor = null;
+  // Ace editor session.
+  JsObject _aceEditorSession = null;
 
   // Node validator for output HTML.
   NodeValidator _outputNodeValidator = null;

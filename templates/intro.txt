@@ -1,0 +1,6 @@
+Introduction
+------------
+
+AsciiDoc is a text document format for writing notes, documentation, articles,
+books, ebooks, slideshows, web pages, man pages and blogs. AsciiDoc files can
+be translated to many formats including HTML, PDF, EPUB, and man page.

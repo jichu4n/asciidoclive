@@ -10,8 +10,48 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  Base styles for the site.
 */
+@font-face {
+  font-family: 'Arimo';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Arimo"), url(http://themes.googleusercontent.com/static/fonts/arimo/v6/wZLYhRRxZWGToTRP78bqJQ.woff) format("woff"); }
+@font-face {
+  font-family: 'Arimo';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Arimo Bold"), local("Arimo-Bold"), url(http://themes.googleusercontent.com/static/fonts/arimo/v6/UnXpojilM3XslYxUnWuVe_esZW2xOQ-xsNqO47m55DA.woff) format("woff"); }
+@font-face {
+  font-family: 'Arimo';
+  font-style: italic;
+  font-weight: 400;
+  src: local("Arimo Italic"), local("Arimo-Italic"), url(http://themes.googleusercontent.com/static/fonts/arimo/v6/8ezAIdgyp-Cm5_X7mWzP_g.woff) format("woff"); }
+@font-face {
+  font-family: 'Arimo';
+  font-style: italic;
+  font-weight: 700;
+  src: local("Arimo Bold Italic"), local("Arimo-BoldItalic"), url(http://themes.googleusercontent.com/static/fonts/arimo/v6/_K7sg-ijHdmkwPzV9FiqaBsxEYwM7FgeyaSgU71cLG0.woff) format("woff"); }
+@font-face {
+  font-family: 'Cousine';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Cousine"), url(http://themes.googleusercontent.com/static/fonts/cousine/v7/CJJ-BXzwL4jWItOg5qolAA.woff) format("woff"); }
+@font-face {
+  font-family: 'Cousine';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Cousine Bold"), local("Cousine-Bold"), url(http://themes.googleusercontent.com/static/fonts/cousine/v7/XkYjaL8YjqL9qW8o0T14uRsxEYwM7FgeyaSgU71cLG0.woff) format("woff"); }
+@font-face {
+  font-family: 'Cousine';
+  font-style: italic;
+  font-weight: 400;
+  src: local("Cousine Italic"), local("Cousine-Italic"), url(http://themes.googleusercontent.com/static/fonts/cousine/v7/0VdvlOBfHobA4eW-NVYk-T8E0i7KZn-EPnyo3HZu7kw.woff) format("woff"); }
+@font-face {
+  font-family: 'Cousine';
+  font-style: italic;
+  font-weight: 700;
+  src: local("Cousine Bold Italic"), local("Cousine-BoldItalic"), url(http://themes.googleusercontent.com/static/fonts/cousine/v7/y_AZ5Sz-FwL1lux2xLSTZXhCUOGz7vYGh680lGh-uXM.woff) format("woff"); }
 html, body {
-  font-family: sans-serif;
+  font-family: Arimo, "Helvetica Neue", "Open Sans", Helvetica, Arial, sans-serif;
   font-size: 16px;
   min-height: 100%;
   margin: 0;
@@ -63,34 +103,429 @@ html, body {
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  Styles for the AsciiDoc editor component.
 */
-#asciidoc-editor {
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Styles specific to AsciiDoc's HTML output. Mostly copied from
+ /etc/asciidoc/stylesheets/asciidoc.css.
+*/
+#asciidoc-editor-wrapper {
   height: 100%;
   width: 100%;
-  background-color: #f1f1f1;
-  padding: 8px;
-  overflow: auto;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
-#asciidoc-source-container,
-#asciidoc-output-container {
-  border: 1px solid #bbb;
-  float: left;
-  height: 99.5%;
-  min-width: 30em;
-  width: 50%;
-  padding: 0;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
-#asciidoc-source,
-#asciidoc-output {
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  padding: 1em;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
+  background-color: #f1f1f1; }
+  #asciidoc-editor-wrapper #asciidoc-editor {
+    height: 100%;
+    width: 100%;
+    min-width: 424px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px;
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+    #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-source-container,
+    #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output-container {
+      border: 1px solid #bbb;
+      float: left;
+      height: 99.5%;
+      min-width: 200px;
+      width: 50%;
+      padding: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+    #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-source,
+    #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output {
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+    #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-source {
+      font-family: Cousine, Monaco, Consolas, Courier, "Courier New", monospace;
+      font-size: 95%; }
+    #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output {
+      background-color: #fbfbfb;
+      padding: 0 20px;
+      /* Block element titles. */
+      /* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+      /*
+       * xhtml11 specific
+       *
+       * */
+      /* Because the table frame attribute is overriden by CSS in most browsers. */
+      /*
+       * html5 specific
+       *
+       * */ }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output a {
+        color: blue;
+        text-decoration: underline; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output a:visited {
+        color: fuchsia; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output em {
+        font-style: italic;
+        color: navy; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output strong {
+        font-weight: bold;
+        color: #083194; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h1, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h2, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h3, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h4, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h5, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h6 {
+        color: #527bbd;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        line-height: 1.3; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h1, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h2, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h3 {
+        border-bottom: 2px solid silver; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h2 {
+        padding-top: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h3 {
+        float: left; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h3 + * {
+        clear: left; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output h5 {
+        font-size: 1.0em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.sectionbody {
+        margin-left: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output hr {
+        border: 1px solid silver; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ul, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ol, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output li > p {
+        margin-top: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ul > li {
+        color: #aaa; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ul > li > * {
+        color: black; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output .monospaced, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output code, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output pre {
+        font-family: Cousine, Monaco, Consolas, Courier, "Courier New", monospace;
+        font-size: inherit;
+        color: navy;
+        padding: 0;
+        margin: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output pre {
+        white-space: pre-wrap; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #author {
+        color: #527bbd;
+        font-weight: bold;
+        font-size: 1.1em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #footer {
+        font-size: small;
+        border-top: 2px solid silver;
+        padding-top: 0.5em;
+        margin-top: 4.0em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #footer-text {
+        float: left;
+        padding-bottom: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #footer-badges {
+        float: right;
+        padding-bottom: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #preamble {
+        margin-top: 1.5em;
+        margin-bottom: 1.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.imageblock, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.exampleblock, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.verseblock,
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.quoteblock, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.literalblock, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.listingblock, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.sidebarblock,
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.admonitionblock {
+        margin-top: 1.0em;
+        margin-bottom: 1.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.admonitionblock {
+        margin-top: 2.0em;
+        margin-bottom: 2.0em;
+        margin-right: 10%;
+        color: #606060; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.content {
+        /* Block element content. */
+        padding: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.title, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output caption.title {
+        color: #527bbd;
+        font-weight: bold;
+        text-align: left;
+        margin-top: 1.0em;
+        margin-bottom: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.title + * {
+        margin-top: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td div.title:first-child {
+        margin-top: 0.0em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.content div.title:first-child {
+        margin-top: 0.0em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.content + div.title {
+        margin-top: 0.0em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.sidebarblock > div.content {
+        background: #ffffee;
+        border: 1px solid #dddddd;
+        border-left: 4px solid #f0f0f0;
+        padding: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.listingblock > div.content {
+        border: 1px solid #dddddd;
+        border-left: 5px solid #f0f0f0;
+        background: #f8f8f8;
+        padding: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.quoteblock, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.verseblock {
+        padding-left: 1.0em;
+        margin-left: 1.0em;
+        margin-right: 10%;
+        border-left: 5px solid #f0f0f0;
+        color: #888; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.quoteblock > div.attribution {
+        padding-top: 0.5em;
+        text-align: right; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.verseblock > pre.content {
+        font-family: inherit;
+        font-size: inherit; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.verseblock > div.attribution {
+        padding-top: 0.75em;
+        text-align: left; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.verseblock + div.attribution {
+        text-align: left; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.admonitionblock .icon {
+        vertical-align: top;
+        font-size: 1.1em;
+        font-weight: bold;
+        text-decoration: underline;
+        color: #527bbd;
+        padding-right: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.admonitionblock td.content {
+        padding-left: 0.5em;
+        border-left: 3px solid #dddddd; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.exampleblock > div.content {
+        border-left: 3px solid #dddddd;
+        padding-left: 0.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.imageblock div.content {
+        padding-left: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.image img {
+        border-style: none;
+        vertical-align: text-bottom; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output a.image:visited {
+        color: white; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output dl {
+        margin-top: 0.8em;
+        margin-bottom: 0.8em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output dt {
+        margin-top: 0.5em;
+        margin-bottom: 0;
+        font-style: normal;
+        color: navy; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output dd > *:first-child {
+        margin-top: 0.1em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ul, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ol {
+        list-style-position: outside; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ol.arabic {
+        list-style-type: decimal; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ol.loweralpha {
+        list-style-type: lower-alpha; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ol.upperalpha {
+        list-style-type: upper-alpha; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ol.lowerroman {
+        list-style-type: lower-roman; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output ol.upperroman {
+        list-style-type: upper-roman; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.compact ul, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.compact ol,
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.compact p, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.compact p,
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.compact div, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.compact div {
+        margin-top: 0.1em;
+        margin-bottom: 0.1em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output tfoot {
+        font-weight: bold; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td > div.verse {
+        white-space: pre; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.hdlist {
+        margin-top: 0.8em;
+        margin-bottom: 0.8em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.hdlist tr {
+        padding-bottom: 15px; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output dt.hdlist1.strong, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.hdlist1.strong {
+        font-weight: bold; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.hdlist1 {
+        vertical-align: top;
+        font-style: normal;
+        padding-right: 0.8em;
+        color: navy; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.hdlist2 {
+        vertical-align: top; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.hdlist.compact tr {
+        margin: 0;
+        padding-bottom: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output .comment {
+        background: yellow; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output .footnote, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output .footnoteref {
+        font-size: 0.8em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.footnote, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.footnoteref {
+        vertical-align: super; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #footnotes {
+        margin: 20px 0 20px 0;
+        padding: 7px 0 0 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #footnotes div.footnote {
+        margin: 0 0 5px 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #footnotes hr {
+        border: none;
+        border-top: 1px solid silver;
+        height: 1px;
+        text-align: left;
+        margin-left: 0;
+        width: 20%;
+        min-width: 100px; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.colist td {
+        padding-right: 0.5em;
+        padding-bottom: 0.3em;
+        vertical-align: top; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.colist td img {
+        margin-top: 0.3em; }
+      @media print {
+        #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #footer-badges {
+          display: none; } }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #toc {
+        margin-bottom: 2.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output #toctitle {
+        color: #527bbd;
+        font-size: 1.1em;
+        font-weight: bold;
+        margin-top: 1.0em;
+        margin-bottom: 0.1em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel0, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel1, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel2, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel3, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel4 {
+        margin-top: 0;
+        margin-bottom: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel2 {
+        margin-left: 2em;
+        font-size: 0.9em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel3 {
+        margin-left: 4em;
+        font-size: 0.9em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.toclevel4 {
+        margin-left: 6em;
+        font-size: 0.9em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.aqua {
+        color: aqua; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.black {
+        color: black; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.blue {
+        color: blue; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.fuchsia {
+        color: fuchsia; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.gray {
+        color: gray; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.green {
+        color: green; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.lime {
+        color: lime; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.maroon {
+        color: maroon; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.navy {
+        color: navy; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.olive {
+        color: olive; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.purple {
+        color: purple; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.red {
+        color: red; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.silver {
+        color: silver; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.teal {
+        color: teal; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.white {
+        color: white; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.yellow {
+        color: yellow; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.aqua-background {
+        background: aqua; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.black-background {
+        background: black; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.blue-background {
+        background: blue; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.fuchsia-background {
+        background: fuchsia; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.gray-background {
+        background: gray; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.green-background {
+        background: green; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.lime-background {
+        background: lime; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.maroon-background {
+        background: maroon; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.navy-background {
+        background: navy; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.olive-background {
+        background: olive; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.purple-background {
+        background: purple; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.red-background {
+        background: red; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.silver-background {
+        background: silver; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.teal-background {
+        background: teal; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.white-background {
+        background: white; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.yellow-background {
+        background: yellow; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.big {
+        font-size: 2em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.small {
+        font-size: 0.6em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.underline {
+        text-decoration: underline; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.overline {
+        text-decoration: overline; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output span.line-through {
+        text-decoration: line-through; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.unbreakable {
+        page-break-inside: avoid; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.tableblock {
+        margin-top: 1.0em;
+        margin-bottom: 1.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.tableblock > table {
+        border: 3px solid #527bbd; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output thead, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output p.table.header {
+        font-weight: bold;
+        color: #527bbd; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output p.table {
+        margin-top: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.tableblock > table[frame="void"] {
+        border-style: none; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.tableblock > table[frame="hsides"] {
+        border-left-style: none;
+        border-right-style: none; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output div.tableblock > table[frame="vsides"] {
+        border-top-style: none;
+        border-bottom-style: none; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output table.tableblock {
+        margin-top: 1.0em;
+        margin-bottom: 1.5em; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output thead, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output p.tableblock.header {
+        font-weight: bold;
+        color: #527bbd; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output p.tableblock {
+        margin-top: 0; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output table.tableblock {
+        border-width: 3px;
+        border-spacing: 0px;
+        border-style: solid;
+        border-color: #527bbd;
+        border-collapse: collapse; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output th.tableblock, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.tableblock {
+        border-width: 1px;
+        padding: 4px;
+        border-style: solid;
+        border-color: #527bbd; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output table.tableblock.frame-topbot {
+        border-left-style: hidden;
+        border-right-style: hidden; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output table.tableblock.frame-sides {
+        border-top-style: hidden;
+        border-bottom-style: hidden; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output table.tableblock.frame-none {
+        border-style: hidden; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output th.tableblock.halign-left, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.tableblock.halign-left {
+        text-align: left; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output th.tableblock.halign-center, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.tableblock.halign-center {
+        text-align: center; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output th.tableblock.halign-right, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.tableblock.halign-right {
+        text-align: right; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output th.tableblock.valign-top, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.tableblock.valign-top {
+        vertical-align: top; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output th.tableblock.valign-middle, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.tableblock.valign-middle {
+        vertical-align: middle; }
+      #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output th.tableblock.valign-bottom, #asciidoc-editor-wrapper #asciidoc-editor #asciidoc-output td.tableblock.valign-bottom {
+        vertical-align: bottom; }
