@@ -40,13 +40,11 @@ class AsciiDocEditor {
     _aceEditorSession.callMethod(
         'on', ['change', _onSourceTextChange]);
     _aceEditorSession.callMethod(
-        'on', ['changeScrollTop',
-               (e, t) => _setOutputScrollRatio(_sourceScrollRatio)]);
+        'on', ['changeScrollTop', _onSourceTextScroll]);
     // Set focus on editor now.
     _aceEditor.callMethod('focus');
     // Register event handler for output.
-    _outputNode.onScroll.listen(
-        (e) => _setSourceScrollRatio(_outputScrollRatio));
+    _outputNode.onScroll.listen(_onOutputScroll);
 
     // Construct node validator for output HTML.
     NodeValidatorBuilder builder = new NodeValidatorBuilder.common();
@@ -195,6 +193,24 @@ class AsciiDocEditor {
     _outputNode.scrollTop = _outputScrollSize.toScrollTop(scrollRatio);
   }
 
+  // Callback invoked when the source text is scrolled.
+  void _onSourceTextScroll(JsObject e, JsObject t) {
+    if (_scrollEventSource == null) {
+      _scrollEventSource = _sourceNode;
+      _setOutputScrollRatio(_sourceScrollRatio);
+      _scrollEventSource = null;
+    }
+  }
+
+  // Callback invoked when the output text is scrolled.
+  void _onOutputScroll(Event e) {
+    if (_scrollEventSource == null) {
+      _scrollEventSource = _outputNode;
+      _setSourceScrollRatio(_outputScrollRatio);
+      _scrollEventSource = null;
+    }
+  }
+
   // URL of the AsciiDoc API.
   static final String _ASCIIDOC_TO_HTML_URI = '/api/v1/asciidoc-to-html';
 
@@ -237,6 +253,10 @@ class AsciiDocEditor {
 
   // Timer for executing _Update.
   Timer _updateTimer = null;
+
+  // Set when the source or the output is being scrolled by the user. This
+  // prevents scrolling callbacks on other elements.
+  DivElement _scrollEventSource = null;
 }
 
 
