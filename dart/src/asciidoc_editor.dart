@@ -36,6 +36,8 @@ class AsciiDocEditor {
     // Register event handler for source text.
     _aceEditorSession.callMethod(
         'on', ['change', _onSourceTextChange]);
+    // Set focus on editor now.
+    _aceEditor.callMethod('focus');
 
     // Construct node validator for output HTML.
     NodeValidatorBuilder builder = new NodeValidatorBuilder.common();
