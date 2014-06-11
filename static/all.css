@@ -25,15 +25,20 @@ html, body {
 */
 #header {
   height: 40px;
-  padding: 4px 4px;
+  padding: 6px 5px;
   background-color: #55a943; }
   #header ul {
     list-style-type: none;
-    line-height: 32px;
+    line-height: 28px;
     margin: 0;
     padding: 0; }
-    #header ul li#logo > img {
-      height: 32px; }
+    #header ul li {
+      display: inline; }
+    #header ul li#logo {
+      padding: 3px 0; }
+      #header ul li#logo img {
+        height: 22px;
+        vertical-align: middle; }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                         Copyright (C) 2014 Chuan Ji                         *

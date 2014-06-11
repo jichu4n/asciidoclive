@@ -9,16 +9,17 @@
 //                               Environment 
 //==============================================================================
 $HEADER_HEIGHT: 40px;
-$HEADER_H_PADDING: 4px;
-$HEADER_V_PADDING: 4px;
+$HEADER_V_PADDING: 6px;
 $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
+
+$LOGO_V_PADDING: 3px;
 
 //==============================================================================
 //                                Styles
 //==============================================================================
 #header {
   height: $HEADER_HEIGHT;
-  padding: $HEADER_V_PADDING $HEADER_H_PADDING;
+  padding: $HEADER_V_PADDING 5px;
 
   background-color: #55a943;
 
@@ -29,8 +30,18 @@ $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
     margin: 0;
     padding: 0;
 
-    li#logo > img {
-      height: $HEADER_INNER_HEIGHT;
+    li {
+      // All list items on one line.
+      display: inline;
+    }
+
+    li#logo {
+      padding: $LOGO_V_PADDING 0;
+
+      img {
+        height: $HEADER_INNER_HEIGHT - 2 * $LOGO_V_PADDING;
+        vertical-align: middle;
+      }
     }
   }
 }
