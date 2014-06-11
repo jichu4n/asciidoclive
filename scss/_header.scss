@@ -2,33 +2,35 @@
  *                         Copyright (C) 2014 Chuan Ji                         *
  *                             All Rights Reserved                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Base styles for the site.
+ Styles for the page header.
 */
 
 //==============================================================================
 //                               Environment 
 //==============================================================================
-// URI to static dir.
-$STATIC_DIR: '/static';
-
-// Set box-sizing to border-box.
-@mixin BorderBox() {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
+$HEADER_HEIGHT: 40px;
+$HEADER_H_PADDING: 4px;
+$HEADER_V_PADDING: 4px;
+$HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
 
 //==============================================================================
-//                                  Styles
+//                                Styles
 //==============================================================================
+#header {
+  height: $HEADER_HEIGHT;
+  padding: $HEADER_V_PADDING $HEADER_H_PADDING;
 
-html, body {
-  // Default font settings.
-  font-family: sans-serif;
-  font-size: 16px;
-  // Take up full browser height.
-  height: 100%;
-  // Clear default margins.
-  margin: 0;
-  padding: 0;
+  background-color: #55a943;
+
+  ul {
+    list-style-type: none;
+    line-height: $HEADER_INNER_HEIGHT;
+    // Without margin: 0, there is a weird gap at the top of the page :-/
+    margin: 0;
+    padding: 0;
+
+    li#logo > img {
+      height: $HEADER_INNER_HEIGHT;
+    }
+  }
 }

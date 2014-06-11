@@ -27,8 +27,8 @@ env_lib.DB.init_app(app)
 
 
 @app.route('/')
-def RenderHome():
-  return flask.render_template('home.html')
+def RenderEditor():
+  return flask.render_template('editor.html')
 
 
 @app.route('/api/v1/asciidoc-to-html', methods=['POST'])

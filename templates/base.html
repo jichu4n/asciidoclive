@@ -2,15 +2,26 @@
  #                         Copyright (C) 2014 Chuan Ji                         #
  #                             All Rights Reserved                             #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
- # Home page template. #}
+ # Base page template. #}
 <!DOCTYPE html>
 <html>
+
   <head>
-    <title>asciidocLive</title>
+
+    <meta charset="UTF-8">
+
+    <title>{% block title %}{% endblock title %}</title>
+
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='all.css') }}">
+
+    {% block head_extra %}{% endblock head_extra %}
+
   </head>
+
   <body>
-    {% include 'asciidoc_editor.html' %}
+    <div id="header">{% include 'header.html' %}</div>
+    {% block main %}{% endblock main %}
   </body>
+
 </html>

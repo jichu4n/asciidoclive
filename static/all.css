@@ -10,12 +10,30 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  Base styles for the site.
 */
-body, html {
+html, body {
   font-family: sans-serif;
   font-size: 16px;
   height: 100%;
   margin: 0;
   padding: 0; }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Styles for the page header.
+*/
+#header {
+  height: 40px;
+  padding: 4px 4px;
+  background-color: #55a943; }
+  #header ul {
+    list-style-type: none;
+    line-height: 32px;
+    margin: 0;
+    padding: 0; }
+    #header ul li#logo > img {
+      height: 32px; }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                         Copyright (C) 2014 Chuan Ji                         *

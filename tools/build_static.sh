@@ -30,7 +30,14 @@ function BuildDartFiles() {
     cp -R build/src/* "$STATIC_DIR" )
 }
 
+# Copy misc assets into the static dir.
+function CopyAssets() {
+  ( set -x;
+    cp misc/logo.png "$STATIC_DIR" )
+}
+
 
 TIMEFORMAT=$'\033[32m[ %Us ]\033[m'
 time BuildScssFiles
 time BuildDartFiles
+time CopyAssets
