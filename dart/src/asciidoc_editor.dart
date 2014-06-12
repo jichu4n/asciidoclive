@@ -190,33 +190,37 @@ class AsciiDocEditor {
 
   // Updates the output for the source text.
   void _update() {
+    List<Element> messageNodes = [];
     String sourceText = _aceEditor.callMethod('getValue');
     if (sourceText.length > _MAX_SOURCE_TEXT_SIZE) {
-      print('Warning: source text too large, truncating.');
+      print(_textSizeTooLargeMessageText);
+      messageNodes.add(_newMessageNode('error', _textSizeTooLargeMessageText));
       sourceText = sourceText.substring(0, _MAX_SOURCE_TEXT_SIZE);
     }
-    if (sourceText == _sourceTextAtLastUpdate) {
-      return;
-    }
-    final String sourceTextDigest = _getSha1Digest(sourceText);
+    if (sourceText != _sourceTextAtLastUpdate) {
+      final String sourceTextDigest = _getSha1Digest(sourceText);
 
-    if (_responseCache.containsKey(sourceTextDigest)) {
-      print('Using cached response for ${sourceTextDigest}');
-      _updateUi(_responseCache[sourceTextDigest]);
-    } else {
-      print('Send request for ${sourceTextDigest}');
-      _showMessages([_newMessageNode('loading', _loadingMessageText)]);
-      if (_httpRequest != null) {
-        _httpRequest.abort();
+      if (_responseCache.containsKey(sourceTextDigest)) {
+        print('Using cached response for ${sourceTextDigest}');
+        _updateUi(_responseCache[sourceTextDigest]);
+      } else {
+        print('Send request for ${sourceTextDigest}');
+        messageNodes.add(_newMessageNode('loading', _loadingMessageText));
+        if (_httpRequest != null) {
+          _httpRequest.abort();
+        }
+        _httpRequest = _postData(
+            _ASCIIDOC_TO_HTML_URI, {
+                'text': sourceText,
+            }, (HttpRequest request) =>
+                _onServerResponseReceived(sourceTextDigest, request));
       }
-      _httpRequest = _postData(
-          _ASCIIDOC_TO_HTML_URI, {
-              'text': sourceText,
-          }, (HttpRequest request) =>
-              _onServerResponseReceived(sourceTextDigest, request));
-    }
 
-    _sourceTextAtLastUpdate = sourceText;
+      _sourceTextAtLastUpdate = sourceText;
+    }
+    if (messageNodes.isNotEmpty) {
+      _showMessages(messageNodes);
+    }
     _updateTimer = new Timer(_UPDATE_INTERVAL, _update);
   }
 
@@ -316,11 +320,13 @@ class AsciiDocEditor {
       querySelector('#asciidoc-loading-message-text').text.trim();
   final String _lineNumberMessageTitleText =
       querySelector('#asciidoc-line-number-message-title-text').text.trim();
+  final String _textSizeTooLargeMessageText =
+      querySelector('#asciidoc-text-size-too-large-message-text').text.trim();
   // Maps a message type to a Font Awesome icon names.
   static final Map<String, List<String>> _MESSAGE_TYPE_TO_ICON = {
       'success': ['fa-check'],
       'warning': ['fa-exclamation-triangle'],
-      'error': ['fa-times-circle'],
+      'error': ['fa-exclamation-circle'],
       'loading': ['fa-refresh', 'fa-spin'],
   };
   // Regular expression for extracting message to be displayed from a raw error
