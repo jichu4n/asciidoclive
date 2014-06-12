@@ -37,6 +37,12 @@ def RenderEditor():
   return flask.render_template(template)
 
 
+@app.route('/sitemap.xml')
+def RenderSitemap():
+  """Handler for a sitemap request."""
+  return flask.render_template('sitemap.xml')
+
+
 @app.route('/api/v1/asciidoc-to-html', methods=['POST'])
 def AsciiDocToHtml():
   """Handler for AsciiDoc to HTML conversion.
