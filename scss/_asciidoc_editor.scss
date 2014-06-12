@@ -78,66 +78,68 @@ $OUTPUT_H_PADDING: 20px;
       @include PygmentsOutputStyles();
     }
 
-    #asciidoc-messages {
+    div.message {
+      padding: 0;
 
-      div.message {
-        padding: 0;
+      table {
+        // We need to clear the default border spacing.
+        border-spacing: 0;
+        // This will automatically stretch the text td as well.
+        width: 100%;
 
-        table {
-          // We need to clear the default border spacing.
-          border-spacing: 0;
-          // This will automatically stretch the text td as well.
-          width: 100%;
+        td.handle {
+          width: 10px;
+        }
 
-          td.handle {
-            width: 10px;
-          }
+        td.text {
+          padding: 8px 12px;
+          @include BorderBox();
+          font-size: 85%;
 
-          td.text {
-            padding: 8px 12px;
-            @include BorderBox();
-            font-size: 85%;
-
-            .icon {
-              margin-right: 10px;
-            }
+          .icon {
+            margin-right: 10px;
           }
         }
-
-        @include BorderBox();
-        @include BorderRadius(2px);
       }
 
-      div.message-with-line-number {
-        cursor: pointer;
-        td.text:hover {
-          text-decoration: underline;
-        }
-      }
+      @include BorderBox();
+      @include BorderRadius(2px);
+    }
 
-      div.message-success, div.message-loading {
-        border: 1px solid #cbe2c0;
-        background-color: #f3faef;
-        color: #325d1d;
-        td.handle {
-          background-color: #77b259;
-        }
+    div.message-with-line-number {
+      cursor: pointer;
+      td.text:hover {
+        text-decoration: underline;
       }
-      div.message-warning {
-        border: 1px solid #f7e5c0;
-        background-color: #fdf8ed;
-        color: #6f4700;
-        td.handle {
-          background-color: #e09600;
-        }
+    }
+
+    div.message-success, div.message-loading {
+      border: 1px solid #cbe2c0;
+      background-color: #f3faef;
+      color: #325d1d;
+      td.handle {
+        background-color: #77b259;
       }
-      div.message-error {
-        border: 1px solid #fad9d3;
-        background-color: #fcf4f2;
-        color: #9f0b00;
-        td.handle {
-          background-color: #e62600;
-        }
+    }
+    div.message-warning {
+      border: 1px solid #f7e5c0;
+      background-color: #fdf8ed;
+      color: #6f4700;
+      td.handle {
+        background-color: #e09600;
+      }
+    }
+    div.message-error {
+      border: 1px solid #fad9d3;
+      background-color: #fcf4f2;
+      color: #9f0b00;
+      td.handle {
+        background-color: #e62600;
+      }
+    }
+    div.message-loading {
+      td.text {
+        font-style: italic;
       }
     }
   }

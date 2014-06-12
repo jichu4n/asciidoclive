@@ -23,6 +23,17 @@ class AsciiDocEditor {
     _sourceNode = querySelector('#${_SOURCE_NODE_ID}');
     _demoSourceText = _sourceNode.text.trim();
 
+    // We make a clone of the message template, measure its height, and add the
+    // same number of pixels of padding to the source container. This allows the
+    // source and output containers to have the same viewport height in stable
+    // state.
+    DivElement messageNode = _messageTemplateNode.clone(true);
+    messageNode.id = '';
+    messageNode.classes.remove('hidden');
+    messageNode.classes.add('message');
+    _sourceContainerNode.children.add(messageNode);
+    _sourceContainerNode.style.paddingBottom = '${messageNode.clientHeight}px';
+
     // Initialize editor.
     _aceEditor = context['ace'].callMethod(
         'edit', [_SOURCE_NODE_ID]);
@@ -119,10 +130,11 @@ class AsciiDocEditor {
     messageNode.classes.remove('hidden');
     messageNode.classes.addAll(['message', 'message-${type}']);
 
-    Element messageTextNode = messageNode.querySelector('.text');
     SpanElement iconNode = new SpanElement();
     iconNode.classes.addAll(['fa', 'icon']);
     iconNode.classes.addAll(_MESSAGE_TYPE_TO_ICON[type]);
+    Element messageTextNode = messageNode.querySelector('.text');
+    messageTextNode.children.clear();
     messageTextNode.children.add(iconNode);
     messageTextNode.appendText(message);
 
@@ -300,6 +312,8 @@ class AsciiDocEditor {
   // DOM components.
   final String _SOURCE_NODE_ID = 'asciidoc-source';
   DivElement _sourceNode = null;
+  final DivElement _sourceContainerNode =
+      querySelector('#asciidoc-source-container');
   final DivElement _outputNode = querySelector('#asciidoc-output');
   final DivElement _outputContainerNode =
       querySelector('#asciidoc-output-container');
