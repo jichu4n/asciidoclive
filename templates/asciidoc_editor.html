@@ -11,8 +11,22 @@
     </div>
     <div id="asciidoc-output-container">
       <div id="asciidoc-output">&nbsp;</div>
+      <div id="asciidoc-messages"></div>
     </div>
   </div>
+</div>
+
+{# Template for AsciiDoc messages. #}
+<div id="asciidoc-message-template" class="hidden">
+  <table><tr><td class="handle"></td><td class="text"></td></tr></table>
+</div>
+
+{# Stock messages to display. #}
+<div id="asciidoc-success-message-text" class="hidden">OK</div>
+<div id="asciidoc-error-message-text" class="hidden">Failed to compile</div>
+<div id="asciidoc-loading-message-text" class="hidden">Processing...</div>
+<div id="asciidoc-line-number-message-title-text" class="hidden">
+  Click to go to line
 </div>
 
 {# Message for the leave confirmation dialog. #}

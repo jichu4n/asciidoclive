@@ -53,7 +53,7 @@ class AsciiDocEditor {
     _outputNodeValidator = builder;
 
     // Start request timer.
-    _Update();
+    _update();
 
     // Set up events.
     window.onBeforeUnload.listen(_onBeforeUnload);
@@ -105,12 +105,79 @@ class AsciiDocEditor {
   // Event handler for source text change.
   void _onSourceTextChange(JsObject e, JsObject t) {
     _updateTimer.cancel();
-    _updateTimer = new Timer(_UPDATE_DELAY, _Update);
+    _updateTimer = new Timer(_UPDATE_DELAY, _update);
+  }
+
+  // Utility function for creating a message element to be displayed. type
+  // should be one of 'success', 'warning' and 'error'.
+  Element _newMessageNode(String type, String message, [int lineNumber]) {
+    assert(_MESSAGE_TYPE_TO_ICON.containsKey(type));
+    print('Message: ${type}: ${message}');
+
+    DivElement messageNode = _messageTemplateNode.clone(true);
+    messageNode.id = '';
+    messageNode.classes.remove('hidden');
+    messageNode.classes.addAll(['message', 'message-${type}']);
+
+    Element messageTextNode = messageNode.querySelector('.text');
+    SpanElement iconNode = new SpanElement();
+    iconNode.classes.addAll(['fa', 'icon']);
+    iconNode.classes.addAll(_MESSAGE_TYPE_TO_ICON[type]);
+    messageTextNode.children.add(iconNode);
+    messageTextNode.appendText(message);
+
+    if (lineNumber != null) {
+      messageNode.classes.add('message-with-line-number');
+      messageNode.title = _lineNumberMessageTitleText;
+      messageNode.onClick.listen((MouseEvent e) =>
+          _aceEditor.callMethod('gotoLine', [lineNumber, 1, true]));
+    }
+
+    return messageNode;
+  }
+
+  // Updates the messages container with the provided list of message elements.
+  void _showMessages(List<Element> messageNodes) {
+    _messagesNode.children.clear();
+    _messagesNode.children.addAll(messageNodes);
+    final num messagesHeight = _messagesNode.clientHeight;
+    _outputContainerNode.style.paddingBottom = '${messagesHeight}px';
   }
 
   // Updates the UI given a server response.
-  void _UpdateUi(Map response) {
+  void _updateUi(Map response) {
+
     _outputNode.setInnerHtml(response['html'], validator: _outputNodeValidator);
+
+    List<Element> messageNodes = [];
+    if (response['error_message'].isEmpty) {
+      if (response['success']) {
+        messageNodes.add(_newMessageNode('success', _successMessageText));
+      } else {
+        messageNodes.add(_newMessageNode('error', _errorMessageText));
+      }
+    } else {
+      response['error_message'].split('\n').forEach((String line) {
+        String messageText = line.replaceAllMapped(
+            _ERROR_MESSAGE_RE, (Match m) => m[1]);
+        if (messageText.isNotEmpty) {
+          int messageLineNumber = null;
+          try {
+            messageLineNumber = int.parse(messageText.replaceAllMapped(
+                _ERROR_MESSAGE_LINE_NUMBER_RE, (Match m) => m[1]));
+          } on FormatException catch (e) {
+            print('Could not parse line number from message: ${e.toString()}');
+          }
+          // Capitalize first character.
+          messageText = messageText.substring(0, 1).toUpperCase() +
+              messageText.substring(1);
+
+          messageNodes.add(
+              _newMessageNode('warning', messageText, messageLineNumber));
+        }
+      });
+    }
+    _showMessages(messageNodes);
   }
 
   // Callback that is invoked when HTML output is received from the server.
@@ -118,11 +185,11 @@ class AsciiDocEditor {
     print('Got response for ${sourceTextDigest}');
     Map response = JSON.decode(request.responseText);
     _responseCache[sourceTextDigest] = response;
-    _UpdateUi(response);
+    _updateUi(response);
   }
 
   // Updates the output for the source text.
-  void _Update() {
+  void _update() {
     String sourceText = _aceEditor.callMethod('getValue');
     if (sourceText.length > _MAX_SOURCE_TEXT_SIZE) {
       print('Warning: source text too large, truncating.');
@@ -135,9 +202,10 @@ class AsciiDocEditor {
 
     if (_responseCache.containsKey(sourceTextDigest)) {
       print('Using cached response for ${sourceTextDigest}');
-      _UpdateUi(_responseCache[sourceTextDigest]);
+      _updateUi(_responseCache[sourceTextDigest]);
     } else {
       print('Send request for ${sourceTextDigest}');
+      _showMessages([_newMessageNode('loading', _loadingMessageText)]);
       if (_httpRequest != null) {
         _httpRequest.abort();
       }
@@ -149,7 +217,7 @@ class AsciiDocEditor {
     }
 
     _sourceTextAtLastUpdate = sourceText;
-    _updateTimer = new Timer(_UPDATE_INTERVAL, _Update);
+    _updateTimer = new Timer(_UPDATE_INTERVAL, _update);
   }
 
   // Callback invoked when the user attempts to close the window.
@@ -229,12 +297,39 @@ class AsciiDocEditor {
   final String _SOURCE_NODE_ID = 'asciidoc-source';
   DivElement _sourceNode = null;
   final DivElement _outputNode = querySelector('#asciidoc-output');
+  final DivElement _outputContainerNode =
+      querySelector('#asciidoc-output-container');
+  final DivElement _messagesNode = querySelector('#asciidoc-messages');
+  final DivElement _messageTemplateNode =
+      querySelector('#asciidoc-message-template');
   final String _unloadConfirmationMessage = (
       querySelector('#unload-confirmation-message').text
       .replaceAllMapped(
           new RegExp(r'([^\n])\n([^\n])', multiLine: true),
           (Match m) => '${m[1]} ${m[2]}')
       .replaceAll(new RegExp(r'[ ]+'), ' '));
+  final String _successMessageText =
+      querySelector('#asciidoc-success-message-text').text.trim();
+  final String _errorMessageText =
+      querySelector('#asciidoc-error-message-text').text.trim();
+  final String _loadingMessageText =
+      querySelector('#asciidoc-loading-message-text').text.trim();
+  final String _lineNumberMessageTitleText =
+      querySelector('#asciidoc-line-number-message-title-text').text.trim();
+  // Maps a message type to a Font Awesome icon names.
+  static final Map<String, List<String>> _MESSAGE_TYPE_TO_ICON = {
+      'success': ['fa-check'],
+      'warning': ['fa-exclamation-triangle'],
+      'error': ['fa-times-circle'],
+      'loading': ['fa-refresh', 'fa-spin'],
+  };
+  // Regular expression for extracting message to be displayed from a raw error
+  // message.
+  static final RegExp _ERROR_MESSAGE_RE =
+      new RegExp(r'^(?:[^:]+:\s+){3}(.*)$');
+  // Regular expression for extracting the line number from an error message.
+  static final RegExp _ERROR_MESSAGE_LINE_NUMBER_RE =
+      new RegExp(r'^line\s+(\d+):.*$');
 
   // Handle to Ace editor object.
   JsObject _aceEditor = null;
@@ -251,7 +346,7 @@ class AsciiDocEditor {
   // The original demo text.
   String _demoSourceText = null;
 
-  // Timer for executing _Update.
+  // Timer for executing _update.
   Timer _updateTimer = null;
 
   // Set when the source or the output is being scrolled by the user. This

@@ -18,6 +18,14 @@ $STATIC_DIR: '/static';
   box-sizing: border-box;
 }
 
+// Set border radius.
+@mixin BorderRadius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
 //==============================================================================
 //                                   Fonts 
 //==============================================================================
