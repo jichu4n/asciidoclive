@@ -121,7 +121,6 @@ $OUTPUT_H_PADDING: 20px;
     }
 
     div.message-success, div.message-loading {
-      border: 1px solid #cbe2c0;
       background-color: #f3faef;
       color: #325d1d;
       td.handle {
@@ -129,7 +128,6 @@ $OUTPUT_H_PADDING: 20px;
       }
     }
     div.message-warning {
-      border: 1px solid #f7e5c0;
       background-color: #fdf8ed;
       color: #6f4700;
       td.handle {
@@ -137,7 +135,6 @@ $OUTPUT_H_PADDING: 20px;
       }
     }
     div.message-error {
-      border: 1px solid #fad9d3;
       background-color: #fcf4f2;
       color: #9f0b00;
       td.handle {
