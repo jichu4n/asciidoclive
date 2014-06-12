@@ -70,6 +70,13 @@ $OUTPUT_H_PADDING: 20px;
       font-size: 90%;
     }
 
+    // Hides the original text until Ace is initialized. This prevents a "flash"
+    // before Ace takes control of the element.
+    #asciidoc-source.uninitialized {
+      background-color: $UI_BG_COLOR;
+      color: $UI_BG_COLOR;
+    }
+
     #asciidoc-output {
       background-color: $OUTPUT_BG_COLOR;
       padding: 0 $OUTPUT_H_PADDING;

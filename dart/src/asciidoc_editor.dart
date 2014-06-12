@@ -56,6 +56,9 @@ class AsciiDocEditor {
     _aceEditor.callMethod('focus');
     // Register event handler for output.
     _outputNode.onScroll.listen(_onOutputScroll);
+    // Now we can remove the unitialized class from source node to unhide the
+    // text.
+    _sourceNode.classes.remove('uninitialized');
 
     // Construct node validator for output HTML.
     NodeValidatorBuilder builder = new NodeValidatorBuilder.common();
