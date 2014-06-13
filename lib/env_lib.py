@@ -2,7 +2,7 @@
 #                         Copyright (C) 2014 Chuan Ji                         #
 #                             All Rights Reserved                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-"""Set up common execution environment for our scripts."""
+"""Set up execution environment."""
 
 from flask.ext import mongoengine
 import logging
@@ -10,10 +10,23 @@ import os
 import sys
 import traceback
 
+# Set up configs from the config file.
+try:
+  import config
+except ImportError:
+  print(
+      'Failed to import config.\n'
+      '\n'
+      'Please create a symlink named \'config.py\' in the app root directory '
+      'to either prod_config.py or test_config.py.',
+      file=sys.stderr)
+  sys.exit(1)
+
+CONFIG = config.CONFIG
+
 
 # Log file path.
-LOG_FILE_PATH = '/var/log/asciidoclive/app_server.log'
-_LOG_FILE_LOGGING_HANDLER = logging.FileHandler(LOG_FILE_PATH)
+_LOG_FILE_LOGGING_HANDLER = logging.FileHandler(CONFIG.LOG_FILE_PATH)
 _CONSOLE_LOGGING_HANDLER = logging.StreamHandler(sys.stderr)
 # Set up logging.
 logging.basicConfig(
@@ -34,6 +47,7 @@ def _CrashingLoggingFatalFn(*args, **kwargs):
 
 logging.fatal = _CrashingLoggingFatalFn
 
+
 # Absolute path to the root directory of the application.
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Path to directory containing Jinja2 templates.
@@ -45,8 +59,6 @@ DATA_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
     'data')
 
-# MongoDB database name.
-DB_NAME = 'asciidoclive'
 # MongoEngine handle.
 DB = mongoengine.MongoEngine()
 

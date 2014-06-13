@@ -119,7 +119,7 @@ def GetAsciiDocResult(text):
       logging.debug('Fetching from cache: %s', text_sha1_digest)
       cached_result = (
           models_lib.CachedAsciiDocResult.objects(
-            text_sha1_digest=text_sha1_digest)
+              text_sha1_digest=text_sha1_digest)
           .first())
       if cached_result.run_ts is None:
         time.sleep(_CONCURRENT_RUN_POLL_INTERVAL)

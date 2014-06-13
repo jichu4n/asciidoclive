@@ -18,10 +18,7 @@ app = flask.Flask(
     __name__,
     template_folder=env_lib.TEMPLATES_DIR,
     static_folder=env_lib.STATIC_DIR)
-app.config.update(
-    MONGODB_SETTINGS={
-        'DB': env_lib.DB_NAME,
-    })
+app.config.from_object(env_lib.CONFIG)
 env_lib.DB.init_app(app)
 # pylint: enable=invalid-name
 

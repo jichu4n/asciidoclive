@@ -18,9 +18,8 @@ application = app_server_lib.app
 # pylint: enable=invalid-name
 
 
-# Serve a dev HTTP server if directly invoked.
+# Serve an HTTP server if directly invoked.
 if __name__ == '__main__':
   application.run(
       '0.0.0.0',
-      port=5299,
-      debug=True)
+      port=5299)
