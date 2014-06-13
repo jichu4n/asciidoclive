@@ -1,0 +1,152 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Base styles for sign-in window.
+*/
+
+// Settings and mixins.
+
+// Full window fixed div.
+@mixin FullWindowFixed() {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left:0;
+}
+
+
+// Styles.
+
+$OVERLAY_Z_INDEX: 10000;
+
+#overlay {
+  background-color: #000;
+  @include Opacity(0.3);
+
+  // Place above regular page.
+  z-index: $OVERLAY_Z_INDEX;
+
+  @include FullWindowFixed;
+}
+
+$SIGNIN_WINDOW_WIDTH: 450px;
+
+// See http://goo.gl/FmVxR8 and http://goo.gl/Fh4UDY .
+#sign-in-window-wrapper-1 {
+  // Place above overlay.
+  z-index: $OVERLAY_Z_INDEX + 1;
+
+  display: table;
+  @include FullWindowFixed;
+}
+#sign-in-window-wrapper-2 {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+$SIGN_IN_BUTTON_ICON_WIDTH: 80px;
+$SIGN_IN_BUTTON_TITLE_WIDTH: 150px;
+$SIGN_IN_BUTTON_PADDING: 5px;
+$SIGN_IN_BUTTON_BORDER_WIDTH: 2px;
+$SIGN_IN_BUTTON_WIDTH: (
+    2 * $SIGN_IN_BUTTON_BORDER_WIDTH +
+    2 * $SIGN_IN_BUTTON_PADDING +
+    $SIGN_IN_BUTTON_ICON_WIDTH +
+    $SIGN_IN_BUTTON_TITLE_WIDTH);
+$SIGN_IN_WINDOW_PADDING: 15px;
+#sign-in-window {
+  display: inline-block;
+
+  // Overrides text-align in container.
+  text-align: left;
+
+  @include DropShadow();
+  background-color: #fff;
+
+  .header {
+    background-color: $HEADER_BG_COLOR;
+    text-align:center;
+
+    padding: $HEADER_V_PADDING 0px;
+
+    img {
+      display: inline-block;
+      height: $HEADER_HEIGHT;
+    }
+  }
+
+  .body {
+    @include BorderBox();
+
+    overflow: auto;
+    max-width: 2 * $SIGN_IN_WINDOW_PADDING + 2 * $SIGN_IN_BUTTON_WIDTH;
+    padding: $SIGN_IN_WINDOW_PADDING;
+  }
+
+  .prompt {
+    padding: $SIGN_IN_BUTTON_PADDING + $SIGN_IN_BUTTON_BORDER_WIDTH;
+  }
+
+  .sign-in-button {
+    @include BorderBox();
+    border: $SIGN_IN_BUTTON_BORDER_WIDTH solid #fff;
+    padding: $SIGN_IN_BUTTON_PADDING;
+
+    float: left;
+    cursor: pointer;
+
+    table {
+      // We need to clear the default border spacing.
+      border-spacing: 0;
+      td {
+        vertical-align: middle;
+        // We need to clear the default padding.
+        padding: 0;
+      }
+    }
+    .icon {
+      width: $SIGN_IN_BUTTON_ICON_WIDTH;
+      color: #fff;
+      text-align: center;
+    }
+    .title {
+      @include BorderBox();
+      width: $SIGN_IN_BUTTON_TITLE_WIDTH;
+      padding: 10px;
+
+      color: #000;
+      background-color: #eee;
+      text-align: left;
+      font-size: 80%;
+
+      @include Opacity(0.7);
+
+    }
+  }
+  .sign-in-button:hover {
+    border: $SIGN_IN_BUTTON_BORDER_WIDTH solid #ccc;
+
+    .icon {
+      @include Opacity(0.9);
+    }
+    .title {
+      @include Opacity(1.0);
+    }
+  }
+
+  .sign-in-button-facebook .icon {
+    background-color: #3a5795;
+  }
+  .sign-in-button-google .icon {
+    background-color: #da4a39;
+  }
+  .sign-in-button-twitter .icon {
+    background-color: #02ace8;
+  }
+  .sign-in-button-linkedin .icon {
+    background-color: #0179b3;
+  }
+}

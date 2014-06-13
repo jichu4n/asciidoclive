@@ -5,11 +5,17 @@
  Base styles for the site.
 */
 
-//==============================================================================
-//                               Environment 
-//==============================================================================
+
+// Settings and mixins.
+
 // URI to static dir.
 $STATIC_DIR: '/static';
+
+// Center horizontally.
+@mixin HCenter() {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 // Set box-sizing to border-box.
 @mixin BorderBox() {
@@ -26,9 +32,32 @@ $STATIC_DIR: '/static';
   border-radius: $radius;
 }
 
-//==============================================================================
-//                                   Fonts 
-//==============================================================================
+// Set opacity.
+@mixin Opacity($opacity) {
+  opacity: $opacity;
+  filter: alpha(opacity=$opacity * 100);  // For IE.
+}
+
+// Default settings for a drop shadow.
+$DROP_SHADOW_SIZE: 12px;
+$DROP_SHADOW_COLOR: #777;
+@mixin DropShadow() {
+  box-shadow: 0 0 $DROP_SHADOW_SIZE ($DROP_SHADOW_SIZE / 3) $DROP_SHADOW_COLOR;
+}
+
+$HEADER_BG_COLOR: #496fb0;
+$HEADER_HEIGHT: 44px;
+
+// Site fonts.
+
+// Roboto.
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(//themes.googleusercontent.com/static/fonts/roboto/v11/Hgo13k-tfSpn0qi1SFdUfT8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
 // Arimo.
 @font-face {
   font-family: 'Arimo';
@@ -81,19 +110,43 @@ $STATIC_DIR: '/static';
   src: local('Cousine Bold Italic'), local('Cousine-BoldItalic'), url(//themes.googleusercontent.com/static/fonts/cousine/v7/y_AZ5Sz-FwL1lux2xLSTZXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
 }
 
-$REGULAR_FONT: Arimo,'Helvetica Neue','Open Sans',Helvetica,Arial,sans-serif;
-$MONOSPACE_FONT: Cousine,Monaco,Consolas,Courier,'Courier New',monospace;
-//==============================================================================
-//                                  Styles
-//==============================================================================
+@mixin UiFont() {
+  font-family: Roboto,'Helvetica Neue','Open Sans',Helvetica,Arial,sans-serif;
+  font-weight: lighter;
+  font-size: 20px;
+}
+@mixin TextFont() {
+  font-family: Arimo,'Helvetica Neue','Open Sans',Helvetica,Arial,sans-serif;
+  font-weight: normal;
+  font-size: 16.5px;
+}
+@mixin MonospaceFontFamily() {
+  font-family: Cousine,Monaco,Consolas,Courier,'Courier New',monospace;
+}
+@mixin MonospaceFont() {
+  @include MonospaceFontFamily();
+  font-weight: normal;
+  font-size: 15px;
+}
+
+
+// Styles.
 
 html, body {
-  // Default font settings.
-  font-family: $REGULAR_FONT;
-  font-size: 16px;
   // Take up full browser height.
   min-height: 100%;
   // Clear default margins.
   margin: 0;
   padding: 0;
+
+  @include UiFont();
+}
+
+#body-wrapper {
+  padding: $HEADER_HEIGHT 0 0 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

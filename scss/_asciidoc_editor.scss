@@ -8,9 +8,9 @@
 @import '_asciidoc.scss';
 @import '_pygments.scss';
 
-//==============================================================================
-//                               Settings 
-//==============================================================================
+
+// Settings.
+
 $UI_BG_COLOR: #f1f1f1;
 $UI_MARGIN: 12px;
 $COLUMN_MIN_WIDTH: 200px;
@@ -18,9 +18,8 @@ $COLUMN_MAX_WIDTH: 800px;
 $OUTPUT_BG_COLOR: #fbfbfb;
 $OUTPUT_H_PADDING: 20px;
 
-//==============================================================================
-//                                Styles
-//==============================================================================
+
+// Styles.
 #asciidoc-editor-wrapper {
   height: 100%;
   width: 100%;
@@ -66,8 +65,7 @@ $OUTPUT_H_PADDING: 20px;
     }
 
     #asciidoc-source {
-      font-family: $MONOSPACE_FONT;
-      font-size: 90%;
+      @include MonospaceFont();
     }
 
     // Hides the original text until Ace is initialized. This prevents a "flash"
@@ -80,6 +78,8 @@ $OUTPUT_H_PADDING: 20px;
     #asciidoc-output {
       background-color: $OUTPUT_BG_COLOR;
       padding: 0 $OUTPUT_H_PADDING;
+
+      @include TextFont();
 
       @include AsciiDocOutputStyles();
       @include PygmentsOutputStyles();

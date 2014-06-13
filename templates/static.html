@@ -11,6 +11,10 @@
   AsciiDocLIVE - free online AsciiDoc editor
 {% endblock title %}
 
+{# Disable Analytics. #}
+{% block google_analytics %}{% endblock google_analytics %}
+
+{# No point in showing header. #}
 {% block header %}{% endblock header %}
 
 {% block main %}
