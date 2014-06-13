@@ -17,7 +17,7 @@ class UserManager {
     // Maps sign-in type strings to account providers.
     final Map<String, AccountProvider> accountProviders = {
         'google': new GoogleAccountProvider('google', onSignInReady),
-        'facebook': null,
+        'facebook': new FacebookAccountProvider('facebook', onSignInReady),
         'twitter': null,
         'linkedin': null,
     };
@@ -44,5 +44,7 @@ class UserManager {
   // Invoked on a successful login.
   void onSignInReady(AccountProvider accountProvider) {
     print('Signed in abstraaaactly to ${accountProvider.type}!');
+    print('User ID: ${accountProvider.accountData.userId}');
+    print('Greeting name: ${accountProvider.accountData.greetingName}');
   }
 }

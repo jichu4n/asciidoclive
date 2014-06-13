@@ -4,46 +4,6 @@
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
  # Sign-in window. #}
 
-{# Sign-in settings. #}
-{% set FACEBOOK_APP_ID = '644477638972528' %}
-
-
-{# Google+. #}
-
-{# Facebook. #}
-{% macro FacebookJs(app_id) %}
-  <div id="fb-root"></div>
-  <script>
-    /*
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '{{ app_id }}',
-        xfbml      : true,
-        status     : true,
-        cookie     : true,
-        version    : 'v2.0'
-      });
-    };
-    */
-
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "//connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
-  </script>
-{% endmacro %}
-{% macro FacebookSignInButton() %}
-  <span
-    class="fb-login-button"
-    data-max-rows="1"
-    data-size="xlarge"
-    data-show-faces="false"
-    data-auto-logout-link="false"
-    data-scope="public_profile,email"></span>
-{% endmacro %}
 
 {# Renders a sign-in button for the given provider.
  # Args:
@@ -84,4 +44,20 @@
   </div>
 </div></div>
 
-{{ FacebookJs(FACEBOOK_APP_ID) }}
+{# Facebook JavaScript SDK. #}
+<div id="fb-root"></div>
+<script>
+  // The default fbAsyncInit function appears to conflict with Google's
+  // sign-in. Instead, we change our init function to just set a flag
+  // and we will call FB.init() from Dart.
+  window.isFbJsSdkLoaded = false;
+  window.fbAsyncInit = function() { window.isFbJsSdkLoaded = true; };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
