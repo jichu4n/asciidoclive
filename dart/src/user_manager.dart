@@ -11,10 +11,10 @@ import 'package:google_oauth2_client/google_oauth2_browser.dart';
 import "package:google_plus_v1_api/plus_v1_api_browser.dart" as googlePlusClient;
 
 // Class that manages user accounts and related workflows.
-class AccountManager {
+class UserManager {
 
   // Constructor.
-  AccountManager() {
+  UserManager() {
     // Maps sign-in type strings to handlers.
     final Map<String, Function> signInHandlers = {
         'google': _handleGoogleSignIn,
