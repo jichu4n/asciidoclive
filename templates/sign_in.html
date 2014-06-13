@@ -47,13 +47,13 @@
 
 {# Renders a sign-in button for the given provider.
  # Args:
- #   - name: the type of sign-in scheme, as an identifier.
+ #   - name: the account provider identifier.
  #   - icon_name: FontAwesome icon name.
  #   - title: title to display for the button.
  #}
 {% macro SignInButton(name, icon_name, title) %}
   <a href="#"
-    data-sign-in-type="{{ name }}"  {# For Dart. #}
+    data-account-provider-type="{{ name }}"  {# For Dart. #}
     class="sign-in-button sign-in-button-{{ name }}">
     <table><tr>
       <td class="icon"><span class="fa {{ icon_name }} fa-lg"></span></td>
