@@ -30,10 +30,10 @@ class AccountManager {
       assert(signInHandlers.containsKey(signInType));
       e.onClick.listen((_) => signInHandlers[signInType]());
     });
-  _googleOAuth2 = new GoogleOAuth2(
-      _GOOGLE_CLIENT_ID,
-      _GOOGLE_AUTH_SCOPES,
-      tokenLoaded:_onGoogleSignIn);
+    _googleOAuth2 = new GoogleOAuth2(
+        _GOOGLE_CLIENT_ID,
+        _GOOGLE_AUTH_SCOPES,
+        tokenLoaded:_onGoogleSignIn);
   }
 
   // Handler signing in via Google+.

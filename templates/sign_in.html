@@ -12,20 +12,25 @@
 
 {# Facebook. #}
 {% macro FacebookJs(app_id) %}
+  <div id="fb-root"></div>
   <script>
+    /*
     window.fbAsyncInit = function() {
       FB.init({
         appId      : '{{ app_id }}',
         xfbml      : true,
+        status     : true,
+        cookie     : true,
         version    : 'v2.0'
       });
     };
+    */
 
     (function(d, s, id){
        var js, fjs = d.getElementsByTagName(s)[0];
        if (d.getElementById(id)) {return;}
        js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       js.src = "//connect.facebook.net/en_US/sdk.js";
        fjs.parentNode.insertBefore(js, fjs);
      }(document, 'script', 'facebook-jssdk'));
   </script>
@@ -60,6 +65,7 @@
 
 {# Sign-in window. #}
 
+
 {# Overlay window that dims the normal page. Used during sign-in. #}
 <div id="overlay" {# class="hidden" #}>&nbsp;</div>
 {# Sign in window. #}
@@ -78,4 +84,4 @@
   </div>
 </div></div>
 
-{# {{ FacebookJs(FACEBOOK_APP_ID) }} #}
+{{ FacebookJs(FACEBOOK_APP_ID) }}
