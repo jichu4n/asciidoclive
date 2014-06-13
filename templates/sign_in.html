@@ -5,34 +5,10 @@
  # Sign-in window. #}
 
 {# Sign-in settings. #}
-{% set GOOGLE_CLIENT_ID = '701344041607-pq2g8uisl3uhhjj2u15lilsqbgr24tdc.apps.googleusercontent.com' %}
 {% set FACEBOOK_APP_ID = '644477638972528' %}
 
 
 {# Google+. #}
-{% macro GooglePlusJs() %}
-  <script type="text/javascript">
-    (function() {
-     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-     po.src = 'https://apis.google.com/js/client:plusone.js';
-     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-   })();
-  </script>
-{% endmacro %}
-{% macro GooglePlusSignInButton(client_id) %}
-  <span id="signinButton">
-    <span
-      class="g-signin"
-      data-callback="signinCallback"
-      data-clientid="{{ client_id }}"
-      data-cookiepolicy="single_host_origin"
-      data-requestvisibleactions=""
-      data-scope="profile,email"
-      data-width="standard"
-      data-height="tall">
-    </span>
-  </span>
-{% endmacro %}
 
 {# Facebook. #}
 {% macro FacebookJs(app_id) %}
@@ -66,17 +42,19 @@
 
 {# Renders a sign-in button for the given provider.
  # Args:
- #   - name: a tag to append to identifiers.
+ #   - name: the type of sign-in scheme, as an identifier.
  #   - icon_name: FontAwesome icon name.
  #   - title: title to display for the button.
  #}
 {% macro SignInButton(name, icon_name, title) %}
-  <div class="sign-in-button sign-in-button-{{ name }}">
+  <a href="#"
+    data-sign-in-type="{{ name }}"  {# For Dart. #}
+    class="sign-in-button sign-in-button-{{ name }}">
     <table><tr>
       <td class="icon"><span class="fa {{ icon_name }} fa-lg"></span></td>
       <td class="title">{{ title }}</td>
     </tr></table>
-  </div>
+  </a>
 {% endmacro %}
 
 
@@ -100,5 +78,4 @@
   </div>
 </div></div>
 
-{{ GooglePlusJs() }}
-{{ FacebookJs(FACEBOOK_APP_ID) }}
+{# {{ FacebookJs(FACEBOOK_APP_ID) }} #}

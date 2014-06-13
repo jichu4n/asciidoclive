@@ -11,4 +11,9 @@ AsciiDocLIVE - free online AsciiDoc editor
 
 {% block main %}
   {% include 'asciidoc_editor.html' %}
+
+  {# Editor client-side code. #}
+  <script type="application/dart"
+          src="{{ url_for('static', filename='editor.dart') }}"></script>
+  <script src="{{ url_for('static', filename='packages/browser/dart.js') }}"></script>
 {% endblock main %}

@@ -2,7 +2,7 @@
  *                         Copyright (C) 2014 Chuan Ji                         *
  *                             All Rights Reserved                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- AsciiDoc editor.
+ AsciiDoc editor component.
 */
 
 import 'dart:async';
@@ -14,7 +14,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:utf/utf.dart';
 
-// AsciiDoc editor client-side implementation.
+// AsciiDoc editor component client-side implementation.
 class AsciiDocEditor {
 
   // Constructor.
@@ -404,9 +404,4 @@ class _ScrollSize {
 
   // Constructor.
   _ScrollSize(this.viewportHeight, this.contentHeight);
-}
-
-
-void main() {
-  AsciiDocEditor editor = new AsciiDocEditor();
 }

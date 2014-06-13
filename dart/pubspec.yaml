@@ -1,6 +1,8 @@
-name: asciidoc_editor
+name: asciidoclive
 dependencies:
   browser: any
   crypto: any
   js: any
   utf: any
+  google_oauth2_client: any
+  google_plus_v1_api: any
