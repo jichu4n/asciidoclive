@@ -4,6 +4,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 """Set up execution environment."""
 
+from flask.ext import login
 from flask.ext import mongoengine
 import logging
 import os
@@ -59,8 +60,11 @@ DATA_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
     'data')
 
-# MongoEngine handle.
-DB = mongoengine.MongoEngine()
-
 # Maximum source text size allowed, in bytes.
 MAX_SOURCE_TEXT_SIZE = 32 * 1024
+
+
+# MongoEngine handle.
+DB = mongoengine.MongoEngine()
+# Login manager.
+LOGIN_MANAGER = login.LoginManager()

@@ -5,7 +5,6 @@
 """Main web app server library."""
 
 import flask
-import flask.ext.mongoengine
 import json
 
 from lib import asciidoc_lib
@@ -20,6 +19,7 @@ app = flask.Flask(
     static_folder=env_lib.STATIC_DIR)
 app.config.from_object(env_lib.CONFIG)
 env_lib.DB.init_app(app)
+env_lib.LOGIN_MANAGER.init_app(app)
 # pylint: enable=invalid-name
 
 

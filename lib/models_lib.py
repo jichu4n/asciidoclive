@@ -34,3 +34,42 @@ class CachedAsciiDocResult(DB.Document):
       'collection': 'cached_asciidoc_results',
       'indexes': ['text_sha1_digest', 'run_ts'],
   }
+
+
+class Account(DB.EmbeddedDocument):
+  """A user account from a particular provider."""
+
+  # The type of the account provider.
+  account_provider_type = DB.StringField(
+      required=True,
+      choices=[
+          'google',
+          'facebook',
+          'twitter',
+          'linkedin',
+      ])
+  # The account provider's ID for the user.
+  user_id = DB.StringField(required=True)
+  # The full account ID string. This is of the form
+  #    <account_provider_type>::<user_id>
+  account_id = DB.StringField(required=True)
+
+  # Data about this user from the account provider.
+  data = DB.DictField()
+
+
+class User(DB.Document):
+  """A user in our system.
+
+  A single user may be logged in to accounts from multiple account providers;
+  for example, a user may be simultaneously logged in to Facebook and Google.
+  """
+
+  # Accounts from account providers.
+  accounts = DB.ListField(DB.EmbeddedDocumentField(Account))
+
+  meta = {
+      'collection': 'users',
+      'indexes': ['accounts.account_id'],
+  }
+
