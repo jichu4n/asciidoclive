@@ -8,62 +8,48 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js';
-import 'package:google_oauth2_client/google_oauth2_browser.dart';
-import "package:google_plus_v1_api/plus_v1_api_browser.dart" as googlePlusClient;
+import 'utils.dart';
 
-// Account information obtained from a provider.
-class AccountData {
+// Authentication information obtained from a provider.
+class AuthData {
   // The provider's ID for this user.
   String userId;
-  // The person's nickname or first name.
-  String greetingName;
-
-  // Additional provider-specific data.
-  Map data;
+  // The authentication token.
+  String authToken;
 }
 
-// Converts a JsObject to a JSON string.
-String toJson(JsObject obj) {
-  return context['JSON'].callMethod('stringify', [obj]);
-}
-
-// Converts a JsObject to a Map.
-Map toMap(JsObject obj) {
-  return JSON.decode(toJson(obj));
-}
-
-// Callback invoked when sign-in is complete.
-typedef void OnSignInReadyCallback(AccountProvider accountProvider);
+// Callback invoked when authentication is complete.
+typedef void OnAuthCallback(AccountProvider accountProvider);
 // Interface for account providers (e.g., Google, Facebook).
 abstract class AccountProvider {
 
-  // Constructor. Will invoke onSignIn ready if silently logged in.
-  AccountProvider(String type, OnSignInReadyCallback onSignInReady) {
+  // Constructor. Will invoke onAuth ready if silently logged in.
+  AccountProvider(String type, OnAuthCallback onAuth) {
     _type = type;
-    _onSignInReady = onSignInReady;
+    _onAuth = onAuth;
   }
 
   // An identifier for this instance.
   String get type => _type;
 
   // Returns whether the user is already logged in.
-  bool get isSignedIn => _isSignedIn;
+  bool get hasAuth => _hasAuth;
 
   // Starts the sign-in process for the provider asynchronously. Will invoke the
-  // onSignInResult callback when complete.
-  void signIn();
+  // onAuthResult callback when complete.
+  void auth();
 
   // Returns account information from the provider.
-  AccountData get accountData => _accountData;
+  AuthData get authData => _authData;
 
   // An identifier for this instance.
   String _type;
   // Indicates whether we are already signed in.
-  bool _isSignedIn = false;
+  bool _hasAuth = false;
   // Retrieved account data.
-  AccountData _accountData = null;
+  AuthData _authData = null;
   // Callback invoked when logged in.
-  OnSignInReadyCallback _onSignInReady;
+  OnAuthCallback _onAuth;
 }
 
 
@@ -71,48 +57,71 @@ abstract class AccountProvider {
 class GoogleAccountProvider extends AccountProvider {
 
   // Constructor.
-  GoogleAccountProvider(String type, OnSignInReadyCallback onSignInReady)
-      : super(type, onSignInReady) {
-    // Initialize OAuth2 client. This will trigger the sign-in callback if
-    // silently sign-in.
-    _googleOAuth2 = new GoogleOAuth2(
-        _GOOGLE_CLIENT_ID,
-        _GOOGLE_AUTH_SCOPES,
-        tokenLoaded:_onGoogleSignIn,
-        autoLogin: true);
+  GoogleAccountProvider(String type, OnAuthCallback onAuth)
+      : super(type, onAuth) {
+    whenJsPropExists('gapi.client.load').then(_googleInit);
+  }
+
+  // Initialize Google JavaScript API and check if already authenticated.
+  void _googleInit(JsObject _) {
+    _gapi = context['gapi'];
+    // Load the Google+ client API asynchronously.
+    _gapi['client'].callMethod(
+        'load', ['plus', 'v1', () {
+          print('Google+ client API loaded');
+        }]);
+    _gapi['client'].callMethod('setApiKey', [_GOOGLE_API_KEY]);
+    // Try silent authentication.
+    final Map<String, String> params = {
+        'client_id': _GOOGLE_CLIENT_ID,
+        'scope': _GOOGLE_AUTH_SCOPES.join(' '),
+        'immediate': true,
+    };
+    _gapi['auth'].callMethod(
+        'authorize', [new JsObject.jsify(params), _onGoogleAuthStateChange]);
   }
 
   @override
-  void signIn() {
-    if (_isSignedIn) {
-      _onSignInReady(this);
+  void auth() {
+    if (_hasAuth) {
+      _onAuth(this);
     } else {
-      _googleOAuth2.login();
+      final Map<String, String> params = {
+          'client_id': _GOOGLE_CLIENT_ID,
+          'scope': _GOOGLE_AUTH_SCOPES.join(' '),
+          'immediate': false,
+      };
+      _gapi['auth'].callMethod(
+          'authorize', [new JsObject.jsify(params), _onGoogleAuthStateChange]);
     }
   }
 
-  // Callback for successful login to Google.
-  void _onGoogleSignIn(Token token) {
-    print('Signed in to Google with token: ${token.toString()}');
-    _isSignedIn = true;
+  // Callback invoked when the auth state changes.
+  void _onGoogleAuthStateChange(JsObject response) {
+    if (response.hasProperty('access_token')) {
+      print('Signed in to Google!');
+      // We now execute a GET to plus/v1/people/me to fetch the user ID.
+      whenJsPropExists('gapi.client.plus.people.get').then((_) {
+        JsObject request = _gapi['client']['plus']['people'].callMethod(
+            'get', [new JsObject.jsify({'userId': 'me'})]);
+        // WTF is the second callback arg??? It is not shown in any of the
+        // JavaScript examples / docs.
+        request.callMethod('execute', [(JsObject response_2, _) {
+          print('Retrieved Google user ID');
+          _hasAuth = true;
+          _authData = new AuthData();
+          _authData.authToken = response['access_token'];
+          _authData.userId = response_2['id'];
 
-    googlePlusClient.Plus plus = new googlePlusClient.Plus(_googleOAuth2);
-    plus.key = _GOOGLE_API_KEY;
-    plus.oauth_token = token.data;
-    plus.people.get('me').then((person) {
-      _accountData = new AccountData();
-      _accountData.userId = person.id;
-      if (person.nickname != null && person.nickname.isNotEmpty) {
-        _accountData.greetingName = person.nickname;
-      } else {
-        _accountData.greetingName = person.name.givenName;
-      }
-      _accountData.data = person.toJson();
-      if (_onSignInReady != null) {
-        _onSignInReady(this);
-      }
-    });
-
+          if (_onAuth != null) {
+            _onAuth(this);
+          }
+        }]);
+      });
+    } else {
+      print('Not signed in to Google.');
+      _hasAuth = false;
+    }
   }
 
   static final String _GOOGLE_CLIENT_ID = (
@@ -120,7 +129,8 @@ class GoogleAccountProvider extends AccountProvider {
       '.apps.googleusercontent.com');
   static final String _GOOGLE_API_KEY = 'AIzaSyD5dYsaLDbNQx2KLGhdKsBs50RREx34OXs';
   static final List<String> _GOOGLE_AUTH_SCOPES = ['profile', 'email'];
-  GoogleOAuth2 _googleOAuth2;
+  // Handle to gapi object.
+  JsObject _gapi;
 }
 
 
@@ -128,66 +138,53 @@ class GoogleAccountProvider extends AccountProvider {
 class FacebookAccountProvider extends AccountProvider {
 
   // Constructor.
-  FacebookAccountProvider(String type, OnSignInReadyCallback onSignInReady)
-      : super(type, onSignInReady) {
-    _fbInit();
+  FacebookAccountProvider(String type, OnAuthCallback onAuth)
+      : super(type, onAuth) {
+    whenJsPropExists('FB.init').then(_fbInit);
   }
 
-  // Invokes FB.init(). If the Facebook JavaScript SDK is not yet ready, will
-  // set a timer to retry in a bit.
-  void _fbInit() {
-    if (context['isFbJsSdkLoaded']) {
-      _fb = context['FB'];
-      final Map<String, String> params = {
+  // Invokes FB.init() and checks if already authenticated.
+  void _fbInit(JsObject _) {
+    _fb = context['FB'];
+    final Map<String, String> params = {
         'appId': _FACEBOOK_APP_ID,
         'xfbml': true,
         'status': true,
         'cookie': true,
         'version': 'v2.0',
-      };
-      _fb.callMethod('init', [new JsObject.jsify(params)]);
-      _fb.callMethod('getLoginStatus', [_onFbSignInStateChange]);
-    } else {
-      print('Facebook JavaScript SDK not yet loaded, will retry.');
-      new Timer(_FB_JS_SDK_POLL_INTERVAL, _fbInit);
-    }
+    };
+    _fb.callMethod('init', [new JsObject.jsify(params)]);
+    _fb.callMethod('getLoginStatus', [_onFbAuthStateChange]);
   }
 
-  // Callback invoked when the sign-in state changes.
-  void _onFbSignInStateChange(JsObject response) {
+  // Callback invoked when the auth state changes.
+  void _onFbAuthStateChange(JsObject response) {
     if (response['status'] == 'connected') {
       print('Signed in to Facebook!');
-      _isSignedIn = true;
-      _fb.callMethod('api', ['/me', (JsObject response) {
-        if (response.hasProperty('error')) {
-          print('Error fetching user info!');
-          print(toJson(response));
-        } else {
-          _accountData = new AccountData();
-          _accountData.userId = response['id'];
-          _accountData.greetingName = response['first_name'];
-          _accountData.data = toMap(response);
-        }
-        if (_onSignInReady != null) {
-          _onSignInReady(this);
-        }
-      }]);
+      _hasAuth = true;
+      _authData = new AuthData();
+      _authData.userId = response['authResponse']['userID'];
+      _authData.authToken = response['authResponse']['accessToken'];
+
+      if (_onAuth != null) {
+        _onAuth(this);
+      }
     } else {
       print('Not signed in to Facebook.');
-      _isSignedIn = false;
+      _hasAuth = false;
     }
   }
 
   @override
-  void signIn() {
-    if (_isSignedIn) {
-      _onSignInReady(this);
+  void auth() {
+    if (_hasAuth) {
+      _onAuth(this);
     } else {
       final Map<String, String> params = {
           'scope': _FACEBOOK_AUTH_SCOPE.join(','),
       };
       _fb.callMethod(
-          'login', [_onFbSignInStateChange, new JsObject.jsify(params)]);
+          'login', [_onFbAuthStateChange, new JsObject.jsify(params)]);
     }
   }
 

@@ -14,10 +14,10 @@ class UserManager {
 
   // Constructor.
   UserManager() {
-    // Maps sign-in type strings to account providers.
+    // Maps auth type strings to account providers.
     final Map<String, AccountProvider> accountProviders = {
-        'google': new GoogleAccountProvider('google', onSignInReady),
-        'facebook': new FacebookAccountProvider('facebook', onSignInReady),
+        'google': new GoogleAccountProvider('google', _onAuth),
+        'facebook': new FacebookAccountProvider('facebook', _onAuth),
         'twitter': null,
         'linkedin': null,
     };
@@ -28,13 +28,13 @@ class UserManager {
           e.attributes['data-account-provider-type'];
       assert(accountProviderType != null);
       assert(accountProviders.containsKey(accountProviderType));
-      // e.onClick.listen((_) => signInHandlers[accountProviderType]());
+      // e.onClick.listen((_) => authHandlers[accountProviderType]());
       e.onClick.listen((_) {
         final AccountProvider provider = accountProviders[accountProviderType];
         if (provider == null) {
           print('Not implemented :(');
         } else {
-          provider.signIn();
+          provider.auth();
         }
       });
     });
@@ -42,9 +42,9 @@ class UserManager {
   }
 
   // Invoked on a successful login.
-  void onSignInReady(AccountProvider accountProvider) {
+  void _onAuth(AccountProvider accountProvider) {
     print('Signed in abstraaaactly to ${accountProvider.type}!');
-    print('User ID: ${accountProvider.accountData.userId}');
-    print('Greeting name: ${accountProvider.accountData.greetingName}');
+    print('User ID: ${accountProvider.authData.userId}');
+    print('Auth token: ${accountProvider.authData.authToken}');
   }
 }

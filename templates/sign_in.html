@@ -25,7 +25,6 @@
 
 {# Sign-in window. #}
 
-
 {# Overlay window that dims the normal page. Used during sign-in. #}
 <div id="overlay" {# class="hidden" #}>&nbsp;</div>
 {# Sign in window. #}
@@ -38,21 +37,27 @@
       <div class="prompt">Sign in with...</div>
       {{ SignInButton('facebook', 'fa-facebook', 'Facebook') }}
       {{ SignInButton('google', 'fa-google', 'Google') }}
-      {{ SignInButton('twitter', 'fa-twitter', 'Twitter') }}
-      {{ SignInButton('linkedin', 'fa-linkedin', 'LinkedIn') }}
+      {# Not implemented yet.
+        {{ SignInButton('twitter', 'fa-twitter', 'Twitter') }}
+        {{ SignInButton('linkedin', 'fa-linkedin', 'LinkedIn') }}
+      #}
     </div>
   </div>
 </div></div>
 
+
+{# Google API JavaScript client. #}
+<script type="text/javascript">
+  (function() {
+     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+     po.src = 'https://apis.google.com/js/client:plusone.js';
+     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+   })();
+</script>
+
 {# Facebook JavaScript SDK. #}
 <div id="fb-root"></div>
 <script>
-  // The default fbAsyncInit function appears to conflict with Google's
-  // sign-in. Instead, we change our init function to just set a flag
-  // and we will call FB.init() from Dart.
-  window.isFbJsSdkLoaded = false;
-  window.fbAsyncInit = function() { window.isFbJsSdkLoaded = true; };
-
   (function(d, s, id){
      var js, fjs = d.getElementsByTagName(s)[0];
      if (d.getElementById(id)) {return;}
