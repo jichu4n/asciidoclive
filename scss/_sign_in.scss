@@ -49,14 +49,13 @@ $SIGNIN_WINDOW_WIDTH: 450px;
 
 $SIGN_IN_BUTTON_ICON_WIDTH: 80px;
 $SIGN_IN_BUTTON_TITLE_WIDTH: 150px;
-$SIGN_IN_BUTTON_PADDING: 5px;
-$SIGN_IN_BUTTON_BORDER_WIDTH: 2px;
+$SIGN_IN_BUTTON_BORDER_WIDTH: 1px;
 $SIGN_IN_BUTTON_WIDTH: (
     2 * $SIGN_IN_BUTTON_BORDER_WIDTH +
-    2 * $SIGN_IN_BUTTON_PADDING +
     $SIGN_IN_BUTTON_ICON_WIDTH +
     $SIGN_IN_BUTTON_TITLE_WIDTH);
-$SIGN_IN_WINDOW_PADDING: 15px;
+$SIGN_IN_WINDOW_PADDING: 25px;
+$SIGN_IN_BUTTON_DIVIDER_WIDTH: 10px;
 #sign-in-window {
   display: inline-block;
 
@@ -82,21 +81,32 @@ $SIGN_IN_WINDOW_PADDING: 15px;
     @include BorderBox();
 
     overflow: auto;
-    max-width: 2 * $SIGN_IN_WINDOW_PADDING + 2 * $SIGN_IN_BUTTON_WIDTH;
+    max-width: (
+        2 * $SIGN_IN_WINDOW_PADDING +
+        2 * $SIGN_IN_BUTTON_WIDTH +
+        $SIGN_IN_BUTTON_DIVIDER_WIDTH);
     padding: $SIGN_IN_WINDOW_PADDING;
+
+    @include UiFontLarge();
   }
 
   .prompt {
-    padding: $SIGN_IN_BUTTON_PADDING + $SIGN_IN_BUTTON_BORDER_WIDTH;
+    margin-bottom: $SIGN_IN_WINDOW_PADDING;
+  }
+
+  .sign-in-buttons {
+    @include ContainFloating();
   }
 
   .sign-in-button {
     @include BorderBox();
-    border: $SIGN_IN_BUTTON_BORDER_WIDTH solid #fff;
-    padding: $SIGN_IN_BUTTON_PADDING;
+    @include UiButtonGray();
+    @include UiFont();
+    border-radius: 0;
 
     float: left;
     cursor: pointer;
+    padding: 0;
 
     table {
       // We need to clear the default border spacing.
@@ -116,24 +126,17 @@ $SIGN_IN_WINDOW_PADDING: 15px;
       @include BorderBox();
       width: $SIGN_IN_BUTTON_TITLE_WIDTH;
       padding: 10px;
-
-      color: #000;
-      background-color: #eee;
       text-align: left;
-      font-size: 80%;
-
-      @include Opacity(0.7);
-
+      @include UiFont();
     }
   }
   .sign-in-button:hover {
-    border: $SIGN_IN_BUTTON_BORDER_WIDTH solid #ccc;
-
+    @include UiButtonGrayHover();
+    @include UiFont();
+    padding: 0;
+    border-radius: 0;
     .icon {
       @include Opacity(0.9);
-    }
-    .title {
-      @include Opacity(1.0);
     }
   }
 
@@ -148,5 +151,19 @@ $SIGN_IN_WINDOW_PADDING: 15px;
   }
   .sign-in-button-linkedin .icon {
     background-color: #0179b3;
+  }
+
+  .divider {
+    float: left;
+    width: $SIGN_IN_BUTTON_DIVIDER_WIDTH;
+  }
+
+  .actions {
+    margin-top: $SIGN_IN_WINDOW_PADDING * 1.5;
+    @include ContainFloating();
+
+    .ui-button {
+      float: right;
+    }
   }
 }

@@ -21,29 +21,45 @@
     </tr></table>
   </a>
 {% endmacro %}
+{# Renders a divider between two buttons. #}
+{% macro Divider() %}
+  <span class="divider">&nbsp;</span>
+{% endmacro %}
 
 
 {# Sign-in window. #}
 
 {# Overlay window that dims the normal page. Used during sign-in. #}
-<div id="overlay" {# class="hidden" #}>&nbsp;</div>
+<div id="overlay" class="hidden">&nbsp;</div>
 {# Sign in window. #}
-<div id="sign-in-window-wrapper-1"><div id="sign-in-window-wrapper-2">
-  <div id="sign-in-window">
-    <div class="header">
-      <img src="{{ url_for('static', filename='logo.png') }}">
-    </div>
-    <div class="body">
-      <div class="prompt">Sign in with...</div>
-      {{ SignInButton('facebook', 'fa-facebook', 'Facebook') }}
-      {{ SignInButton('google', 'fa-google', 'Google') }}
-      {# Not implemented yet.
-        {{ SignInButton('twitter', 'fa-twitter', 'Twitter') }}
-        {{ SignInButton('linkedin', 'fa-linkedin', 'LinkedIn') }}
-      #}
+<div id="sign-in-window-wrapper" class="hidden">
+  <div id="sign-in-window-wrapper-1">
+    <div id="sign-in-window-wrapper-2">
+      <div id="sign-in-window">
+        <div class="header">
+          <img src="{{ url_for('static', filename='logo.png') }}">
+        </div>
+        <div class="body">
+          <div class="prompt">Sign in with...</div>
+          <div class="sign-in-buttons">
+            {{ SignInButton('facebook', 'fa-facebook', 'Facebook') }}
+            {{ Divider() }}
+            {{ SignInButton('google', 'fa-google', 'Google') }}
+            {# Not implemented yet.
+              {{ SignInButton('twitter', 'fa-twitter', 'Twitter') }}
+              {{ Divider() }}
+              {{ SignInButton('linkedin', 'fa-linkedin', 'LinkedIn') }}
+            #}
+          </div>
+          <div class="actions">
+            <a href="#"
+               class="ui-button ui-button-cancel">Cancel</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div></div>
+</div>
 
 
 {# Google API JavaScript client. #}

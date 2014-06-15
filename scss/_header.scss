@@ -10,6 +10,8 @@ $HEADER_FG_COLOR: #fff;
 $HEADER_V_PADDING: 6px;
 $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
 $LOGO_V_PADDING: 4px;
+$HEADER_FONT_SIZE: 14px;
+$HEADER_ITEM_H_PADDING: 15px;
 
 
 // Styles.
@@ -17,7 +19,7 @@ $LOGO_V_PADDING: 4px;
 #header {
   height: $HEADER_HEIGHT;
   margin: -$HEADER_HEIGHT 0 0 0;
-  padding: $HEADER_V_PADDING 5px;
+  padding: 0;
   @include BorderBox();
 
   background-color: $HEADER_BG_COLOR;
@@ -28,19 +30,47 @@ $LOGO_V_PADDING: 4px;
     // Without margin: 0, there is a weird gap at the top of the page :-/
     margin: 0;
     padding: 0;
+    height: $HEADER_HEIGHT;
+    line-height: $HEADER_HEIGHT;
+    @include BorderBox();
+
+    @include UiFont();
+
+    // This allows items to become "highlighted" by simply changing opacity.
+    background: #fff;
 
     li {
       // All list items on one line.
-      display: inline;
+      display: inline-block;
 
-      line-height: $HEADER_INNER_HEIGHT;
+      padding: 0 $HEADER_ITEM_H_PADDING;
+      @include BorderBox();
+
+      background: $HEADER_BG_COLOR;
     }
 
+    li.button {
+      @include Opacity(1.0);
+      cursor: pointer;
+    }
+    li.button:hover {
+      @include Opacity(0.925);
+    }
+  }
+
+  ul.left {
+    float: left;
+
     li#logo {
+      padding: 0 $HEADER_ITEM_H_PADDING 0 ($HEADER_ITEM_H_PADDING / 2);
       img {
         height: $HEADER_INNER_HEIGHT - 2 * $LOGO_V_PADDING;
         vertical-align: middle;
       }
     }
+  }
+
+  ul.right {
+    float: right;
   }
 }

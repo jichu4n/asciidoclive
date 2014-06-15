@@ -37,8 +37,7 @@ $OUTPUT_H_PADDING: 20px;
     margin-right: auto;
 
     padding: $UI_MARGIN;
-    // Contain floating children.
-    overflow: auto;
+    @include ContainFloating();
 
     @include BorderBox();
 
@@ -147,8 +146,4 @@ $OUTPUT_H_PADDING: 20px;
       }
     }
   }
-}
-
-.hidden {
-  display: none;
 }

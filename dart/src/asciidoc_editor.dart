@@ -240,11 +240,12 @@ class AsciiDocEditor {
 
   // Sets the scroll position of the output.
   void _setOutputScrollRatio(num scrollRatio) {
-    _outputNode.scrollTop = _outputScrollSize.toScrollTop(scrollRatio);
+    // scrollTop takes an int.
+    _outputNode.scrollTop = _outputScrollSize.toScrollTop(scrollRatio).round();
   }
 
   // Callback invoked when the source text is scrolled.
-  void _onSourceTextScroll(JsObject e, JsObject t) {
+  void _onSourceTextScroll(num position, JsObject t) {
     if (_scrollEventSource == null) {
       _scrollEventSource = _sourceNode;
       _setOutputScrollRatio(_sourceScrollRatio);

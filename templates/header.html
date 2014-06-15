@@ -5,15 +5,17 @@
  # Page header template. #}
 
 <div id="header">
-  <ul>
+  <ul class="left">
     <li id="logo">
       <a href="{{ url_for('RenderEditor') }}">
         <img src="{{ url_for('static', filename='logo.png') }}">
       </a>
-      {% if user %}
-        <li>{{ user.user_id }}
-      {% else %}
-        <li>Not logged in
-      {% endif %}
+  </ul>
+  <ul class="right">
+    {% if user.is_authenticated() %}
+      <li>{{ user.user_id }}
+    {% endif %}
+    <li id="sign-in-button-launcher"
+        class="button {{ 'hidden' if user.is_authenticated() else '' }}">Sign in
   </ul>
 </div>
