@@ -12,7 +12,7 @@ $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
 $LOGO_V_PADDING: 4px;
 $HEADER_FONT_SIZE: 14px;
 $HEADER_ITEM_H_PADDING: 15px;
-
+$HEADER_ITEM_HIGHLIGHT_HEIGHT: 5px;
 
 // Styles.
 
@@ -31,30 +31,33 @@ $HEADER_ITEM_H_PADDING: 15px;
     margin: 0;
     padding: 0;
     height: $HEADER_HEIGHT;
-    line-height: $HEADER_HEIGHT;
     @include BorderBox();
 
     @include UiFont();
 
-    // This allows items to become "highlighted" by simply changing opacity.
+    // This allows us to use opacity to highlight buttons.
     background: #fff;
 
     li {
       // All list items on one line.
       display: inline-block;
 
+      height: $HEADER_HEIGHT;
+      line-height: $HEADER_HEIGHT;
       padding: 0 $HEADER_ITEM_H_PADDING;
       @include BorderBox();
 
-      background: $HEADER_BG_COLOR;
+      background-color: $HEADER_BG_COLOR;
+      border-bottom: $HEADER_ITEM_HIGHLIGHT_HEIGHT solid $HEADER_BG_COLOR;
     }
 
     li.button {
-      @include Opacity(1.0);
       cursor: pointer;
     }
     li.button:hover {
-      @include Opacity(0.925);
+      @include Opacity(0.95);
+      border-bottom: $HEADER_ITEM_HIGHLIGHT_HEIGHT solid
+          $HEADER_ITEM_HIGHLIGHT_COLOR;
     }
   }
 
