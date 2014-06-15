@@ -14,19 +14,11 @@ import 'utils.dart';
 abstract class BasePage {
   BasePage() {
     // Set auth state change callback to refresh base page UI.
-    new UserManager(() {
+    _userManager = new UserManager(() {
       postJson(_AUTH_STATE_CHANGE_REFRESH_UI, {}, _onAuthStateChangeRefresh);
       _signInWindowWrapperNode.classes.add('hidden');
     });
-    // Event listeners.
-    querySelector('#sign-in-button-launcher').onClick.listen((_) {
-      _overlayNode.classes.remove('hidden');
-      _signInWindowWrapperNode.classes.remove('hidden');
-    });
-    querySelector('#sign-in-window .ui-button-cancel').onClick.listen((_) {
-      _signInWindowWrapperNode.classes.add('hidden');
-      _overlayNode.classes.add('hidden');
-    });
+    _registerHeaderEventListeners();
   }
 
   // Callback invoked when we receive changed UI elements following auth state
@@ -34,13 +26,31 @@ abstract class BasePage {
   void _onAuthStateChangeRefresh(Map response) {
     if (response['success']) {
       print('Refreshing page elements following auth state change');
-      // Refresh header.
+      // Refresh header and re-register event handlers, as the old elements have
+      // been deleted along with any event handlers.
       replaceWithHtml('#header', response['header']);
+      _registerHeaderEventListeners();
     } else {
       print('Failed to refresh on auth state change. Error: ' +
             response['error_message']);
     }
     _overlayNode.classes.add('hidden');
+  }
+
+  // Attaches event handlers for the header.
+  void _registerHeaderEventListeners() {
+    querySelector('#sign-in-launcher').onClick.listen((_) {
+      _overlayNode.classes.remove('hidden');
+      _signInWindowWrapperNode.classes.remove('hidden');
+    });
+    querySelector('#sign-out-launcher').onClick.listen((_) {
+      print('Clicked');
+      _userManager.logout();
+    });
+    querySelector('#sign-in-window .ui-button-cancel').onClick.listen((_) {
+      _signInWindowWrapperNode.classes.add('hidden');
+      _overlayNode.classes.add('hidden');
+    });
   }
 
   // Auth state change refresh API.
@@ -50,4 +60,6 @@ abstract class BasePage {
   final Element _overlayNode = querySelector('#overlay');
   final Element _signInWindowWrapperNode =
       querySelector('#sign-in-window-wrapper');
+  // Handle to user manager instance.
+  UserManager _userManager;
 }

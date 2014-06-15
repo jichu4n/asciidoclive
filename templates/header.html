@@ -12,10 +12,11 @@
       </a>
   </ul>
   <ul class="right">
-    {% if user.is_authenticated() %}
-      <li>{{ user.user_id }}
-    {% endif %}
-    <li id="sign-in-button-launcher"
-        class="button {{ 'hidden' if user.is_authenticated() else '' }}">Sign in
+    <li id="sign-in-launcher"
+        class="button {{ 'hidden' if user.is_authenticated() else '' }}">
+      <span class="fa fa-sign-in"></span>&nbsp;Sign in
+    <li id="sign-out-launcher"
+        class="button {{ '' if user.is_authenticated() else 'hidden' }}">
+      <span class="fa fa-sign-out"></span>&nbsp;Sign out
   </ul>
 </div>

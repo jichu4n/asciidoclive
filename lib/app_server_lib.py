@@ -156,6 +156,32 @@ def Auth():
   return json.dumps(response)
 
 
+@app.route('/api/v1/logout', methods=['POST'])
+def Logout():
+  """Handler for user logout.
+
+  POST data: an empty JSON object.
+  Returns:
+    A JSON dict of the form:
+        {
+          'success': <A boolean>
+          'error_message': <Warnings or error messages>
+        }
+  """
+  if login.current_user.is_authenticated():
+    login.logout_user()
+    response = {
+        'success': True,
+        'error_message': '',
+    }
+  else:
+    response = {
+        'success': False,
+        'error_message': 'Not authenticated',
+    }
+  return json.dumps(response)
+
+
 @app.route('/api/v1/auth_state_change_refresh', methods=['POST'])
 def AuthStateChangeRefresh():
   """Re-renders elements that depend on authentication state.
