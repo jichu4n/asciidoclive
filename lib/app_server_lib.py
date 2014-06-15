@@ -7,6 +7,7 @@
 import flask
 from flask.ext import login
 import json
+import logging
 
 from lib import auth_lib
 from lib import asciidoc_lib
@@ -101,6 +102,8 @@ def Auth():
       - account_provider_type: type of the account provider.
       - user_id: the user's ID with the account provider.
       - auth_token: the authentication token obtained from the provider.
+      - data: extra data for this user obtained from the account provider. The
+          format depends on the account provider.
   Returns:
     A JSON dict of the form:
         {
@@ -119,6 +122,7 @@ def Auth():
         'error_message': 'Invalid request',
     }
   else:
+    logging.debug('Auth request: %s', str(request_data))
     accounts = []
     for account_data in request_data['accounts']:
       if (not account_data.get('account_provider_type', None) or
@@ -142,7 +146,9 @@ def Auth():
         break
       else:
         accounts.append(
-            (account_data['account_provider_type'], account_data['user_id']))
+            (account_data['account_provider_type'],
+             account_data['user_id'],
+             account_data['data']))
     if response is None:
       # All accounts valid.
       user = auth_lib.FindOrCreateUser(accounts)

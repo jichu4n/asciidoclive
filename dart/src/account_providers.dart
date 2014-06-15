@@ -16,6 +16,8 @@ class AuthData {
   String userId;
   // The authentication token.
   String authToken;
+  // Extra data obtained from the account provider.
+  Map data;
 }
 
 // Callback invoked when authentication is complete.
@@ -107,11 +109,12 @@ class GoogleAccountProvider extends AccountProvider {
         // WTF is the second callback arg??? It is not shown in any of the
         // JavaScript examples / docs.
         request.callMethod('execute', [(JsObject response_2, _) {
-          print('Retrieved Google user ID');
+          print('Retrieved Google user info');
           _hasAuth = true;
           _authData = new AuthData();
           _authData.authToken = response['access_token'];
           _authData.userId = response_2['id'];
+          _authData.data = toMap(response_2);
 
           if (_onAuth != null) {
             _onAuth(this);
@@ -165,10 +168,19 @@ class FacebookAccountProvider extends AccountProvider {
       _authData = new AuthData();
       _authData.userId = response['authResponse']['userID'];
       _authData.authToken = response['authResponse']['accessToken'];
+      _fb.callMethod('api', ['/me', (JsObject response_2) {
+        if (response_2['error'] == null ||
+            response_2['error'].isEmpty) {
+          _authData.data = toMap(response_2);
+        } else {
+          print('Failed to retrieve Facebook user info. Error: ' +
+                response_2['error']);
+        }
 
-      if (_onAuth != null) {
-        _onAuth(this);
-      }
+        if (_onAuth != null) {
+          _onAuth(this);
+        }
+      }]);
     } else {
       print('Not signed in to Facebook.');
       _hasAuth = false;

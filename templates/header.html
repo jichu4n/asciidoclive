@@ -15,8 +15,13 @@
     <li id="sign-in-launcher"
         class="button {{ 'hidden' if user.is_authenticated() else '' }}">
       <span class="fa fa-sign-in"></span>&nbsp;&nbsp;Sign in
+    {#
     <li id="sign-out-launcher"
         class="button {{ '' if user.is_authenticated() else 'hidden' }}">
       <span class="fa fa-sign-out"></span>&nbsp;&nbsp;Sign out
+    #}
+    <li id="account-launcher"
+        class="button {{ '' if user.is_authenticated() else 'hidden' }}">
+      {{ user.greeting_name }}
   </ul>
 </div>

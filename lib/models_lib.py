@@ -92,6 +92,9 @@ class User(DB.Document, login.UserMixin):
   # Accounts from account providers.
   accounts = DB.ListField(DB.EmbeddedDocumentField(Account))
 
+  # Name to display in greetings.
+  greeting_name = DB.StringField(required=True)
+
   meta = {
       'collection': 'users',
       'indexes': ['accounts.account_id', 'user_id'],

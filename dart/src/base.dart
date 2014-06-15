@@ -43,10 +43,12 @@ abstract class BasePage {
       _overlayNode.classes.remove('hidden');
       _signInWindowWrapperNode.classes.remove('hidden');
     });
+    /*
     querySelector('#sign-out-launcher').onClick.listen((_) {
       print('Clicked');
       _userManager.logout();
     });
+    */
     querySelector('#sign-in-window .ui-button-cancel').onClick.listen((_) {
       _signInWindowWrapperNode.classes.add('hidden');
       _overlayNode.classes.add('hidden');

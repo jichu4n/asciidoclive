@@ -47,13 +47,14 @@ class UserManager {
   // Invoked on a successful login. Sends login information to the server.
   void _onAuth(AccountProvider accountProvider) {
     print('Signed in to ${accountProvider.type}! Sending auth request');
-    List<Map<String, String>> accounts = [];
+    List<Map> accounts = [];
     for (AccountProvider accountProvider in _accountProviders.values) {
       if (accountProvider.hasAuth) {
         accounts.add({
             'account_provider_type': accountProvider.type,
             'user_id': accountProvider.authData.userId,
             'auth_token': accountProvider.authData.authToken,
+            'data': accountProvider.authData.data,
         });
       }
     }

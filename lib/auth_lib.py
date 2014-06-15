@@ -36,6 +36,16 @@ class AccountProvider(object):
     """
     raise NotImplementedError()
 
+  def GetGreetingName(self, account):
+    """Returns an appropriate greeting name given account data.
+
+    Args:
+      account: an Account instance.
+    Returns:
+      A greeting name for the user.
+    """
+    raise NotImplementedError();
+
 
 class GoogleAccountProvider(AccountProvider):
   """Handles authentication with Google."""
@@ -61,6 +71,14 @@ class GoogleAccountProvider(AccountProvider):
           'Failed token validation for Google user ID %s:\n%s',
           user_id, str(response))
       return False
+
+  def GetGreetingName(self, account):
+    # See https://developers.google.com/+/api/latest/people#resource.
+    if account.data.get('nickname', None):
+      return account.data['nickname']
+    if account.data.get('name', {}).get('givenName', None):
+      return account.data['name']['givenName']
+    return account.data['displayName']
 
 
 class FacebookAccountProvider(AccountProvider):
@@ -95,6 +113,14 @@ class FacebookAccountProvider(AccountProvider):
           user_id, str(response))
       return False
 
+  def GetGreetingName(self, account):
+    # See https://developers.facebook.com/docs/graph-api/reference/v2.0/user.
+    if account.data.get('first_name', None):
+      return account.data['first_name']
+    if account.data.get('name_format', None):
+      return account.data['name_format']
+    return account.data['name']
+
 
 # All account providers.
 ACCOUNT_PROVIDERS = {
@@ -117,13 +143,15 @@ def FindOrCreateUser(account_data_list):
     A list of tuples of the form (account_provider_type, user_id) where
       - account_provider_type: type of the account provider.
       - user_id: the user's ID with the account provider.
+      - account_data: extra data for this user obtained from the account
+        provider. The format depends on the account provider.
   Returns:
     A User instance.
   """
   found_users = []
   accounts_to_add = []
 
-  for account_provider_type, user_id in set(account_data_list):
+  for account_provider_type, user_id, data in account_data_list:
     account_id = models_lib.Account.ToAccountId(account_provider_type, user_id)
     user = models_lib.User.objects(accounts__account_id=account_id).first()
     if user is None:
@@ -132,6 +160,7 @@ def FindOrCreateUser(account_data_list):
       account.user_id = user_id
       account.account_id = models_lib.Account.ToAccountId(
           account_provider_type, user_id)
+      account.data = data
       accounts_to_add.append(account)
     elif not any(found_user.id == user.id for found_user in found_users):
       found_users.append(user)
@@ -146,6 +175,9 @@ def FindOrCreateUser(account_data_list):
 
   if accounts_to_add:
     user.accounts.extend(accounts_to_add)
+    user.greeting_name = ACCOUNT_PROVIDERS[
+        user.accounts[0].account_provider_type].GetGreetingName(
+            user.accounts[0])
     user.save()
 
   return user
