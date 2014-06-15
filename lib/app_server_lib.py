@@ -7,6 +7,7 @@
 import flask
 import json
 
+from lib import auth_lib
 from lib import asciidoc_lib
 from lib import env_lib
 
@@ -44,7 +45,7 @@ def RenderSitemap():
 def AsciiDocToHtml():
   """Handler for AsciiDoc to HTML conversion.
 
-  POST arguments:
+  POST data: A JSON object:
     - text: the text to convert.
   Returns:
     A JSON dict of the form:
@@ -54,8 +55,14 @@ def AsciiDocToHtml():
           'error_message': <Warnings or error messages>
         }
   """
-  text = flask.request.form.get('text', '')
-  if len(text) > env_lib.MAX_SOURCE_TEXT_SIZE:
+  request_data = flask.request.get_json()
+  if 'text' not in request_data:
+    response = {
+        'success': False,
+        'html': '',
+        'error_message': 'Invalid request',
+    }
+  elif len(request_data['text']) > env_lib.MAX_SOURCE_TEXT_SIZE:
     response = {
         'success': False,
         'html': '',
@@ -63,10 +70,75 @@ def AsciiDocToHtml():
     }
   else:
     (return_code, stdout_output, stderr_output) = (
-        asciidoc_lib.GetAsciiDocResult(text))
+        asciidoc_lib.GetAsciiDocResult(request_data['text']))
     response = {
         'success': return_code == 0,
         'html': stdout_output,
         'error_message': stderr_output,
     }
+  return json.dumps(response)
+
+
+@app.route('/api/v1/auth', methods=['POST'])
+def Auth():
+  """Handler for user authentication.
+
+  This is invoked by the client side after a successful login.
+
+  POST data: a JSON object:
+    - accounts: an array of objects:
+      - account_provider_type: type of the account provider.
+      - user_id: the user's ID with the account provider.
+      - auth_token: the authentication token obtained from the provider.
+  Returns:
+    A JSON dict of the form:
+        {
+          'success': <A boolean indicating whether the conversion succeeded.>
+          'user_id': <Our very own user ID>
+          'error_message': <Warnings or error messages>
+        }
+  """
+  response = None
+  request_data = flask.request.get_json()
+  if ('accounts' not in request_data or
+      not isinstance(request_data['accounts'], list) or
+      not request_data['accounts']):
+    response = {
+        'success': False,
+        'error_message': 'Invalid request',
+    }
+  else:
+    accounts = []
+    for account_data in request_data['accounts']:
+      if (not account_data.get('account_provider_type', None) or
+          not account_data.get('user_id', None) or
+          not account_data.get('auth_token', None) or
+          account_data['account_provider_type'] not in
+          auth_lib.ACCOUNT_PROVIDERS):
+        response = {
+            'success': False,
+            'error_message': 'Invalid request',
+        }
+        break
+      account_provider = (
+          auth_lib.ACCOUNT_PROVIDERS[account_data['account_provider_type']])
+      if not account_provider.IsTokenValid(
+          account_data['user_id'], account_data['auth_token']):
+        response = {
+            'success': False,
+            'error_message': 'Invalid token',
+        }
+        break
+      else:
+        accounts.append(
+            (account_data['account_provider_type'], account_data['user_id']))
+    if response is None:
+      # All accounts valid.
+      user = auth_lib.FindOrCreateUser(accounts)
+      response = {
+          'success': True,
+          'user_id': user.user_id,
+          'error_message': ''
+      }
+
   return json.dumps(response)

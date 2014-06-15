@@ -4,6 +4,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 """MongoEngine models."""
 
+import os
+import time
 
 # Usually we don't import individual classes directly, but we'll make an
 # exception here as this makes the model classes much more readable.
@@ -52,10 +54,25 @@ class Account(DB.EmbeddedDocument):
   user_id = DB.StringField(required=True)
   # The full account ID string. This is of the form
   #    <account_provider_type>::<user_id>
-  account_id = DB.StringField(required=True)
+  account_id = DB.StringField(required=True, unique=True)
 
   # Data about this user from the account provider.
   data = DB.DictField()
+
+  @staticmethod
+  def ToAccountId(account_provider_type, user_id):
+    """Generates a full account ID from the provider type and user ID.
+
+    The generated account ID is of the form
+        <account_provider_type>::<user_id>
+
+    Args:
+      account_provider_type: the type of the account provider.
+      user_id: the account provider's ID for the user.
+    Returns:
+      The generated account ID.
+    """
+    return '%s::%s' % (account_provider_type, user_id)
 
 
 class User(DB.Document):
@@ -65,11 +82,22 @@ class User(DB.Document):
   for example, a user may be simultaneously logged in to Facebook and Google.
   """
 
+  # Our very own user ID :)
+  user_id = DB.StringField(required=True, unique=True)
+
   # Accounts from account providers.
   accounts = DB.ListField(DB.EmbeddedDocumentField(Account))
 
   meta = {
       'collection': 'users',
-      'indexes': ['accounts.account_id'],
+      'indexes': ['accounts.account_id', 'user_id'],
   }
 
+  @staticmethod
+  def NewUserId():
+    """Generates a new user ID.
+
+    The user ID is based on the process ID and current time in microseconds.
+    """
+    return '%d-%d' % (
+        os.getpid(), int(time.time() * 1000000))

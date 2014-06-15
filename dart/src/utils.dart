@@ -6,6 +6,8 @@
 */
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:html';
 import 'dart:js';
 
 // Converts a JsObject to a JSON string.
@@ -53,4 +55,32 @@ Future<JsObject> whenJsPropExists(String prop_string) {
   new Timer(PROPERTY_POLL_INTERVAL, completeIfJsAttrExists);
 
   return completer.future;
+}
+
+// Sends a JSON POST request. Returns the request.
+HttpRequest postJson(
+    String url,
+    Map args,
+    void onLoad(HttpRequest request),
+    {void onError(HttpRequest request, ProgressEvent e)}) {
+  HttpRequest httpRequest = new HttpRequest();
+  httpRequest.open('POST', url);
+  httpRequest.setRequestHeader(
+      'Content-Type', 'application/json; charset=UTF-8');
+  httpRequest.onLoad.listen((ProgressEvent e) {
+    // Note: file:// URIs have status of 0.
+    if ((httpRequest.status >= 200 && httpRequest.status < 300) ||
+        httpRequest.status == 0 || httpRequest.status == 304) {
+      onLoad(httpRequest);
+    } else {
+      if (onError == null) {
+        print('HttpRequest error: ${e.toString()}');
+      } else {
+        onError(httpRequest, e);
+      }
+    }
+  });
+  httpRequest.send(JSON.encode(args));
+
+  return httpRequest;
 }

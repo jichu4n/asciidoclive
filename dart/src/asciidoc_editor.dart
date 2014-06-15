@@ -13,6 +13,7 @@ import 'dart:js';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:utf/utf.dart';
+import 'utils.dart';
 
 // AsciiDoc editor component client-side implementation.
 class AsciiDocEditor {
@@ -78,42 +79,6 @@ class AsciiDocEditor {
     SHA1 sha1 = new SHA1();
     sha1.add(encodeUtf8(text));
     return CryptoUtils.bytesToHex(sha1.close());
-  }
-
-  // Sends a POST request. This is similar to HttpRequest.postFormData(), except
-  // it returns the raw HttpRequest object after the send.
-  HttpRequest _postData(
-      String url,
-      Map<String, String> args,
-      void onLoad(HttpRequest request),
-      {void onError(HttpRequest request, ProgressEvent e)}) {
-    List<String> arg_strings = [];
-    args.forEach((k, v) {
-      arg_strings.add(
-          Uri.encodeQueryComponent(k) + '=' + Uri.encodeQueryComponent(v));
-    });
-    final String data = arg_strings.join('&');
-
-    HttpRequest httpRequest = new HttpRequest();
-    httpRequest.open('POST', url);
-    httpRequest.setRequestHeader(
-        'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    httpRequest.onLoad.listen((ProgressEvent e) {
-      // Note: file:// URIs have status of 0.
-      if ((httpRequest.status >= 200 && httpRequest.status < 300) ||
-          httpRequest.status == 0 || httpRequest.status == 304) {
-        onLoad(httpRequest);
-      } else {
-        if (onError == null) {
-          print('HttpRequest error: ${e.toString()}');
-        } else {
-          onError(httpRequest, e);
-        }
-      }
-    });
-    httpRequest.send(data);
-
-    return httpRequest;
   }
 
   // Event handler for source text change.
@@ -224,7 +189,7 @@ class AsciiDocEditor {
         if (_httpRequest != null) {
           _httpRequest.abort();
         }
-        _httpRequest = _postData(
+        _httpRequest = postJson(
             _ASCIIDOC_TO_HTML_URI, {
                 'text': sourceText,
             }, (HttpRequest request) =>
