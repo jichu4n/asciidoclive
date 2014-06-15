@@ -57,11 +57,12 @@ Future<JsObject> whenJsPropExists(String prop_string) {
   return completer.future;
 }
 
-// Sends a JSON POST request. Returns the request.
+// Sends a JSON POST request. Returns the request. On successful response, will
+// parse the response into JSON and invoke the onLoad callback.
 HttpRequest postJson(
     String url,
     Map args,
-    void onLoad(HttpRequest request),
+    void onLoad(Map responseJson),
     {void onError(HttpRequest request, ProgressEvent e)}) {
   HttpRequest httpRequest = new HttpRequest();
   httpRequest.open('POST', url);
@@ -71,7 +72,7 @@ HttpRequest postJson(
     // Note: file:// URIs have status of 0.
     if ((httpRequest.status >= 200 && httpRequest.status < 300) ||
         httpRequest.status == 0 || httpRequest.status == 304) {
-      onLoad(httpRequest);
+      onLoad(JSON.decode(httpRequest.responseText));
     } else {
       if (onError == null) {
         print('HttpRequest error: ${e.toString()}');
@@ -83,4 +84,11 @@ HttpRequest postJson(
   httpRequest.send(JSON.encode(args));
 
   return httpRequest;
+}
+
+// Parses an HTML fragment, finds the element matching the given selector and
+// uses it to replace the element in the document that matches the same selector
+void replaceWithHtml(String selector, String htmlString) {
+  DocumentFragment fragment = new DocumentFragment.html(htmlString);
+  querySelector(selector).replaceWith(fragment.querySelector(selector));
 }

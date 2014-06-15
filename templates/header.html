@@ -10,5 +10,10 @@
       <a href="{{ url_for('RenderEditor') }}">
         <img src="{{ url_for('static', filename='logo.png') }}">
       </a>
+      {% if user %}
+        <li>{{ user.user_id }}
+      {% else %}
+        <li>Not logged in
+      {% endif %}
   </ul>
 </div>

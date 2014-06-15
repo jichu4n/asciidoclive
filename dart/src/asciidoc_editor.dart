@@ -7,7 +7,6 @@
 
 import 'dart:async';
 import 'dart:collection';
-import 'dart:convert';
 import 'dart:html';
 import 'dart:js';
 import 'dart:math';
@@ -161,9 +160,8 @@ class AsciiDocEditor {
   }
 
   // Callback that is invoked when HTML output is received from the server.
-  void _onServerResponseReceived(String sourceTextDigest, HttpRequest request) {
+  void _onServerResponseReceived(String sourceTextDigest, Map response) {
     print('Got response for ${sourceTextDigest}');
-    Map response = JSON.decode(request.responseText);
     _responseCache[sourceTextDigest] = response;
     _updateUi(response);
   }
@@ -192,8 +190,8 @@ class AsciiDocEditor {
         _httpRequest = postJson(
             _ASCIIDOC_TO_HTML_URI, {
                 'text': sourceText,
-            }, (HttpRequest request) =>
-                _onServerResponseReceived(sourceTextDigest, request));
+            }, (Map response) =>
+                _onServerResponseReceived(sourceTextDigest, response));
       }
 
       _sourceTextAtLastUpdate = sourceText;
