@@ -5,6 +5,7 @@
 """Main web app server library."""
 
 import flask
+from flask.ext import login
 import json
 
 from lib import auth_lib
@@ -140,5 +141,6 @@ def Auth():
           'user_id': user.user_id,
           'error_message': ''
       }
+      login.login_user(user, remember=True)
 
   return json.dumps(response)

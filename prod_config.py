@@ -26,6 +26,9 @@ class ProdConfig(object):
       'DB': 'asciidoclive-prod',
   }
 
+  # Session protection mode for Flast-Login.
+  SESSION_PROTECTION = 'strong'
+
   # Custom config settings.
 
   # App log file location.

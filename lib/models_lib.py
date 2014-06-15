@@ -4,9 +4,11 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 """MongoEngine models."""
 
+from flask.ext import login
 import os
 import time
 
+from lib import env_lib
 # Usually we don't import individual classes directly, but we'll make an
 # exception here as this makes the model classes much more readable.
 from lib.env_lib import DB
@@ -75,11 +77,13 @@ class Account(DB.EmbeddedDocument):
     return '%s::%s' % (account_provider_type, user_id)
 
 
-class User(DB.Document):
+class User(DB.Document, login.UserMixin):
   """A user in our system.
 
   A single user may be logged in to accounts from multiple account providers;
   for example, a user may be simultaneously logged in to Facebook and Google.
+
+  This class also provides the required interface for Flask-Login.
   """
 
   # Our very own user ID :)
@@ -101,3 +105,18 @@ class User(DB.Document):
     """
     return '%d-%d' % (
         os.getpid(), int(time.time() * 1000000))
+
+  # pylint: disable=invalid-name
+  def get_id(self):
+    """Returns the user ID.
+
+    This is a method required by Flask-Login.
+    """
+    return self.user_id
+  # pylint: enable=invalid-name
+
+
+@env_lib.LOGIN_MANAGER.user_loader
+def GetUser(user_id):
+  """Login manager binding for retrieving a user by ID."""
+  return User.objects(user_id=user_id).first()
