@@ -12,7 +12,26 @@ $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
 $LOGO_V_PADDING: 4px;
 $HEADER_FONT_SIZE: 14px;
 $HEADER_ITEM_H_PADDING: 15px;
-$HEADER_ITEM_HIGHLIGHT_HEIGHT: 5px;
+$HEADER_ITEM_BAR_HEIGHT: 5px;
+
+@mixin HeaderUiContainer() {
+  // This allows us to use opacity to highlight UI elements.
+  background: #fff;
+}
+@mixin HeaderUi() {
+  background-color: $HEADER_BG_COLOR;
+  @include Opacity(1.0);
+}
+@mixin HeaderUiHighlight() {
+  @include Opacity(0.95);
+}
+@mixin HeaderUiNoBar() {
+  border-bottom: $HEADER_ITEM_BAR_HEIGHT solid $HEADER_BG_COLOR;
+}
+@mixin HeaderUiBar() {
+  border-bottom: $HEADER_ITEM_BAR_HEIGHT solid
+      $HEADER_ITEM_BAR_COLOR;
+}
 
 // Styles.
 
@@ -20,7 +39,6 @@ $HEADER_ITEM_HIGHLIGHT_HEIGHT: 5px;
   height: $HEADER_HEIGHT;
   margin: -$HEADER_HEIGHT 0 0 0;
   padding: 0;
-  @include BorderBox();
 
   background-color: $HEADER_BG_COLOR;
   color: $HEADER_FG_COLOR;
@@ -31,12 +49,9 @@ $HEADER_ITEM_HIGHLIGHT_HEIGHT: 5px;
     margin: 0;
     padding: 0;
     height: $HEADER_HEIGHT;
-    @include BorderBox();
 
     @include UiFont();
-
-    // This allows us to use opacity to highlight buttons.
-    background: #fff;
+    @include HeaderUiContainer();
 
     li {
       // All list items on one line.
@@ -45,19 +60,18 @@ $HEADER_ITEM_HIGHLIGHT_HEIGHT: 5px;
       height: $HEADER_HEIGHT;
       line-height: $HEADER_HEIGHT;
       padding: 0 $HEADER_ITEM_H_PADDING;
-      @include BorderBox();
-
-      background-color: $HEADER_BG_COLOR;
-      border-bottom: $HEADER_ITEM_HIGHLIGHT_HEIGHT solid $HEADER_BG_COLOR;
+      @include HeaderUiNoBar();
     }
 
-    li.button {
+    li.button, li.menu-button {
       cursor: pointer;
+      @include HeaderUi();
+    }
+    li.button:hover, li.menu-button:hover {
+      @include HeaderUiHighlight;
     }
     li.button:hover {
-      @include Opacity(0.95);
-      border-bottom: $HEADER_ITEM_HIGHLIGHT_HEIGHT solid
-          $HEADER_ITEM_HIGHLIGHT_COLOR;
+      @include HeaderUiBar();
     }
   }
 
@@ -70,10 +84,40 @@ $HEADER_ITEM_HIGHLIGHT_HEIGHT: 5px;
         height: $HEADER_INNER_HEIGHT - 2 * $LOGO_V_PADDING;
         vertical-align: middle;
       }
+      @include HeaderUi();
     }
   }
 
   ul.right {
     float: right;
   }
+
 }
+
+$MENU_Z_INDEX: 5000;
+$MENU_ITEM_V_PADDING: 8px;
+$MENU_ITEM_H_PADDING: 17px;
+.menu {
+  position: absolute;
+  z-index: $MENU_Z_INDEX;
+
+  color: $HEADER_FG_COLOR;
+  @include UiFont();
+  @include HeaderUiContainer();
+  // We need to clear the default border spacing.
+  border-spacing: 0;
+
+  .item {
+    cursor: pointer;
+    @include HeaderUi();
+    padding: $MENU_ITEM_V_PADDING $MENU_ITEM_H_PADDING;
+    @include HeaderUiNoBar();
+  }
+  .item:hover {
+    @include HeaderUiHighlight();
+  }
+  .item:last-child {
+    @include HeaderUiBar();
+  }
+}
+

@@ -39,8 +39,6 @@ $OUTPUT_H_PADDING: 20px;
     padding: $UI_MARGIN;
     @include ContainFloating();
 
-    @include BorderBox();
-
     #asciidoc-source-container,
     #asciidoc-output-container {
       border: 1px solid #bbb;
@@ -49,8 +47,6 @@ $OUTPUT_H_PADDING: 20px;
       min-width: $COLUMN_MIN_WIDTH;
       width: 50%;
       padding: 0;
-
-      @include BorderBox();
     }
 
     #asciidoc-source,
@@ -59,8 +55,6 @@ $OUTPUT_H_PADDING: 20px;
       width: 100%;
 
       overflow: auto;
-
-      @include BorderBox();
     }
 
     #asciidoc-source {
@@ -99,7 +93,6 @@ $OUTPUT_H_PADDING: 20px;
 
         td.text {
           padding: 8px 12px;
-          @include BorderBox();
           font-size: 85%;
 
           .icon {
@@ -107,8 +100,6 @@ $OUTPUT_H_PADDING: 20px;
           }
         }
       }
-
-      @include BorderBox();
       @include BorderRadius(2px);
     }
 

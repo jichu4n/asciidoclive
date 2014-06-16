@@ -21,7 +21,8 @@
       <span class="fa fa-sign-out"></span>&nbsp;&nbsp;Sign out
     #}
     <li id="account-launcher"
-        class="button {{ '' if user.is_authenticated() else 'hidden' }}">
+        class="menu-button {{ '' if user.is_authenticated() else 'hidden' }}"
+        data-menu-id="account-menu">
       {{ user.greeting_name }}
   </ul>
 </div>

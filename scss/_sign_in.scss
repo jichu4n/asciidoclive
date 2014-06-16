@@ -78,8 +78,6 @@ $SIGN_IN_BUTTON_DIVIDER_WIDTH: 10px;
   }
 
   .body {
-    @include BorderBox();
-
     overflow: auto;
     max-width: (
         2 * $SIGN_IN_WINDOW_PADDING +
@@ -99,7 +97,6 @@ $SIGN_IN_BUTTON_DIVIDER_WIDTH: 10px;
   }
 
   .sign-in-button {
-    @include BorderBox();
     @include UiButtonGray();
     @include UiFont();
     border-radius: 0;
@@ -123,7 +120,6 @@ $SIGN_IN_BUTTON_DIVIDER_WIDTH: 10px;
       text-align: center;
     }
     .title {
-      @include BorderBox();
       width: $SIGN_IN_BUTTON_TITLE_WIDTH;
       padding: 10px;
       text-align: left;

@@ -51,7 +51,7 @@ $DROP_SHADOW_COLOR: #777;
 }
 
 $HEADER_BG_COLOR: #496fb0;
-$HEADER_ITEM_HIGHLIGHT_COLOR: #b6c5df;
+$HEADER_ITEM_BAR_COLOR: #b6c5df;
 $HEADER_HEIGHT: 48px;
 
 @mixin GradientTopBottom($top_color, $bottom_color) {
@@ -168,7 +168,6 @@ $HEADER_HEIGHT: 48px;
 
 // Button styles reverse-engineered from Gmail ;)
 @mixin UiButton() {
-  @include BorderBox();
   border-radius: 2px;
   white-space: nowrap;
   @include UiFontSmall();
@@ -209,6 +208,10 @@ $HEADER_HEIGHT: 48px;
 }
 
 // Styles.
+
+* {
+  @include BorderBox();
+}
 
 html, body {
   // Take up full browser height.

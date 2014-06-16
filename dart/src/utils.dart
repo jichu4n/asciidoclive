@@ -86,9 +86,27 @@ HttpRequest postJson(
   return httpRequest;
 }
 
+// A custom NodeValidatorBuilder based on NodeValidator.common() that accepts
+// attributes beginning with "data-".
+class DefaultNodeValidator extends NodeValidatorBuilder {
+
+  // Constructor.
+  DefaultNodeValidator()
+      : super.common() {
+  }
+
+  @override
+  bool allowsAttribute(Element element, String attributeName, String value) {
+    return super.allowsAttribute(element, attributeName, value) ||
+        attributeName.startsWith('data-');
+  }
+}
+
 // Parses an HTML fragment, finds the element matching the given selector and
-// uses it to replace the element in the document that matches the same selector
+// uses it to replace the element in the document that matches the same
+// selector.
 void replaceWithHtml(String selector, String htmlString) {
-  DocumentFragment fragment = new DocumentFragment.html(htmlString);
+  DocumentFragment fragment = new DocumentFragment.html(
+      htmlString, validator: new DefaultNodeValidator());
   querySelector(selector).replaceWith(fragment.querySelector(selector));
 }
