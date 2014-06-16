@@ -42,7 +42,7 @@ page and saving it on your computer.
 </div>
 
 {# Ace. #}
-<script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+<script src="{{ url_for('static', filename='ace/ace.js') }}"></script>
 {# Editor code. #}
 <script type="application/dart"
         src="{{ url_for('static', filename='asciidoc_editor.dart') }}"></script>
