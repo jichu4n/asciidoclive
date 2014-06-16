@@ -73,6 +73,9 @@ class AsciiDocEditor {
     window.onBeforeUnload.listen(_onBeforeUnload);
   }
 
+  // Returns the source text in the editor.
+  String get sourceText => _aceEditor.callMethod('getValue').trim();
+
   // Returns the SHA1 digest of a string.
   String _getSha1Digest(String text) {
     SHA1 sha1 = new SHA1();
@@ -169,14 +172,14 @@ class AsciiDocEditor {
   // Updates the output for the source text.
   void _update() {
     List<Element> messageNodes = [];
-    String sourceText = _aceEditor.callMethod('getValue');
+    String sourceTextToSend = sourceText;
     if (sourceText.length > _MAX_SOURCE_TEXT_SIZE) {
       print(_textSizeTooLargeMessageText);
       messageNodes.add(_newMessageNode('error', _textSizeTooLargeMessageText));
-      sourceText = sourceText.substring(0, _MAX_SOURCE_TEXT_SIZE);
+      sourceTextToSend = sourceText.substring(0, _MAX_SOURCE_TEXT_SIZE);
     }
-    if (sourceText != _sourceTextAtLastUpdate) {
-      final String sourceTextDigest = _getSha1Digest(sourceText);
+    if (sourceTextToSend != _sourceTextAtLastUpdate) {
+      final String sourceTextDigest = _getSha1Digest(sourceTextToSend);
 
       if (_responseCache.containsKey(sourceTextDigest)) {
         print('Using cached response for ${sourceTextDigest}');
@@ -189,12 +192,12 @@ class AsciiDocEditor {
         }
         _httpRequest = postJson(
             _ASCIIDOC_TO_HTML_URI, {
-                'text': sourceText,
+                'text': sourceTextToSend,
             }, (Map response) =>
                 _onServerResponseReceived(sourceTextDigest, response));
       }
 
-      _sourceTextAtLastUpdate = sourceText;
+      _sourceTextAtLastUpdate = sourceTextToSend;
     }
     if (messageNodes.isNotEmpty) {
       _showMessages(messageNodes);
@@ -204,7 +207,6 @@ class AsciiDocEditor {
 
   // Callback invoked when the user attempts to close the window.
   void _onBeforeUnload(BeforeUnloadEvent e) {
-    final String sourceText = _aceEditor.callMethod('getValue');
     if (sourceText.trim() == _demoSourceText) {
       return;
     }

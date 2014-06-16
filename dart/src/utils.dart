@@ -63,9 +63,10 @@ HttpRequest postJson(
     String url,
     Map args,
     void onLoad(Map responseJson),
-    {void onError(HttpRequest request, ProgressEvent e)}) {
+    {void onError(HttpRequest request, ProgressEvent e),
+     String method: 'POST'}) {
   HttpRequest httpRequest = new HttpRequest();
-  httpRequest.open('POST', url);
+  httpRequest.open(method, url);
   httpRequest.setRequestHeader(
       'Content-Type', 'application/json; charset=UTF-8');
   httpRequest.onLoad.listen((ProgressEvent e) {

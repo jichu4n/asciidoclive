@@ -34,14 +34,22 @@ class Menu {
 
 // Base class for client-side code on a page.
 abstract class BasePage {
-  BasePage() {
+  BasePage(this._headerTemplate) {
     // Set auth state change callback to refresh base page UI.
     _userManager = new UserManager(() {
-      postJson(_AUTH_STATE_CHANGE_REFRESH_UI, {}, _onAuthStateChangeRefresh);
+      postJson(
+          _AUTH_STATE_CHANGE_REFRESH_UI,
+          {'header_template': _headerTemplate},
+          _onAuthStateChangeRefresh);
       _signInWindowWrapperNode.classes.add('hidden');
     });
-    _registerHeaderEventListeners();
+    registerHeaderEventListeners();
     _setUpAccountMenu();
+
+    querySelector('#sign-in-window .ui-button-cancel').onClick.listen((_) {
+      _signInWindowWrapperNode.classes.add('hidden');
+      _overlayNode.classes.add('hidden');
+    });
   }
 
   // Inflates a menu and binds it to the corresponding menu button element.
@@ -58,6 +66,21 @@ abstract class BasePage {
     _registerMenuButtonEventHandlers(menu.id);
   }
 
+  // Returns the user manager instance.
+  UserManager get userManager => _userManager;
+
+  // Triggers the sign-in window.
+  void showSignInWindow() {
+    _overlayNode.classes.remove('hidden');
+    _signInWindowWrapperNode.classes.remove('hidden');
+  }
+
+  // Attaches event handlers on a header refresh. This should be overridden if
+  // the child page adds additional header elements.
+  void registerHeaderEventListeners() {
+    querySelector('#sign-in-button').onClick.listen((_) => showSignInWindow());
+  }
+
   // Callback invoked when we receive changed UI elements following auth state
   // change.
   void _onAuthStateChangeRefresh(Map response) {
@@ -66,7 +89,7 @@ abstract class BasePage {
       // Refresh header and re-register event handlers, as the old elements have
       // been deleted along with any event handlers.
       replaceWithHtml('#header', response['header']);
-      _registerHeaderEventListeners();
+      registerHeaderEventListeners();
       // Re-register menu buttons.
       for (String menuId in _menus.keys) {
         _registerMenuButtonEventHandlers(menuId);
@@ -76,24 +99,6 @@ abstract class BasePage {
             response['error_message']);
     }
     _overlayNode.classes.add('hidden');
-  }
-
-  // Attaches event handlers for the header.
-  void _registerHeaderEventListeners() {
-    querySelector('#sign-in-button').onClick.listen((_) {
-      _overlayNode.classes.remove('hidden');
-      _signInWindowWrapperNode.classes.remove('hidden');
-    });
-    /*
-    querySelector('#sign-out-launcher').onClick.listen((_) {
-      print('Clicked');
-      _userManager.logout();
-    });
-    */
-    querySelector('#sign-in-window .ui-button-cancel').onClick.listen((_) {
-      _signInWindowWrapperNode.classes.add('hidden');
-      _overlayNode.classes.add('hidden');
-    });
   }
 
   // Returns the menu button corresponding to a menu ID. If not found, returns
@@ -184,6 +189,9 @@ abstract class BasePage {
     }
   }
 
+  // Name of the header template to request when refreshing after auth state
+  // change.
+  final String _headerTemplate;
   // Auth state change refresh API.
   final String _AUTH_STATE_CHANGE_REFRESH_UI =
       '/api/v1/auth_state_change_refresh';

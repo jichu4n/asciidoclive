@@ -7,6 +7,7 @@
 import flask
 from flask.ext import login
 import functools
+import jinja2
 import json
 import logging
 import mongoengine
@@ -210,21 +211,32 @@ def Logout(_):
 
 @app.route('/api/v1/auth_state_change_refresh', methods=['POST'])
 @_JsonView
-def AuthStateChangeRefresh(_):
+def AuthStateChangeRefresh(request_data):
   """Re-renders elements that depend on authentication state.
 
   This will return HTML strings based on the current authentication state.
 
-  POST data: None.
+  POST data: a JSON object:
+    - header_template: name of the header template to render, without the
+      trailing .html suffix.
   Returns:
     A JSON objct:
       - success: a boolean.
       - header: re-rendered header div.
+      - error_message: warnings or error messages.
   """
-  return {
-      'success': True,
-      'header': _RenderTemplate('header.html'),
-  }
+  if not request_data.get('header_template', None):
+    return _INVALID_REQUEST_RESPONSE
+  template = '%s.html' % request_data['header_template']
+  try:
+    app.jinja_env.get_template(template)
+  except jinja2.exceptions.TemplateNotFound:
+    return _INVALID_REQUEST_RESPONSE
+  else:
+    return {
+        'success': True,
+        'header': _RenderTemplate(template),
+    }
 
 
 @app.route('/api/v1/documents', methods=['PUT'])
@@ -246,7 +258,7 @@ def CreateDocument(request_data):
       - document_id: ID of the created document.
   """
   document = models_lib.UserDocument()
-  document.owner = login.current_user
+  document.owner = login.current_user._get_current_object()
   document.title = request_data.get('title', None)
   document.text = request_data['text']
   while True:

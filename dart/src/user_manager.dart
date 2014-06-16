@@ -44,6 +44,12 @@ class UserManager {
     postJson(_LOGOUT_URI, {}, _onLogoutResult);
   }
 
+  // Returns if the current user is logged in.
+  bool get hasAuth {
+    return _accountProviders.values.any((AccountProvider accountProvider) =>
+        accountProvider.hasAuth);
+  }
+
   // Invoked on a successful login. Sends login information to the server.
   void _onAuth(AccountProvider accountProvider) {
     print('Signed in to ${accountProvider.type}! Sending auth request');
