@@ -9,7 +9,9 @@
 $HEADER_FG_COLOR: #fff;
 $HEADER_V_PADDING: 6px;
 $HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
+$LOGO_H_PADDING_RIGHT: 40px;
 $LOGO_V_PADDING: 4px;
+$LOGO_V_ADJUSTMENT: -5px;
 $HEADER_FONT_SIZE: 14px;
 $HEADER_ITEM_H_PADDING: 15px;
 $HEADER_ITEM_BAR_HEIGHT: 5px;
@@ -79,8 +81,9 @@ $HEADER_ITEM_BAR_HEIGHT: 5px;
     float: left;
 
     li#logo {
-      padding: 0 $HEADER_ITEM_H_PADDING 0 ($HEADER_ITEM_H_PADDING / 2);
+      padding: 0 $LOGO_H_PADDING_RIGHT 0 ($HEADER_ITEM_H_PADDING / 2);
       img {
+        margin-top: $LOGO_V_ADJUSTMENT;
         height: $HEADER_INNER_HEIGHT - 2 * $LOGO_V_PADDING;
         vertical-align: middle;
       }

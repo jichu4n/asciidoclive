@@ -6,6 +6,8 @@
 
 from flask.ext import login
 import os
+import random
+import string
 import time
 
 from lib import env_lib
@@ -88,10 +90,8 @@ class User(DB.Document, login.UserMixin):
 
   # Our very own user ID :)
   user_id = DB.StringField(required=True, unique=True)
-
   # Accounts from account providers.
   accounts = DB.ListField(DB.EmbeddedDocumentField(Account))
-
   # Name to display in greetings.
   greeting_name = DB.StringField(required=True)
 
@@ -123,3 +123,39 @@ class User(DB.Document, login.UserMixin):
 def GetUser(user_id):
   """Login manager binding for retrieving a user by ID."""
   return User.objects(user_id=user_id).first()
+
+
+class UserDocument(DB.Document):
+  """A source document owned by a user."""
+
+  # Valid characters in document IDs.
+  DOCUMENT_ID_CHARS = string.ascii_letters + string.digits
+  # The length of document IDs. The max number of different document IDs is
+  # len(DOCUMENT_ID_CHARS) ^ DOCUMENT_ID_LENGTH.
+  DOCUMENT_ID_LENGTH = 7
+
+  # ID of this document. This can be generated with NewDocumentId().
+  document_id = DB.StringField(required=True, unique=True)
+  # The owner of this document.
+  owner = DB.ReferenceField(User, required=True)
+  # The title.
+  title = DB.StringField()
+  # The source text of this document.
+  text = DB.StringField(required=True)
+  # Rendered screenshot of the output, in PNG.
+  output_thumbnail = DB.BinaryField()
+
+  meta = {
+      'collection': 'user_documents',
+      'indexes': ['document_id', 'owner'],
+  }
+
+  @classmethod
+  def NewDocumentId(cls):
+    """Generates a new random document ID.
+
+    The output is an alphanumeric string DOCUMENT_ID_LENGTH characters long.
+    """
+    return ''.join(
+        random.choice(cls.DOCUMENT_ID_CHARS)
+        for i in range(cls.DOCUMENT_ID_LENGTH))

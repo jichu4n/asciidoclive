@@ -44,7 +44,7 @@ class AccountProvider(object):
     Returns:
       A greeting name for the user.
     """
-    raise NotImplementedError();
+    raise NotImplementedError()
 
 
 class GoogleAccountProvider(AccountProvider):

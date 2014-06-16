@@ -10,16 +10,13 @@
       <a href="{{ url_for('RenderEditor') }}">
         <img src="{{ url_for('static', filename='logo.png') }}">
       </a>
+    {% block header_left_extra %}{% endblock header_left_extra %}
   </ul>
   <ul class="right">
-    <li id="sign-in-launcher"
+    {% block header_right_extra %}{% endblock header_right_extra %}
+    <li id="sign-in-button"
         class="button {{ 'hidden' if user.is_authenticated() else '' }}">
       <span class="fa fa-sign-in"></span>&nbsp;&nbsp;Sign in
-    {#
-    <li id="sign-out-launcher"
-        class="button {{ '' if user.is_authenticated() else 'hidden' }}">
-      <span class="fa fa-sign-out"></span>&nbsp;&nbsp;Sign out
-    #}
     <li id="account-launcher"
         class="menu-button {{ '' if user.is_authenticated() else 'hidden' }}"
         data-menu-id="account-menu">

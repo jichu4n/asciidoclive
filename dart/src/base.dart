@@ -80,7 +80,7 @@ abstract class BasePage {
 
   // Attaches event handlers for the header.
   void _registerHeaderEventListeners() {
-    querySelector('#sign-in-launcher').onClick.listen((_) {
+    querySelector('#sign-in-button').onClick.listen((_) {
       _overlayNode.classes.remove('hidden');
       _signInWindowWrapperNode.classes.remove('hidden');
     });
