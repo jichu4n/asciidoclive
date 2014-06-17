@@ -19,9 +19,7 @@ class AsciiDocEditor {
 
   // Constructor.
   AsciiDocEditor() {
-    // Save demo source text.
-    _sourceNode = querySelector('#${_SOURCE_NODE_ID}');
-    _demoSourceText = _sourceNode.text.trim();
+    lastSavedSourceText = _sourceNode.text.trim();
 
     // We make a clone of the message template, measure its height, and add the
     // same number of pixels of padding to the source container. This allows the
@@ -75,6 +73,8 @@ class AsciiDocEditor {
 
   // Returns the source text in the editor.
   String get sourceText => _aceEditor.callMethod('getValue').trim();
+  // The source text last successfully saved.
+  String lastSavedSourceText = null;
 
   // Returns the SHA1 digest of a string.
   String _getSha1Digest(String text) {
@@ -207,7 +207,7 @@ class AsciiDocEditor {
 
   // Callback invoked when the user attempts to close the window.
   void _onBeforeUnload(BeforeUnloadEvent e) {
-    if (sourceText.trim() == _demoSourceText) {
+    if (sourceText.trim() == lastSavedSourceText) {
       return;
     }
 
@@ -279,8 +279,8 @@ class AsciiDocEditor {
   static Map<String, Map> _responseCache = new Map<String, Map>();
 
   // DOM components.
-  final String _SOURCE_NODE_ID = 'asciidoc-source';
-  DivElement _sourceNode = null;
+  static final String _SOURCE_NODE_ID = 'asciidoc-source';
+  final DivElement _sourceNode = querySelector('#${_SOURCE_NODE_ID}');
   final DivElement _sourceContainerNode =
       querySelector('#asciidoc-source-container');
   final DivElement _outputNode = querySelector('#asciidoc-output');
@@ -332,8 +332,6 @@ class AsciiDocEditor {
   HttpRequest _httpRequest = null;
   // The source text retrieved during the previous update.
   String _sourceTextAtLastUpdate = null;
-  // The original demo text.
-  String _demoSourceText = null;
 
   // Timer for executing _update.
   Timer _updateTimer = null;
