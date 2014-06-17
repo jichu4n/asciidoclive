@@ -102,10 +102,23 @@ def RenderEditor():
   """Handler for the main editor page."""
   if '_escaped_fragment_' in flask.request.args:
     # Static version for search engine crawlers.
-    template = 'static.html'
-  else:
-    template = 'editor.html'
-  return _RenderTemplate(template)
+    return _RenderTemplate('static.html')
+
+  default_text = _RenderTemplate('intro.txt')
+  return _RenderTemplate('editor.html', {
+      'document': None,
+      'asciidoc_editor_text': default_text,
+  })
+
+
+@app.route('/d/<document_id>')
+@login.login_required
+def RenderEditorForDocument(document_id):
+  """Handler for the main editor page with a previously saved document."""
+  document = models_lib.UserDocument.Get(document_id)
+  if document is None or not document.IsReadableByUser(login.current_user):
+    return flask.redirect(flask.url_for('.RenderEditor'))
+  return _RenderTemplate('editor.html', {'document': document})
 
 
 @app.route('/sitemap.xml')
@@ -292,13 +305,13 @@ def SaveDocument(request_data, document_id):
       - success: a boolean.
       - error_message: warnings or error messages.
   """
-  document = models_lib.UserDocument.objects(document_id=document_id).first()
+  document = models_lib.UserDocument.Get(document_id)
   if not document:
     return {
         'success': False,
         'error_message': 'Invalid document ID',
     }
-  if document.owner.id != login.current_user.id:
+  if not document.IsWritableByUser(login.current_user):
     return _NOT_AUTHENTICATED_RESPONSE
   document.title = request_data.get('title', None)
   document.text = request_data['text']

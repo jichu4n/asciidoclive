@@ -7,6 +7,7 @@
 
 import 'dart:convert';
 import 'dart:html';
+import 'dart:js';
 import 'base.dart';
 import 'asciidoc_editor.dart';
 import 'utils.dart';
@@ -15,6 +16,10 @@ import 'utils.dart';
 // Implements the editor page.
 class EditorPage extends BasePage {
   EditorPage() : super('editor_header') {
+    // Get document ID for JavaScript params.
+    if (_editorParams['document_id'] != null) {
+      _documentId = _editorParams['document_id'];
+    }
   }
 
   @override
@@ -66,6 +71,8 @@ class EditorPage extends BasePage {
   final String _DOCUMENT_POST_URI = '/api/v1/documents/';
   // Handle to editor instance.
   final AsciiDocEditor _editor = new AsciiDocEditor();
+  // JavaScript parameters.
+  final JsObject _editorParams = context['EditorParams'];
   // Document ID of the current document being edited. This is null for an
   // unsaved document.
   String _documentId;

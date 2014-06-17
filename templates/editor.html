@@ -12,6 +12,19 @@ AsciiDocLIVE - free online AsciiDoc editor
 {% block header %}{% include 'editor_header.html' %}{% endblock header %}
 
 {% block main %}
+  {% if document %}
+    {% set asciidoc_editor_text = document.text %}
+  {% endif %}
+  <script type="text/javascript">
+    window.EditorParams = {
+        document_id:
+            {% if document %}
+              '{{ document.document_id }}',
+            {% else %}
+              null,
+            {% endif %}
+    };
+  </script>
   {% include 'asciidoc_editor.html' %}
 
   {# Editor client-side code. #}

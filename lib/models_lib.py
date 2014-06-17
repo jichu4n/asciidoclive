@@ -159,3 +159,45 @@ class UserDocument(DB.Document):
     return ''.join(
         random.choice(cls.DOCUMENT_ID_CHARS)
         for i in range(cls.DOCUMENT_ID_LENGTH))
+
+  @classmethod
+  def IsValidDocumentId(cls, document_id):
+    """Returns whether the provided ID can be a valid document ID.
+
+    This does NOT check for the existence of the actual document in the
+    datastore.
+    """
+    return (
+        len(document_id) == cls.DOCUMENT_ID_LENGTH and
+        c in cls.DOCUMENT_ID_CHARS for c in document_id)
+
+  @classmethod
+  def Get(cls, document_id):
+    """Fetches a document by document ID.
+
+    Returns:
+      The document in the datastore with the given document ID. If the document
+      ID does not correspond to an existing document, or is invalid, returns
+      None.
+    """
+    if not cls.IsValidDocumentId(document_id):
+      return None
+    return cls.objects(document_id=document_id).first()
+
+  def IsWritableByUser(self, user):
+    """Returns whether this document is writable by a user.
+
+    Args:
+      user: a User instance.
+    """
+    # TODO(cji): Support sharing.
+    return user.is_authenticated() and self.owner.id == user.id
+
+  def IsReadableByUser(self, user):
+    """Returns whether this document is readable by a user.
+
+    Args:
+      user: a User instance.
+    """
+    # TODO(cji): Support sharing.
+    return user.is_authenticated() and self.owner.id == user.id
