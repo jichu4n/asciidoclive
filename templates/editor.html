@@ -5,6 +5,9 @@
  # Editor page template. #}
 {% extends 'base.html' %}
 
+{% from 'dialog.html' import Dialog %}
+{% from 'loading_dialog.html' import LoadingDialog %}
+
 {% block title %}
 AsciiDocLIVE - free online AsciiDoc editor
 {% endblock title %}
@@ -23,9 +26,32 @@ AsciiDocLIVE - free online AsciiDoc editor
             {% else %}
               null,
             {% endif %}
+        document_title:
+            {% if document and document.title %}
+              '{{ document.title }}',
+            {% else %}
+              null,
+            {% endif %}
+        default_document_title: 'Untitled Document',
     };
   </script>
   {% include 'asciidoc_editor.html' %}
+
+  {# Edit title dialog. #}
+  {% call Dialog('edit-title') %}
+    <div class="prompt">Edit title</div>
+    <form><input type="text" class="ui-input-text"></form>
+    <div class="actions">
+      <a href="#"
+         class="ui-button ui-button-cancel">Cancel</a>
+      <span class="divider">&nbsp;</span>
+      <a href="#"
+         class="ui-button ui-button-ok">Save</a>
+    </div>
+  {% endcall %}
+
+  {# Saving dialog. #}
+  {{ LoadingDialog('saving', 'Saving...') }}
 
   {# Editor client-side code. #}
   <script type="application/dart"

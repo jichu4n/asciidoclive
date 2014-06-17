@@ -13,17 +13,22 @@ import 'utils.dart';
 // Class that manages user accounts and related workflows.
 class UserManager {
 
-  // Constructor. Takes a callback for auth state change.
-  UserManager(void onAuthStateChangeCallback()) {
+  // Constructor. Takes a callback for completing sign-in with an account
+  // provider, and another for auth state change after validation on our own
+  // server.
+  UserManager(
+      Element this._signInDialog,
+      void this._onAccountProviderSignInCallback(),
+      void this._onAuthStateChangeCallback()) {
     _accountProviders = {
-        'google': new GoogleAccountProvider('google', _onAuth),
-        'facebook': new FacebookAccountProvider('facebook', _onAuth),
+        'google': new GoogleAccountProvider(
+            'google', _onAccountProviderSignIn),
+        'facebook': new FacebookAccountProvider(
+            'facebook', _onAccountProviderSignIn),
     };
 
-    _onAuthStateChangeCallback = onAuthStateChangeCallback;
-
     // Register event handlers for sign-in buttons.
-    querySelectorAll('.sign-in-button').forEach((Element e) {
+    _signInDialog.querySelectorAll('.sign-in-button').forEach((Element e) {
       final String accountProviderType =
           e.attributes['data-account-provider-type'];
       assert(accountProviderType != null);
@@ -51,8 +56,9 @@ class UserManager {
   }
 
   // Invoked on a successful login. Sends login information to the server.
-  void _onAuth(AccountProvider accountProvider) {
+  void _onAccountProviderSignIn(AccountProvider accountProvider) {
     print('Signed in to ${accountProvider.type}! Sending auth request');
+    _onAccountProviderSignInCallback();
     List<Map> accounts = [];
     for (AccountProvider accountProvider in _accountProviders.values) {
       if (accountProvider.hasAuth) {
@@ -94,10 +100,14 @@ class UserManager {
   // Auth API.
   static final String _AUTH_URI = '/api/v1/auth';
   static final String _LOGOUT_URI = '/api/v1/logout';
+  // Dialog element containing sign in buttons.
+  Element _signInDialog;
   // Maps auth type strings to account providers.
   Map<String, AccountProvider> _accountProviders;
   // Callback for auth state change.
   Function _onAuthStateChangeCallback;
+  // Callback for sign-in with account provider completed.
+  Function _onAccountProviderSignInCallback;
   // The current logged in user ID.
   String _userId;
 }

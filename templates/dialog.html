@@ -1,0 +1,22 @@
+{# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ #                         Copyright (C) 2014 Chuan Ji                         #
+ #                             All Rights Reserved                             #
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ # Template for dialogs. #}
+
+{% macro Dialog(dialog_id) %}
+  <div id="{{ dialog_id }}-dialog-wrapper" class="hidden dialog-wrapper">
+    <div class="dialog-wrapper-1">
+      <div class="dialog-wrapper-2">
+        <div id="{{ dialog_id }}-dialog" class="dialog">
+          <div class="header">
+            <img src="{{ url_for('static', filename='logo.png') }}">
+          </div>
+          <div class="body">
+            {{ caller() }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endmacro %}

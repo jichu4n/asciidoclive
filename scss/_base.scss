@@ -63,6 +63,15 @@ $HEADER_HEIGHT: 48px;
   background: linear-gradient($top_color, $bottom_color);
 }
 
+// Full window fixed div.
+@mixin FullWindowFixed() {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left:0;
+}
+
 // Site fonts.
 
 // Roboto.
@@ -174,6 +183,8 @@ $HEADER_HEIGHT: 48px;
   text-decoration: none;
   padding: 6px 12px;
   font-weight: bold;
+  min-width: 80px;
+  text-align: center;
 }
 @mixin UiButtonGray() {
   @include UiButton();
@@ -202,6 +213,17 @@ $HEADER_HEIGHT: 48px;
   background-color: #fbfbfb;
   color: #3f3f3f;
   box-shadow: 0 1px 0 0 #e1e1e1;
+}
+@mixin UiButtonBlue() {
+  @include UiButton();
+  border: 1px solid #3079ed;
+  @include GradientTopBottom(#4c8ffd, #4787ed);
+  color: #fff;
+  text-shadow: 0 1px 0 #2f5bb7;
+}
+@mixin UiButtonBlueHover() {
+  border: 1px solid #2f5bb7;
+  @include GradientTopBottom(#4d90fe, #357ae8);
 }
 @mixin UiButtonUnimportant() {
   color: #737373;
@@ -242,4 +264,34 @@ html, body {
 }
 .ui-button-cancel:hover {
   @include UiButtonWhiteHover();
+}
+.ui-button-ok {
+  @include UiButtonBlue();
+}
+.ui-button-ok:hover {
+  @include UiButtonBlueHover();
+}
+.ui-input-text {
+  border: 1px solid #c9c9c9;
+  @include UiFont();
+  padding: 8px 10px;
+  outline: none;
+}
+.ui-input-text:hover {
+  border: 1px solid #a5a5a5;
+}
+.ui-input-text:focus {
+  border: 1px solid #4183f0;
+}
+
+$OVERLAY_Z_INDEX: 10000;
+
+#overlay {
+  background-color: #000;
+  @include Opacity(0.3);
+
+  // Place above regular page.
+  z-index: $OVERLAY_Z_INDEX;
+
+  @include FullWindowFixed;
 }

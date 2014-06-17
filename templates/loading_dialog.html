@@ -1,0 +1,17 @@
+{# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ #                         Copyright (C) 2014 Chuan Ji                         #
+ #                             All Rights Reserved                             #
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ # A dialog that displays a spinning icon and a piece of text. #}
+
+ {% from 'dialog.html' import Dialog %}
+
+{# Loading dialog. #}
+
+{% macro LoadingDialog(dialog_id, text='Working...') %}
+  {% call Dialog(dialog_id) %}
+    <div class="prompt">
+      <span class="fa fa-refresh fa-spin"></span>&nbsp;&nbsp;&nbsp;{{ text }}
+    </div>
+  {% endcall %}
+{% endmacro %}

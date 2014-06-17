@@ -1,0 +1,75 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Base styles for dialogs.
+*/
+
+// Settings and mixins.
+
+
+// Styles.
+
+$DIALOG_PADDING: 25px;
+$DIALOG_HEADER_IMAGE_H_PADDING: 45px;
+$DIALOG_ACTION_BUTTON_DIVIDER_WIDTH: 8px;
+.dialog-wrapper {
+  // See http://goo.gl/FmVxR8 and http://goo.gl/Fh4UDY .
+  .dialog-wrapper-1 {
+    // Place above overlay.
+    z-index: $OVERLAY_Z_INDEX + 1;
+
+    display: table;
+    @include FullWindowFixed;
+
+    .dialog-wrapper-2 {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+
+      .dialog {
+        display: inline-block;
+
+        // Overrides text-align in container.
+        text-align: left;
+        @include DropShadow();
+        background-color: #fff;
+
+        .header {
+          background-color: $HEADER_BG_COLOR;
+          text-align:center;
+
+          padding: $HEADER_V_PADDING 0px;
+
+          img {
+            display: inline-block;
+            height: $HEADER_HEIGHT;
+            padding: 0 $DIALOG_HEADER_IMAGE_H_PADDING;
+          }
+        }
+
+        .body {
+          overflow: auto;
+          padding: $DIALOG_PADDING;
+
+          .prompt {
+            @include UiFontLarge();
+          }
+
+          .actions {
+            margin-top: $DIALOG_PADDING * 1.5;
+            @include ContainFloating();
+
+            .ui-button {
+              float: right;
+            }
+            .divider {
+              float: right;
+              width: $DIALOG_ACTION_BUTTON_DIVIDER_WIDTH;
+            }
+          }
+        }
+      }
+    }
+  }
+}

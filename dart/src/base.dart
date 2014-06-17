@@ -36,18 +36,15 @@ class Menu {
 abstract class BasePage {
   BasePage() {
     // Set auth state change callback to refresh base page UI.
-    _userManager = new UserManager(() {
-      HttpRequest.getString('${window.location.href}?header=1')
-          .then(_onNewHeader);
-      _signInWindowWrapperNode.classes.add('hidden');
-    });
+    _userManager = new UserManager(
+      querySelector('#${SIGN_IN_DIALOG}-dialog'),
+      _onAccountProviderSignIn,
+      _onAuthStateChange);
     registerHeaderEventListeners();
     _setUpAccountMenu();
 
-    querySelector('#sign-in-window .ui-button-cancel').onClick.listen((_) {
-      _signInWindowWrapperNode.classes.add('hidden');
-      _overlayNode.classes.add('hidden');
-    });
+    querySelector('#sign-in-dialog .ui-button-cancel').onClick.listen((_) =>
+        hideDialog());
   }
 
   // Inflates a menu and binds it to the corresponding menu button element.
@@ -67,22 +64,61 @@ abstract class BasePage {
   // Returns the user manager instance.
   UserManager get userManager => _userManager;
 
-  // Triggers the sign-in window.
-  void showSignInWindow() {
-    _overlayNode.classes.remove('hidden');
-    _signInWindowWrapperNode.classes.remove('hidden');
+  // The dialog ID of the sign-in dialog.
+  final String SIGN_IN_DIALOG = 'sign-in';
+  // The dialog ID of the sign-in pending dialog.
+  final String SIGN_IN_PENDING_DIALOG = 'sign-in-pending';
+
+  // Shows a dialog. If another dialog is already being shown, hides it first.
+  void showDialog(String dialogId) {
+    if (_activeDialogWrapperNode == null) {
+      _overlayNode.classes.remove('hidden');
+    } else {
+      _activeDialogWrapperNode.classes.add('hidden');
+    }
+    _activeDialogWrapperNode = querySelector('#${dialogId}-dialog-wrapper');
+    if (_activeDialogWrapperNode == null) {
+      print('Warning: no dialog with ID ${dialogId} found');
+      return;
+    }
+    _activeDialogWrapperNode.classes.remove('hidden');
+  }
+
+  // Hides the currently active dialog.
+  void hideDialog() {
+    if (_activeDialogWrapperNode == null) {
+      print('Warning: no currently active dialog');
+      return;
+    }
+    _activeDialogWrapperNode.classes.add('hidden');
+    _overlayNode.classes.add('hidden');
+    _activeDialogWrapperNode = null;
   }
 
   // Attaches event handlers on a header refresh. This should be overridden if
   // the child page adds additional header elements.
   void registerHeaderEventListeners() {
-    querySelector('#sign-in-button').onClick.listen((_) => showSignInWindow());
+    querySelector('#sign-in-button').onClick.listen((_) =>
+        showDialog(SIGN_IN_DIALOG));
+  }
+
+  // Callback invoked when the user completes sign-in with an account provider,
+  // but we have not yet received validation from our own server.
+  void _onAccountProviderSignIn() {
+    showDialog(SIGN_IN_PENDING_DIALOG);
+  }
+  // Callback invoked when the user is authenticated with our own server or is
+  // logged out.
+  void _onAuthStateChange() {
+    HttpRequest.getString('${window.location.href}?header=1')
+        .then(_onNewHeader);
   }
 
   // Callback invoked when we receive changed UI header following auth state
   // change.
   void _onNewHeader(String headerHtml) {
     print('Refreshing page elements following auth state change');
+    hideDialog();
     // Refresh header and re-register event handlers, as the old elements have
     // been deleted along with any event handlers.
     replaceWithHtml('#header', headerHtml);
@@ -184,8 +220,8 @@ abstract class BasePage {
 
   // DOM elements.
   final Element _overlayNode = querySelector('#overlay');
-  final Element _signInWindowWrapperNode =
-      querySelector('#sign-in-window-wrapper');
+  // The currently active dialog's wrapper node.
+  Element _activeDialogWrapperNode = null;
   // Handle to user manager instance.
   UserManager _userManager;
   // Maps menu IDs to menus.

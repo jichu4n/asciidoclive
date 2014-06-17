@@ -105,6 +105,10 @@ def RenderEditor():
     return _RenderTemplate('static.html')
 
   default_text = _RenderTemplate('intro.txt')
+  if 'header' in flask.request.args:
+    template = 'editor_header.html'
+  else:
+    template = 'editor.html'
   return _RenderTemplate('editor.html', {
       'document': None,
       'asciidoc_editor_text': default_text,

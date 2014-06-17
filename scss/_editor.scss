@@ -2,5 +2,15 @@
  *                         Copyright (C) 2014 Chuan Ji                         *
  *                             All Rights Reserved                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Styles for home page.
+ Styles for editor page.
 */
+
+#edit-title-dialog {
+  .prompt {
+    margin-bottom: $DIALOG_PADDING;
+  }
+  .ui-input-text {
+    max-width: 100%;
+    width: 300px;
+  }
+}

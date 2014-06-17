@@ -17,7 +17,7 @@
 
 
     <link rel="stylesheet" type="text/css"
-          href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+          href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='all.css') }}">
 
@@ -43,6 +43,8 @@
       {% block main %}{% endblock main %}
     </div>
 
-    {% include 'sign_in.html' %}
+    {# Overlay window that dims the normal page. Used for dialogs. #}
+    <div id="overlay" class="hidden">&nbsp;</div>
+    {% include 'sign_in_dialog.html' %}
   </body>
 </html>

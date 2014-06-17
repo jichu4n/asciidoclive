@@ -5,48 +5,6 @@
  Base styles for sign-in window.
 */
 
-// Settings and mixins.
-
-// Full window fixed div.
-@mixin FullWindowFixed() {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left:0;
-}
-
-
-// Styles.
-
-$OVERLAY_Z_INDEX: 10000;
-
-#overlay {
-  background-color: #000;
-  @include Opacity(0.3);
-
-  // Place above regular page.
-  z-index: $OVERLAY_Z_INDEX;
-
-  @include FullWindowFixed;
-}
-
-$SIGNIN_WINDOW_WIDTH: 450px;
-
-// See http://goo.gl/FmVxR8 and http://goo.gl/Fh4UDY .
-#sign-in-window-wrapper-1 {
-  // Place above overlay.
-  z-index: $OVERLAY_Z_INDEX + 1;
-
-  display: table;
-  @include FullWindowFixed;
-}
-#sign-in-window-wrapper-2 {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-}
-
 $SIGN_IN_BUTTON_ICON_WIDTH: 80px;
 $SIGN_IN_BUTTON_TITLE_WIDTH: 150px;
 $SIGN_IN_BUTTON_BORDER_WIDTH: 1px;
@@ -54,42 +12,17 @@ $SIGN_IN_BUTTON_WIDTH: (
     2 * $SIGN_IN_BUTTON_BORDER_WIDTH +
     $SIGN_IN_BUTTON_ICON_WIDTH +
     $SIGN_IN_BUTTON_TITLE_WIDTH);
-$SIGN_IN_WINDOW_PADDING: 25px;
 $SIGN_IN_BUTTON_DIVIDER_WIDTH: 10px;
-#sign-in-window {
-  display: inline-block;
-
-  // Overrides text-align in container.
-  text-align: left;
-
-  @include DropShadow();
-  background-color: #fff;
-
-  .header {
-    background-color: $HEADER_BG_COLOR;
-    text-align:center;
-
-    padding: $HEADER_V_PADDING 0px;
-
-    img {
-      display: inline-block;
-      height: $HEADER_HEIGHT;
-    }
-  }
-
+#sign-in-dialog {
   .body {
-    overflow: auto;
     max-width: (
-        2 * $SIGN_IN_WINDOW_PADDING +
+        2 * $DIALOG_PADDING +
         2 * $SIGN_IN_BUTTON_WIDTH +
         $SIGN_IN_BUTTON_DIVIDER_WIDTH);
-    padding: $SIGN_IN_WINDOW_PADDING;
-
-    @include UiFontLarge();
   }
 
   .prompt {
-    margin-bottom: $SIGN_IN_WINDOW_PADDING;
+    margin-bottom: $DIALOG_PADDING;
   }
 
   .sign-in-buttons {
@@ -152,14 +85,5 @@ $SIGN_IN_BUTTON_DIVIDER_WIDTH: 10px;
   .divider {
     float: left;
     width: $SIGN_IN_BUTTON_DIVIDER_WIDTH;
-  }
-
-  .actions {
-    margin-top: $SIGN_IN_WINDOW_PADDING * 1.5;
-    @include ContainFloating();
-
-    .ui-button {
-      float: right;
-    }
   }
 }

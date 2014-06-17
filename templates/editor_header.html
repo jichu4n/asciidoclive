@@ -11,11 +11,7 @@
 {% endblock header_left_extra %}
 
 {% block header_right_extra %}
-<li id="document-title-button" class="button {{ 'hidden' if not document }}">
-    <span class="fa fa-pencil"></span>&nbsp;&nbsp;
-    {% if document and document.title %}
-      {{ document.title }}
-    {% else %}
-      Untitled Document
-    {% endif %}
+<li id="document-title-button" class="button">
+  <span class="fa fa-pencil"></span>&nbsp;&nbsp;
+  <span class="document-title"></span>
 {% endblock header_right_extra %}

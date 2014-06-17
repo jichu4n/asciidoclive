@@ -2,8 +2,10 @@
  #                         Copyright (C) 2014 Chuan Ji                         #
  #                             All Rights Reserved                             #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
- # Sign-in window. #}
+ # Sign-in dialog. #}
 
+{% from 'dialog.html' import Dialog %}
+{% from 'loading_dialog.html' import LoadingDialog %}
 
 {# Renders a sign-in button for the given provider.
  # Args:
@@ -27,39 +29,30 @@
 {% endmacro %}
 
 
-{# Sign-in window. #}
+{# Sign in dialog. #}
 
-{# Overlay window that dims the normal page. Used during sign-in. #}
-<div id="overlay" class="hidden">&nbsp;</div>
-{# Sign in window. #}
-<div id="sign-in-window-wrapper" class="hidden">
-  <div id="sign-in-window-wrapper-1">
-    <div id="sign-in-window-wrapper-2">
-      <div id="sign-in-window">
-        <div class="header">
-          <img src="{{ url_for('static', filename='logo.png') }}">
-        </div>
-        <div class="body">
-          <div class="prompt">Sign in with...</div>
-          <div class="sign-in-buttons">
-            {{ SignInButton('facebook', 'fa-facebook', 'Facebook') }}
-            {{ Divider() }}
-            {{ SignInButton('google', 'fa-google', 'Google') }}
-            {# Not implemented yet.
-              {{ SignInButton('twitter', 'fa-twitter', 'Twitter') }}
-              {{ Divider() }}
-              {{ SignInButton('linkedin', 'fa-linkedin', 'LinkedIn') }}
-            #}
-          </div>
-          <div class="actions">
-            <a href="#"
-               class="ui-button ui-button-cancel">Cancel</a>
-          </div>
-        </div>
-      </div>
-    </div>
+{% call Dialog('sign-in') %}
+  <div class="prompt">Sign in with...</div>
+  <div class="sign-in-buttons">
+    {{ SignInButton('facebook', 'fa-facebook', 'Facebook') }}
+    {{ Divider() }}
+    {{ SignInButton('google', 'fa-google', 'Google') }}
+    {# Not implemented yet.
+      {{ SignInButton('twitter', 'fa-twitter', 'Twitter') }}
+      {{ Divider() }}
+      {{ SignInButton('linkedin', 'fa-linkedin', 'LinkedIn') }}
+    #}
   </div>
-</div>
+  <div class="actions">
+    <a href="#"
+       class="ui-button ui-button-cancel">Cancel</a>
+  </div>
+{% endcall %}
+
+
+{# Sign in pending dialog. #}
+
+{{ LoadingDialog('sign-in-pending', 'Signing in...') }}
 
 
 {# Google API JavaScript client. #}
