@@ -20,6 +20,6 @@
     <li id="account-launcher"
         class="menu-button {{ '' if user.is_authenticated() else 'hidden' }}"
         data-menu-id="account-menu">
-      {{ user.greeting_name }}
+      <span class="fa fa-user"></span>&nbsp;&nbsp;{{ user.greeting_name }}
   </ul>
 </div>

@@ -34,13 +34,11 @@ class Menu {
 
 // Base class for client-side code on a page.
 abstract class BasePage {
-  BasePage(this._headerTemplate) {
+  BasePage() {
     // Set auth state change callback to refresh base page UI.
     _userManager = new UserManager(() {
-      postJson(
-          _AUTH_STATE_CHANGE_REFRESH_UI,
-          {'header_template': _headerTemplate},
-          _onAuthStateChangeRefresh);
+      HttpRequest.getString('${window.location.href}?header=1')
+          .then(_onNewHeader);
       _signInWindowWrapperNode.classes.add('hidden');
     });
     registerHeaderEventListeners();
@@ -81,22 +79,17 @@ abstract class BasePage {
     querySelector('#sign-in-button').onClick.listen((_) => showSignInWindow());
   }
 
-  // Callback invoked when we receive changed UI elements following auth state
+  // Callback invoked when we receive changed UI header following auth state
   // change.
-  void _onAuthStateChangeRefresh(Map response) {
-    if (response['success']) {
-      print('Refreshing page elements following auth state change');
-      // Refresh header and re-register event handlers, as the old elements have
-      // been deleted along with any event handlers.
-      replaceWithHtml('#header', response['header']);
-      registerHeaderEventListeners();
-      // Re-register menu buttons.
-      for (String menuId in _menus.keys) {
-        _registerMenuButtonEventHandlers(menuId);
-      }
-    } else {
-      print('Failed to refresh on auth state change. Error: ' +
-            response['error_message']);
+  void _onNewHeader(String headerHtml) {
+    print('Refreshing page elements following auth state change');
+    // Refresh header and re-register event handlers, as the old elements have
+    // been deleted along with any event handlers.
+    replaceWithHtml('#header', headerHtml);
+    registerHeaderEventListeners();
+    // Re-register menu buttons.
+    for (String menuId in _menus.keys) {
+      _registerMenuButtonEventHandlers(menuId);
     }
     _overlayNode.classes.add('hidden');
   }
@@ -189,12 +182,6 @@ abstract class BasePage {
     }
   }
 
-  // Name of the header template to request when refreshing after auth state
-  // change.
-  final String _headerTemplate;
-  // Auth state change refresh API.
-  final String _AUTH_STATE_CHANGE_REFRESH_UI =
-      '/api/v1/auth_state_change_refresh';
   // DOM elements.
   final Element _overlayNode = querySelector('#overlay');
   final Element _signInWindowWrapperNode =

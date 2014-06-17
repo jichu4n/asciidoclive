@@ -15,7 +15,7 @@ import 'utils.dart';
 
 // Implements the editor page.
 class EditorPage extends BasePage {
-  EditorPage() : super('editor_header') {
+  EditorPage() {
     // Get document ID from JavaScript params.
     if (_editorParams['document_id'] != null) {
       _documentId = _editorParams['document_id'];

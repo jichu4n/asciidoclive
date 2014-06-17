@@ -118,7 +118,11 @@ def RenderEditorForDocument(document_id):
   document = models_lib.UserDocument.Get(document_id)
   if document is None or not document.IsReadableByUser(login.current_user):
     return flask.redirect(flask.url_for('.RenderEditor'))
-  return _RenderTemplate('editor.html', {'document': document})
+  if 'header' in flask.request.args:
+    template = 'editor_header.html'
+  else:
+    template = 'editor.html'
+  return _RenderTemplate(template, {'document': document})
 
 
 @app.route('/sitemap.xml')
@@ -220,36 +224,6 @@ def Logout(_):
   return {
       'success': True,
   }
-
-
-@app.route('/api/v1/auth_state_change_refresh', methods=['POST'])
-@_JsonView
-def AuthStateChangeRefresh(request_data):
-  """Re-renders elements that depend on authentication state.
-
-  This will return HTML strings based on the current authentication state.
-
-  POST data: a JSON object:
-    - header_template: name of the header template to render, without the
-      trailing .html suffix.
-  Returns:
-    A JSON objct:
-      - success: a boolean.
-      - header: re-rendered header div.
-      - error_message: warnings or error messages.
-  """
-  if not request_data.get('header_template', None):
-    return _INVALID_REQUEST_RESPONSE
-  template = '%s.html' % request_data['header_template']
-  try:
-    app.jinja_env.get_template(template)
-  except jinja2.exceptions.TemplateNotFound:
-    return _INVALID_REQUEST_RESPONSE
-  else:
-    return {
-        'success': True,
-        'header': _RenderTemplate(template),
-    }
 
 
 @app.route('/api/v1/documents', methods=['PUT'])

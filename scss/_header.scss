@@ -99,7 +99,8 @@ $HEADER_ITEM_BAR_HEIGHT: 5px;
 
 $MENU_Z_INDEX: 5000;
 $MENU_ITEM_V_PADDING: 8px;
-$MENU_ITEM_H_PADDING: 17px;
+$MENU_ITEM_PADDING_LEFT: 20px;
+$MENU_ITEM_PADDING_RIGHT: 30px;
 .menu {
   position: absolute;
   z-index: $MENU_Z_INDEX;
@@ -113,7 +114,8 @@ $MENU_ITEM_H_PADDING: 17px;
   .item {
     cursor: pointer;
     @include HeaderUi();
-    padding: $MENU_ITEM_V_PADDING $MENU_ITEM_H_PADDING;
+    padding: $MENU_ITEM_V_PADDING $MENU_ITEM_PADDING_RIGHT
+        $MENU_ITEM_V_PADDING $MENU_ITEM_PADDING_LEFT;
     @include HeaderUiNoBar();
   }
   .item:hover {
