@@ -8,9 +8,9 @@
 {% from 'dialog.html' import Dialog %}
 {% from 'loading_dialog.html' import LoadingDialog %}
 
-{% block title %}
-AsciiDocLIVE - free online AsciiDoc editor
-{% endblock title %}
+{% set default_page_title = 'AsciiDocLIVE - free online AsciiDoc editor' %}
+
+{% block title %}{{ default_page_title }}{% endblock title %}
 
 {% block header %}{% include 'editor_header.html' %}{% endblock header %}
 
@@ -33,6 +33,8 @@ AsciiDocLIVE - free online AsciiDoc editor
               null,
             {% endif %}
         default_document_title: 'Untitled Document',
+        default_page_title: '{{ default_page_title }}',
+        page_title_suffix: ' - AsciiDocLIVE',
     };
   </script>
   {% include 'asciidoc_editor.html' %}

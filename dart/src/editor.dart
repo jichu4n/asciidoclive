@@ -37,7 +37,7 @@ class EditorPage extends BasePage {
       _editTitleInput.value = _documentTitle == null ? '' : _documentTitle;
       _editTitleInput..focus()..select();
     });
-    _updateTitleButtonText();
+    _onDocumentTitleChange();
   }
 
   // Saves the current document. If blocking is false, do not show the
@@ -91,6 +91,7 @@ class EditorPage extends BasePage {
     hideDialog();
     if (response['document_id'] != null) {
       _documentId = response['document_id'];
+      window.history.replaceState({}, _pageTitle, _documentUri);
       print('Created document ${_documentId}');
     } else {
       print('Saved document ${_documentId}');
@@ -109,7 +110,7 @@ class EditorPage extends BasePage {
       return;
     }
     _documentTitle = title;
-    _updateTitleButtonText();
+    _onDocumentTitleChange();
     if (_documentId == null) {
       print('Document not yet saved, not saving title change.');
       return;
@@ -117,17 +118,27 @@ class EditorPage extends BasePage {
     _save(blocking: true);
   }
 
-  // Updates the display of title in the header.
-  void _updateTitleButtonText() {
+  // Updates the UI following a title change.
+  void _onDocumentTitleChange() {
     querySelector('#document-title-button .document-title').setInnerHtml(
         _documentTitleOrDefault);
+    window.history.replaceState({}, _pageTitle);
   }
 
+  // Returns the document title, or the default if one isn't set.
   String get _documentTitleOrDefault =>
       _documentTitle == null ?  _defaultDocumentTitle : _documentTitle;
+  // Returns the page title given the current document title.
+  String get _pageTitle =>
+      _documentTitle == null ?
+      _defaultPageTitle :
+      '${_documentTitle}${_pageTitleSuffix}';
 
   // Returns the document update URI.
   String get _documentPostUri => '${_DOCUMENT_POST_URI}${_documentId}';
+  // Returns the URI for editing a document. This should ideally be sent from
+  // the server, but oh well.
+  String get _documentUri => '/d/${_documentId}';
 
   // Create document API.
   static final String _DOCUMENT_PUT_URI = '/api/v1/documents';
@@ -150,7 +161,11 @@ class EditorPage extends BasePage {
   // Document title.
   String _documentTitle = _editorParams['document_title'];
   // The document title to use when user has not specified one.
-  String _defaultDocumentTitle = _editorParams['default_document_title'];
+  final String _defaultDocumentTitle = _editorParams['default_document_title'];
+  // The page title to use when the document title is not set.
+  final String _defaultPageTitle = _editorParams['default_page_title'];
+  // The suffix to add to the document title to form the page title.
+  final String _pageTitleSuffix = _editorParams['page_title_suffix'];
   // The document title at the last save.
   String _lastSavedDocumentTitle;
 }
