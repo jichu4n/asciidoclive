@@ -74,6 +74,7 @@ class GoogleAccountProvider extends AccountProvider {
         }]);
     _gapi['client'].callMethod('setApiKey', [_GOOGLE_API_KEY]);
     // Try silent authentication.
+    /*
     final Map<String, String> params = {
         'client_id': _GOOGLE_CLIENT_ID,
         'scope': _GOOGLE_AUTH_SCOPES.join(' '),
@@ -81,6 +82,7 @@ class GoogleAccountProvider extends AccountProvider {
     };
     _gapi['auth'].callMethod(
         'authorize', [new JsObject.jsify(params), _onGoogleAuthStateChange]);
+    */
   }
 
   @override
@@ -157,7 +159,7 @@ class FacebookAccountProvider extends AccountProvider {
         'version': 'v2.0',
     };
     _fb.callMethod('init', [new JsObject.jsify(params)]);
-    _fb.callMethod('getLoginStatus', [_onFbAuthStateChange]);
+    // _fb.callMethod('getLoginStatus', [_onFbAuthStateChange]);
   }
 
   // Callback invoked when the auth state changes.

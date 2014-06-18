@@ -17,6 +17,7 @@ class UserManager {
   // provider, and another for auth state change after validation on our own
   // server.
   UserManager(
+      String this._userId,
       Element this._signInDialog,
       void this._onAccountProviderSignInCallback(),
       void this._onAuthStateChangeCallback()) {
@@ -42,14 +43,17 @@ class UserManager {
 
   // Logs out the current user.
   void logout() {
-    if (_userId == null) {
+    if (!isSignedIn) {
       return;
     }
     print('Logging out');
     postJson(_LOGOUT_URI, {}, _onLogoutResult);
   }
 
-  // Returns if the current user is logged in.
+  // Returns whether the user is signed in.
+  bool get isSignedIn => _userId != null;
+
+  // Returns if the user is signed in to one or more account providers.
   bool get hasAuth {
     return _accountProviders.values.any((AccountProvider accountProvider) =>
         accountProvider.hasAuth);

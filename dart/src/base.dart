@@ -8,6 +8,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
+import 'dart:js';
 import 'user_manager.dart';
 import 'utils.dart';
 
@@ -37,6 +38,7 @@ abstract class BasePage {
   BasePage() {
     // Set auth state change callback to refresh base page UI.
     _userManager = new UserManager(
+      _baseParams['user_id'],
       querySelector('#${SIGN_IN_DIALOG}-dialog'),
       _onAccountProviderSignIn,
       _onAuthStateChange);
@@ -71,17 +73,23 @@ abstract class BasePage {
 
   // Shows a dialog. If another dialog is already being shown, hides it first.
   void showDialog(String dialogId) {
-    if (_activeDialogWrapperNode == null) {
-      _overlayNode.classes.remove('hidden');
-    } else {
+    if (_activeDialogWrapperNode != null) {
       _activeDialogWrapperNode.classes.add('hidden');
     }
+    _overlayNode.classes.remove('hidden');
     _activeDialogWrapperNode = querySelector('#${dialogId}-dialog-wrapper');
     if (_activeDialogWrapperNode == null) {
       print('Warning: no dialog with ID ${dialogId} found');
       return;
     }
     _activeDialogWrapperNode.classes.remove('hidden');
+  }
+  static const Duration DEFAULT_DIALOG_TIMEOUT =
+      const Duration(milliseconds: 1500);
+  void showDialogWithTimeout(
+      String dialogId, {Duration timeout: DEFAULT_DIALOG_TIMEOUT}) {
+    showDialog(dialogId);
+    new Timer(timeout, hideDialog);
   }
 
   // Hides the currently active dialog.
@@ -118,7 +126,11 @@ abstract class BasePage {
   // change.
   void _onNewHeader(String headerHtml) {
     print('Refreshing page elements following auth state change');
-    hideDialog();
+    if (_userManager.isSignedIn) {
+      showDialogWithTimeout(_SIGN_IN_SUCCESS_DIALOG);
+    } else {
+      showDialogWithTimeout(_SIGN_OUT_SUCCESS_DIALOG);
+    }
     // Refresh header and re-register event handlers, as the old elements have
     // been deleted along with any event handlers.
     replaceWithHtml('#header', headerHtml);
@@ -127,7 +139,6 @@ abstract class BasePage {
     for (String menuId in _menus.keys) {
       _registerMenuButtonEventHandlers(menuId);
     }
-    _overlayNode.classes.add('hidden');
   }
 
   // Returns the menu button corresponding to a menu ID. If not found, returns
@@ -230,4 +241,9 @@ abstract class BasePage {
   Map<Element, Timer> _menuTimers = {};
   // How long to wait before hiding a menu after mouse out.
   static const Duration _MENU_HIDE_DELAY = const Duration(milliseconds: 50);
+  // Dialog ID of the sign in / out success dialogs.
+  final String _SIGN_IN_SUCCESS_DIALOG = 'sign-in-success';
+  final String _SIGN_OUT_SUCCESS_DIALOG = 'sign-out-success';
+  // JavaScript parameters.
+  static final JsObject _baseParams = context['BaseParams'];
 }

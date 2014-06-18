@@ -56,6 +56,9 @@ class EditorPage extends BasePage {
       if (sourceText == _editor.lastSavedSourceText &&
           _documentTitle == _lastSavedDocumentTitle) {
         print('Not changed since last save, not saving.');
+        if (blocking) {
+          showDialogWithTimeout(_SAVING_SUCCESS_DIALOG);
+        }
         return;
       }
       if (blocking) {
@@ -94,7 +97,7 @@ class EditorPage extends BasePage {
       print('Save failed! Error: ' + response['error_message']);
       return;
     }
-    hideDialog();
+    showDialogWithTimeout(_SAVING_SUCCESS_DIALOG);
     if (response['document_id'] != null) {
       _documentId = response['document_id'];
       window.history.replaceState({}, _pageTitle, _documentUri);
@@ -154,6 +157,8 @@ class EditorPage extends BasePage {
   static final String _EDIT_TITLE_DIALOG = 'edit-title';
   // Saving progress dialog.
   static final String _SAVING_DIALOG = 'saving';
+  // Saving success dialog.
+  static final String _SAVING_SUCCESS_DIALOG = 'saving-success';
   // DOM elements.
   final TextInputElement _editTitleInput = querySelector(
       '#${_EDIT_TITLE_DIALOG}-dialog input[type="text"]');

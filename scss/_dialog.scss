@@ -73,3 +73,11 @@ $DIALOG_ACTION_BUTTON_DIVIDER_WIDTH: 8px;
     }
   }
 }
+
+.dialog .icon-loading,
+.dialog .icon-ok {
+  color: #325d1d;
+}
+.dialog .icon-error {
+  color: #9f0b00;
+}

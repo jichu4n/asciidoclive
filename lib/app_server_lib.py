@@ -94,7 +94,7 @@ def _RenderTemplate(template, extra_args=None):
   }
   if extra_args:
     args.update(extra_args)
-  return flask.render_template(template, **args)
+  return flask.render_template(template, **args).strip()
 
 
 @app.route('/')

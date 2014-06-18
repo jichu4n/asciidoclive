@@ -2,7 +2,7 @@
  #                         Copyright (C) 2014 Chuan Ji                         #
  #                             All Rights Reserved                             #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
- # Template for dialogs. #}
+ # Common templates. #}
 
 {% macro Dialog(dialog_id) %}
   <div id="{{ dialog_id }}-dialog-wrapper" class="hidden dialog-wrapper">
@@ -19,4 +19,35 @@
       </div>
     </div>
   </div>
+{% endmacro %}
+
+{# A simple message dialog with an icon and no buttons.
+   Args:
+     - dialog_id: dialog ID string.
+     - icon_classes: FontAwesome icon name(s) or additional classes for the
+       icon.
+     - text: the text to display.
+#}
+{% macro MessageDialog(dialog_id, icon_classes, text) %}
+  {% call Dialog(dialog_id) %}
+    <div class="prompt">
+      <span class="icon fa {{ icon_classes }}"></span>
+      &nbsp;&nbsp;&nbsp;{{ text }}
+    </div>
+  {% endcall %}
+{% endmacro %}
+
+{# Loading dialog. #}
+{% macro LoadingDialog(dialog_id, text='Working...') %}
+  {{ MessageDialog(dialog_id, 'fa-refresh fa-spin icon-loading', text) }}
+{% endmacro %}
+
+{# OK / success dialog. #}
+{% macro SuccessDialog(dialog_id, text) %}
+  {{ MessageDialog(dialog_id, 'fa-check icon-ok', text) }}
+{% endmacro %}
+
+{# Error dialog. #}
+{% macro ErrorDialog(dialog_id, text) %}
+  {{ MessageDialog(dialog_id, 'fa-exclamation-circle icon-error', text) }}
 {% endmacro %}

@@ -3,6 +3,9 @@
  #                             All Rights Reserved                             #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
  # Base page template. #}
+
+{% from 'dialog.html' import SuccessDialog %}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -21,6 +24,16 @@
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='all.css') }}">
 
+    <script type="text/javascript">
+      window.BaseParams = {
+        user_id:
+            {% if user.is_authenticated() %}
+              '{{ user.user_id }}',
+            {% else %}
+              null,
+            {% endif %}
+      };
+    </script>
     {% block head_extra %}{% endblock head_extra %}
 
     {% block google_analytics %}
@@ -45,6 +58,10 @@
 
     {# Overlay window that dims the normal page. Used for dialogs. #}
     <div id="overlay" class="hidden">&nbsp;</div>
+
     {% include 'sign_in_dialog.html' %}
+
+    {{ SuccessDialog('sign-in-success', 'Signed in') }}
+    {{ SuccessDialog('sign-out-success', 'Signed out') }}
   </body>
 </html>
