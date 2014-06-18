@@ -19,11 +19,17 @@ class EditorPage extends BasePage {
     // Event handlers.
     querySelector('#${_EDIT_TITLE_DIALOG}-dialog .ui-button-cancel')
         .onClick.listen((_) => hideDialog());
-    querySelector('#${_EDIT_TITLE_DIALOG}-dialog .ui-button-ok')
-        .onClick.listen((_) {
-          hideDialog();
-          _setDocumentTitle(_editTitleInput.value.trim());
-        });
+    final Element editTitleDialogOkButton =
+        querySelector('#${_EDIT_TITLE_DIALOG}-dialog .ui-button-ok');
+    editTitleDialogOkButton.onClick.listen((_) {
+      hideDialog();
+      _setDocumentTitle(_editTitleInput.value.trim());
+    });
+    _editTitleInput.onKeyPress.listen((KeyboardEvent e) {
+      if (e.charCode == 13) {  // Enter key.
+        editTitleDialogOkButton.click();
+      }
+    });
     _lastSavedDocumentTitle = _documentTitle;
   }
 
@@ -122,7 +128,7 @@ class EditorPage extends BasePage {
   void _onDocumentTitleChange() {
     querySelector('#document-title-button .document-title').setInnerHtml(
         _documentTitleOrDefault);
-    window.history.replaceState({}, _pageTitle);
+    document.title = _pageTitle;
   }
 
   // Returns the document title, or the default if one isn't set.
