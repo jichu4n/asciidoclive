@@ -31,6 +31,9 @@ class EditorPage extends BasePage {
       }
     });
     _lastSavedDocumentTitle = _documentTitle;
+    _lastSavedSourceText = _editor.sourceText.trim();
+
+    window.onBeforeUnload.listen(_onBeforeUnload);
   }
 
   @override
@@ -50,14 +53,13 @@ class EditorPage extends BasePage {
   // sign in dialog if user is not authenticated, but silently fail, and do not
   // show the saving progress dialog.
   void _save({bool blocking: false}) {
-    if (userManager.hasAuth) {
+    if (userManager.isSignedIn) {
       // TODO(cji): Update UI; add title.
       final String sourceText = _editor.sourceText;
-      if (sourceText == _editor.lastSavedSourceText &&
-          _documentTitle == _lastSavedDocumentTitle) {
+      if (!_isDirty) {
         print('Not changed since last save, not saving.');
         if (blocking) {
-          showDialogWithTimeout(_SAVING_SUCCESS_DIALOG);
+          showDialogWithTimeout(_SAVING_NOT_CHANGED_DIALOG);
         }
         return;
       }
@@ -105,7 +107,7 @@ class EditorPage extends BasePage {
     } else {
       print('Saved document ${_documentId}');
     }
-    _editor.lastSavedSourceText = sourceText;
+    _lastSavedSourceText = sourceText;
     _lastSavedDocumentTitle = documentTitle;
   }
 
@@ -149,6 +151,18 @@ class EditorPage extends BasePage {
   // the server, but oh well.
   String get _documentUri => '/d/${_documentId}';
 
+  // Returns whether the user has made unsaved modifications.
+  bool get _isDirty => (
+      _editor.sourceText.trim() != _lastSavedSourceText ||
+      _documentTitle != _lastSavedDocumentTitle);
+
+  // Callback invoked when the user attempts to close the window.
+  void _onBeforeUnload(BeforeUnloadEvent e) {
+    if (_isDirty) {
+      e.returnValue = _unloadConfirmationMessage;
+    }
+  }
+
   // Create document API.
   static final String _DOCUMENT_PUT_URI = '/api/v1/documents';
   // Update document API.
@@ -159,6 +173,8 @@ class EditorPage extends BasePage {
   static final String _SAVING_DIALOG = 'saving';
   // Saving success dialog.
   static final String _SAVING_SUCCESS_DIALOG = 'saving-success';
+  // Dialog to show if the user clicks save without a change.
+  static final String _SAVING_NOT_CHANGED_DIALOG = 'saving-not-changed';
   // DOM elements.
   final TextInputElement _editTitleInput = querySelector(
       '#${_EDIT_TITLE_DIALOG}-dialog input[type="text"]');
@@ -179,6 +195,15 @@ class EditorPage extends BasePage {
   final String _pageTitleSuffix = _editorParams['page_title_suffix'];
   // The document title at the last save.
   String _lastSavedDocumentTitle;
+  // The source text at the last save.
+  String _lastSavedSourceText = null;
+  // Message to show when attempting to unload an editor with changes.
+  final String _unloadConfirmationMessage = (
+      querySelector('#unload-confirmation-message').text
+      .replaceAllMapped(
+          new RegExp(r'([^\n])\n([^\n])', multiLine: true),
+          (Match m) => '${m[1]} ${m[2]}')
+      .replaceAll(new RegExp(r'[ ]+'), ' '));
 }
 
 void main() {

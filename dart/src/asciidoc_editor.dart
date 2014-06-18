@@ -19,8 +19,6 @@ class AsciiDocEditor {
 
   // Constructor.
   AsciiDocEditor() {
-    lastSavedSourceText = _sourceNode.text.trim();
-
     // We make a clone of the message template, measure its height, and add the
     // same number of pixels of padding to the source container. This allows the
     // source and output containers to have the same viewport height in stable
@@ -66,15 +64,10 @@ class AsciiDocEditor {
 
     // Start request timer.
     _update();
-
-    // Set up events.
-    window.onBeforeUnload.listen(_onBeforeUnload);
   }
 
   // Returns the source text in the editor.
   String get sourceText => _aceEditor.callMethod('getValue').trim();
-  // The source text last successfully saved.
-  String lastSavedSourceText = null;
 
   // Returns the SHA1 digest of a string.
   String _getSha1Digest(String text) {
@@ -205,15 +198,6 @@ class AsciiDocEditor {
     _updateTimer = new Timer(_UPDATE_INTERVAL, _update);
   }
 
-  // Callback invoked when the user attempts to close the window.
-  void _onBeforeUnload(BeforeUnloadEvent e) {
-    if (sourceText.trim() == lastSavedSourceText) {
-      return;
-    }
-
-    e.returnValue = _unloadConfirmationMessage;
-  }
-
   // Returns the scroll size of the source.
   _ScrollSize get _sourceScrollSize {
     final num sourceContentHeight =
@@ -289,12 +273,6 @@ class AsciiDocEditor {
   final DivElement _messagesNode = querySelector('#asciidoc-messages');
   final DivElement _messageTemplateNode =
       querySelector('#asciidoc-message-template');
-  final String _unloadConfirmationMessage = (
-      querySelector('#unload-confirmation-message').text
-      .replaceAllMapped(
-          new RegExp(r'([^\n])\n([^\n])', multiLine: true),
-          (Match m) => '${m[1]} ${m[2]}')
-      .replaceAll(new RegExp(r'[ ]+'), ' '));
   final String _successMessageText =
       querySelector('#asciidoc-success-message-text').text.trim();
   final String _errorMessageText =

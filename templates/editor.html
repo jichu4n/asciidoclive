@@ -58,6 +58,15 @@
   {# Dialogs. #}
   {{ LoadingDialog('saving', 'Saving...') }}
   {{ SuccessDialog('saving-success', 'Saved') }}
+  {{ SuccessDialog('saving-not-changed', 'No changes since last save') }}
+
+  {# Message for the leave confirmation dialog. #}
+  <div id="unload-confirmation-message" class="hidden">
+    If you leave this page, all data you have entered on this page will be lost.
+
+    Please make sure to save any data you would like to keep by copying it from
+    this page and saving it on your computer.
+  </div>
 
   {# Editor client-side code. #}
   <script type="application/dart"
