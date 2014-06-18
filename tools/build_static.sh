@@ -34,7 +34,7 @@ function BuildDartFiles() {
 function CopyAssets() {
   ( set -x;
     cp "$DART_DIR"/src/*.dart "$STATIC_DIR";
-    cp -R "$DART_DIR"/packages "$STATIC_DIR";
+    cp -R -L "$DART_DIR"/packages "$STATIC_DIR";
     cp -R misc/font-awesome "$STATIC_DIR";
     cp misc/logo.png "$STATIC_DIR" )
 }
@@ -42,9 +42,11 @@ function CopyAssets() {
 
 TIMEFORMAT=$'\033[32m[ %Us ]\033[m'
 while true; do
+  rm -r "$STATIC_DIR"/*
   time BuildScssFiles
   time CopyAssets
   time BuildDartFiles
+  chmod -R o+r "$STATIC_DIR"
   echo
   echo -n 'Rebuild? [Y/n] '
   read r
