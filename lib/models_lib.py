@@ -109,6 +109,15 @@ class User(DB.Document, login.UserMixin):
     return '%d-%d' % (
         os.getpid(), int(time.time() * 1000000))
 
+  def GetOwnedDocuments(self):
+    """Returns the list of documents owned by this user.
+
+    Returns:
+      An iterable of UserDocument instances that are owned by this user.
+    """
+    return UserDocument.objects(owner=self)
+
+
   # pylint: disable=invalid-name
   def get_id(self):
     """Returns the user ID.

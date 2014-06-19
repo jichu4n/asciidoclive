@@ -1,0 +1,34 @@
+{# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ #                         Copyright (C) 2014 Chuan Ji                         #
+ #                             All Rights Reserved                             #
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ # Document list page template. #}
+{% extends 'base.html' %}
+
+{# How many words to show in each item. #}
+{% set MAX_TEXT_SNIPPET_LENGTH = 100 %}
+
+{% block title %}My Documents - AsciiDocLIVE{% endblock title %}
+
+{% block header %}{% include 'header.html' %}{% endblock header %}
+
+{% block main %}
+  <div id="document-list-wrapper">
+    {% for document in documents %}
+      <a class="document-item"
+         href="{{ url_for(
+             'RenderEditorForDocument', document_id=document.document_id) }}">
+        {% if document.title %}
+          <div class="title">{{ document.title }}</div>
+        {% endif %}
+        <div class="text">
+          {{ document.text | truncate(MAX_TEXT_SNIPPET_LENGTH, True) }}
+        </div>
+      </a>
+    {% endfor %}
+    <a id="new-document-item" class="document-item"
+       href="{{ url_for('RenderEditor') + '?new=1' }}">
+      <div class="title"><span class="fa fa-plus fa-lg icon"></span>&nbsp;New</div>
+    </a>
+  </div>
+{% endblock main %}

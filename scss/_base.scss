@@ -154,7 +154,7 @@ $HEADER_HEIGHT: 48px;
 }
 @mixin UiFontLarge() {
   @include UiFontLargeFamily();
-  font-size: 20px;
+  font-size: 22px;
 }
 @mixin UiFontSmall() {
   @include UiFontFamily();

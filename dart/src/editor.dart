@@ -39,6 +39,13 @@ class EditorPage extends BasePage {
   @override
   void registerHeaderEventListeners() {
     super.registerHeaderEventListeners();
+    querySelector('#open-button').onClick.listen((_) {
+      if (userManager.isSignedIn) {
+        window.location.assign(_DOCUMENT_LIST_URI);
+      } else {
+        showDialog(SIGN_IN_DIALOG);
+      }
+    });
     querySelector('#save-button').onClick.listen((_) =>
         _save(blocking: true));
     querySelector('#document-title-button').onClick.listen((_) {
@@ -150,6 +157,8 @@ class EditorPage extends BasePage {
   // Returns the URI for editing a document. This should ideally be sent from
   // the server, but oh well.
   String get _documentUri => '/d/${_documentId}';
+  // Returns the URI for the document list.
+  final String _DOCUMENT_LIST_URI = '/home';
 
   // Returns whether the user has made unsaved modifications.
   bool get _isDirty => (

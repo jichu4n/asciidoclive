@@ -99,17 +99,23 @@ def _RenderTemplate(template, extra_args=None):
 
 @app.route('/')
 def RenderEditor():
-  """Handler for the main editor page."""
+  """Handler for the front page."""
   if '_escaped_fragment_' in flask.request.args:
     # Static version for search engine crawlers.
     return _RenderTemplate('static.html')
 
-  default_text = _RenderTemplate('intro.txt')
+  if login.current_user.is_authenticated() and 'new' not in flask.request.args:
+    return flask.redirect(flask.url_for('.RenderDocumentList'))
+
+  if 'new' in flask.request.args:
+    default_text = ''
+  else:
+    default_text = _RenderTemplate('intro.txt')
   if 'header' in flask.request.args:
     template = 'editor_header.html'
   else:
     template = 'editor.html'
-  return _RenderTemplate('editor.html', {
+  return _RenderTemplate(template, {
       'document': None,
       'asciidoc_editor_text': default_text,
   })
@@ -127,6 +133,14 @@ def RenderEditorForDocument(document_id):
   else:
     template = 'editor.html'
   return _RenderTemplate(template, {'document': document})
+
+
+@app.route('/home')
+@login.login_required
+def RenderDocumentList():
+  """Handler for the document list page."""
+  documents = login.current_user.GetOwnedDocuments()
+  return _RenderTemplate('document_list.html', {'documents': documents})
 
 
 @app.route('/sitemap.xml')

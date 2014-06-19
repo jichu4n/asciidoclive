@@ -1,0 +1,66 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Styles for the document list.
+*/
+
+$DOCUMENT_ITEM_WIDTH: 240px;
+$DOCUMENT_ITEM_HEIGHT: 300px;
+$DOCUMENT_ITEM_MARGIN: 18px;
+$DOCUMENT_ITEM_PADDING: 25px;
+
+// See http://css-tricks.com/snippets/css/cross-browser-inline-block/.
+@mixin InlineBlock() {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#document-list-wrapper {
+  min-width: $DOCUMENT_ITEM_WIDTH + 2 * $DOCUMENT_ITEM_MARGIN;
+  min-height: 100%;
+  padding: $DOCUMENT_ITEM_MARGIN 0 0 $DOCUMENT_ITEM_MARGIN;
+
+  background: #e8e8e8;
+
+  .document-item {
+    @include InlineBlock();
+    width: $DOCUMENT_ITEM_WIDTH;
+    max-height: $DOCUMENT_ITEM_HEIGHT;
+
+    margin: 0 $DOCUMENT_ITEM_MARGIN $DOCUMENT_ITEM_MARGIN 0;
+    padding: $DOCUMENT_ITEM_PADDING;
+
+    background-color: #fff;
+    box-shadow: 0 1px 2px #aaa;
+    border-radius: 1px;
+    color: #000;
+    text-decoration: none;
+
+    .title {
+      display: block;
+      @include UiFontLarge();
+      margin-bottom: 15px;
+      color: $HEADER_BG_COLOR;
+    }
+    .text {
+      display: block;
+      @include TextFont();
+    }
+  }
+
+  #new-document-item {
+    // Square.
+    height: $DOCUMENT_ITEM_WIDTH;
+    line-height: $DOCUMENT_ITEM_WIDTH - 2 * $DOCUMENT_ITEM_PADDING;
+
+    text-align: center;
+    @include UiFontLarge();
+
+    .icon {
+      color: #40ac3c;
+      vertical-align: middle;
+    }
+  }
+}
