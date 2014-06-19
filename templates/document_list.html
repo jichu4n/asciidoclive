@@ -17,7 +17,8 @@
     {% for document in documents %}
       <a class="document-item"
          href="{{ url_for(
-             'RenderEditorForDocument', document_id=document.document_id) }}">
+             'RenderEditorForDocument', document_id=document.document_id) }}"
+         title="Click to open">
         {% if document.title %}
           <div class="title">{{ document.title }}</div>
         {% endif %}
@@ -27,7 +28,8 @@
       </a>
     {% endfor %}
     <a id="new-document-item" class="document-item"
-       href="{{ url_for('RenderEditor') + '?new=1' }}">
+       href="{{ url_for('RenderEditor') + '?new=1' }}"
+       title="Click to start a new document">
       <div class="title"><span class="fa fa-plus fa-lg icon"></span>&nbsp;New</div>
     </a>
   </div>
