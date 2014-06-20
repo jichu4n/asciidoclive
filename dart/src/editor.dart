@@ -31,6 +31,12 @@ class EditorPage extends BasePage {
         editTitleDialogOkButton.click();
       }
     });
+
+    querySelector('#${_CONFIRM_DELETE_DIALOG}-dialog .ui-button-cancel')
+        .onClick.listen((_) => hideDialog());
+    querySelector('#${_CONFIRM_DELETE_DIALOG}-dialog .ui-button-delete')
+        .onClick.listen((_) => _deleteDocument());
+
     _lastSavedDocumentTitle = _documentTitle;
     _lastSavedSourceText = _editor.sourceText.trim();
 
@@ -55,6 +61,9 @@ class EditorPage extends BasePage {
       showDialog(_EDIT_TITLE_DIALOG);
       _editTitleInput.value = _documentTitle == null ? '' : _documentTitle;
       _editTitleInput..focus()..select();
+    });
+    querySelector('#delete-button').onClick.listen((_) {
+      showDialog(_CONFIRM_DELETE_DIALOG);
     });
     _onDocumentTitleChange();
   }
@@ -200,10 +209,37 @@ class EditorPage extends BasePage {
     }
   }
 
+  // Returns the document delete URI.
+  String get _documentDeleteUri => '${_DOCUMENT_DELETE_URI}${_documentId}';
+  // Deletes the current document.
+  void _deleteDocument() {
+    if (_documentId != null) {
+      postJson(_documentDeleteUri, {}, _onDeleteResult, method: 'DELETE');
+      showDialog(_DELETING_DIALOG);
+    } else {
+      _onDeleteResult({'success': true});
+    }
+  }
+  // Callback invoked on delete result.
+  void _onDeleteResult(Map response) {
+    if (!response['success']) {
+      print('Delete failed! Error: ' + response['error_message']);
+      return;
+    }
+    showDialogWithTimeout(_DELETE_SUCCESS_DIALOG);
+    new Timer(BasePage.DEFAULT_DIALOG_TIMEOUT, () {
+      _lastSavedSourceText = _editor.sourceText.trim();
+      _lastSavedDocumentTitle = _documentTitle;
+      window.location.assign(ROOT_URI);
+    });
+  }
+
   // Create document API.
   static final String _DOCUMENT_PUT_URI = '/api/v1/documents';
   // Update document API.
   static final String _DOCUMENT_POST_URI = '/api/v1/documents/';
+  // Delete document API.
+  static final String _DOCUMENT_DELETE_URI = '/api/v1/documents/';
   // Edit title dialog.
   static final String _EDIT_TITLE_DIALOG = 'edit-title';
   // Saving progress dialog.
@@ -212,6 +248,12 @@ class EditorPage extends BasePage {
   static final String _SAVING_SUCCESS_DIALOG = 'saving-success';
   // Dialog to show if the user clicks save without a change.
   static final String _SAVING_NOT_CHANGED_DIALOG = 'saving-not-changed';
+  // Dialog for confirming document deletion.
+  static final String _CONFIRM_DELETE_DIALOG = 'confirm-delete';
+  // Deletion progress dialog.
+  static final String _DELETING_DIALOG = 'deleting';
+  // Dialog shown after deletion.
+  static final String _DELETE_SUCCESS_DIALOG = 'delete-success';
   // DOM elements.
   final TextInputElement _editTitleInput = querySelector(
       '#${_EDIT_TITLE_DIALOG}-dialog input[type="text"]');

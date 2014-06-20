@@ -42,7 +42,8 @@
   {% endif %}
   {% include 'asciidoc_editor.html' %}
 
-  {# Edit title dialog. #}
+  {# Dialogs. #}
+
   {% call Dialog('edit-title') %}
     <div class="prompt">Edit title</div>
       <input type="text" class="ui-input-text">
@@ -54,11 +55,24 @@
          class="ui-button ui-button-ok">Save</a>
     </div>
   {% endcall %}
-
-  {# Dialogs. #}
   {{ LoadingDialog('saving', 'Saving...') }}
   {{ SuccessDialog('saving-success', 'Saved') }}
   {{ SuccessDialog('saving-not-changed', 'No changes since last save') }}
+
+  {% call Dialog('confirm-delete') %}
+    <div class="prompt">
+      Really delete this document? This cannot be undone.
+    </div>
+    <div class="actions">
+      <a href="#"
+         class="ui-button ui-button-cancel">Cancel</a>
+      <span class="divider">&nbsp;</span>
+      <a href="#"
+         class="ui-button ui-button-delete">Delete</a>
+    </div>
+  {% endcall %}
+  {{ LoadingDialog('deleting', 'Deleting...') }}
+  {{ SuccessDialog('delete-success', 'Deleted') }}
 
   {# Message for the leave confirmation dialog. #}
   <div id="unload-confirmation-message" class="hidden">

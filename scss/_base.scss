@@ -225,6 +225,17 @@ $HEADER_HEIGHT: 48px;
   border: 1px solid #2f5bb7;
   @include GradientTopBottom(#4d90fe, #357ae8);
 }
+@mixin UiButtonRed() {
+  @include UiButton();
+  border: 1px solid #d14836;
+  @include GradientTopBottom(#dc4a38, #d14836);
+  color: #fff;
+  text-shadow: 0 1px 0 #b0281a;
+}
+@mixin UiButtonRedHover() {
+  border: 1px solid #b0281a;
+  @include GradientTopBottom(#dc4a38, #c53727);
+}
 @mixin UiButtonUnimportant() {
   color: #737373;
 }
@@ -270,6 +281,12 @@ html, body {
 }
 .ui-button-ok:hover {
   @include UiButtonBlueHover();
+}
+.ui-button-delete {
+  @include UiButtonRed();
+}
+.ui-button-delete:hover {
+  @include UiButtonRedHover();
 }
 .ui-input-text {
   border: 1px solid #c9c9c9;

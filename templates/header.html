@@ -17,7 +17,7 @@
     <li id="sign-in-button"
         class="button {{ 'hidden' if user.is_authenticated() else '' }}">
       <span class="fa fa-sign-in"></span>&nbsp;&nbsp;Sign in
-    <li id="account-launcher"
+    <li id="misc-menu-button"
         class="menu-button {{ '' if user.is_authenticated() else 'hidden' }}"
         data-menu-id="account-menu">
       <span class="fa fa-user"></span>&nbsp;&nbsp;{{ user.greeting_name }}

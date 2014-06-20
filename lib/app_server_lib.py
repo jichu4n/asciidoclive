@@ -39,6 +39,10 @@ _NOT_AUTHENTICATED_RESPONSE = {
     'success': False,
     'error_message': 'Not authenticated',
 }
+_INVALID_DOCUMENT_ID_RESPONSE = {
+    'success': False,
+    'error_message': 'Invalid document ID',
+}
 
 
 def _JsonView(view_function):
@@ -306,10 +310,7 @@ def SaveDocument(request_data, document_id):
   """
   document = models_lib.UserDocument.Get(document_id)
   if not document:
-    return {
-        'success': False,
-        'error_message': 'Invalid document ID',
-    }
+    return _INVALID_DOCUMENT_ID_RESPONSE
   if not document.IsWritableByUser(login.current_user):
     return _NOT_AUTHENTICATED_RESPONSE
   document.title = request_data.get('title', None)
@@ -317,4 +318,28 @@ def SaveDocument(request_data, document_id):
   document.save()
   return {
       'success': True,
+  }
+
+@app.route('/api/v1/documents/<document_id>', methods=['DELETE'])
+@_JsonView
+@_RequireAuth
+def DeleteDocument(request_data, document_id):
+  """Deletes a document.
+
+  Login required.
+
+  POST data: None.
+  Returns:
+    A JSON objct:
+      - success: a boolean.
+      - error_message: warnings or error messages.
+  """
+  document = models_lib.UserDocument.Get(document_id)
+  if not document:
+    return _INVALID_DOCUMENT_ID_RESPONSE
+  if not document.IsWritableByUser(login.current_user):
+    return _NOT_AUTHENTICATED_RESPONSE
+  document.delete()
+  return {
+      'success': True
   }
