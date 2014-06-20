@@ -98,15 +98,21 @@ def _RenderTemplate(template, extra_args=None):
 
 
 @app.route('/')
-def RenderEditor():
-  """Handler for the front page."""
+def RenderRoot():
+  """Handler for the root URI."""
   if '_escaped_fragment_' in flask.request.args:
     # Static version for search engine crawlers.
     return _RenderTemplate('static.html')
 
-  if login.current_user.is_authenticated() and 'new' not in flask.request.args:
+  if login.current_user.is_authenticated():
     return flask.redirect(flask.url_for('.RenderDocumentList'))
 
+  return flask.redirect(flask.url_for('.RenderScratchEditor'))
+
+
+@app.route('/scratch')
+def RenderScratchEditor():
+  """Handler for rendering an unsaved document editor."""
   if 'new' in flask.request.args:
     default_text = ''
   else:
@@ -121,13 +127,14 @@ def RenderEditor():
   })
 
 
+
 @app.route('/d/<document_id>')
 @login.login_required
 def RenderEditorForDocument(document_id):
   """Handler for the main editor page with a previously saved document."""
   document = models_lib.UserDocument.Get(document_id)
   if document is None or not document.IsReadableByUser(login.current_user):
-    return flask.redirect(flask.url_for('.RenderEditor'))
+    return flask.redirect(flask.url_for('.RenderRoot'))
   if 'header' in flask.request.args:
     template = 'editor_header.html'
   else:

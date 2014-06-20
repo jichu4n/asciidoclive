@@ -41,7 +41,7 @@ abstract class BasePage {
       _baseParams['user_id'],
       querySelector('#${SIGN_IN_DIALOG}-dialog'),
       _onAccountProviderSignIn,
-      _onAuthStateChange);
+      onAuthStateChange);
     registerHeaderEventListeners();
     _setUpAccountMenu();
 
@@ -110,16 +110,20 @@ abstract class BasePage {
         showDialog(SIGN_IN_DIALOG));
   }
 
+  // Callback invoked when the user is authenticated with our own server or is
+  // logged out.
+  void onAuthStateChange() {
+    HttpRequest.getString('${window.location.href}?header=1')
+        .then(_onNewHeader);
+  }
+
+  // The URI for the site root.
+  final String ROOT_URI = '/';
+
   // Callback invoked when the user completes sign-in with an account provider,
   // but we have not yet received validation from our own server.
   void _onAccountProviderSignIn() {
     showDialog(SIGN_IN_PENDING_DIALOG);
-  }
-  // Callback invoked when the user is authenticated with our own server or is
-  // logged out.
-  void _onAuthStateChange() {
-    HttpRequest.getString('${window.location.href}?header=1')
-        .then(_onNewHeader);
   }
 
   // Callback invoked when we receive changed UI header following auth state

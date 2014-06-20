@@ -28,9 +28,14 @@
       </a>
     {% endfor %}
     <a id="new-document-item" class="document-item"
-       href="{{ url_for('RenderEditor') + '?new=1' }}"
+       href="{{ url_for('RenderScratchEditor') + '?new=1' }}"
        title="Click to start a new document">
       <div class="title"><span class="fa fa-plus fa-lg icon"></span>&nbsp;New</div>
     </a>
   </div>
+
+  {# Client-side code. #}
+  <script type="application/dart"
+          src="{{ url_for('static', filename='document_list.dart') }}"></script>
+  <script src="{{ url_for('static', filename='packages/browser/dart.js') }}"></script>
 {% endblock main %}

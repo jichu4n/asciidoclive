@@ -56,6 +56,15 @@ class EditorPage extends BasePage {
     _onDocumentTitleChange();
   }
 
+  @override
+  void onAuthStateChange() {
+    if (!userManager.isSignedIn && _documentId != null) {
+      window.location.assign(ROOT_URI);
+    } else {
+      super.onAuthStateChange();
+    }
+  }
+
   // Saves the current document. If blocking is false, do not show the
   // sign in dialog if user is not authenticated, but silently fail, and do not
   // show the saving progress dialog.
@@ -157,7 +166,7 @@ class EditorPage extends BasePage {
   // Returns the URI for editing a document. This should ideally be sent from
   // the server, but oh well.
   String get _documentUri => '/d/${_documentId}';
-  // Returns the URI for the document list.
+  // The URI for the document list.
   final String _DOCUMENT_LIST_URI = '/home';
 
   // Returns whether the user has made unsaved modifications.
