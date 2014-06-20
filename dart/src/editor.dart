@@ -5,6 +5,7 @@
  Editor page.
 */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'dart:js';
@@ -34,6 +35,8 @@ class EditorPage extends BasePage {
     _lastSavedSourceText = _editor.sourceText.trim();
 
     window.onBeforeUnload.listen(_onBeforeUnload);
+
+    _saveTimer = new Timer.periodic(_SAVE_INTERVAL, (_) => _save());
   }
 
   @override
@@ -46,7 +49,7 @@ class EditorPage extends BasePage {
         showDialog(SIGN_IN_DIALOG);
       }
     });
-    querySelector('#save-button').onClick.listen((_) =>
+    _saveButton.onClick.listen((_) =>
         _save(blocking: true));
     querySelector('#document-title-button').onClick.listen((_) {
       showDialog(_EDIT_TITLE_DIALOG);
@@ -82,13 +85,14 @@ class EditorPage extends BasePage {
       if (blocking) {
         showDialog(_SAVING_DIALOG);
       }
+      _showSavingButton();
       if (_documentId == null) {
         print('Saving to new document');
         postJson(_DOCUMENT_PUT_URI, {
             'text': sourceText,
             'title': _documentTitle,
         }, (Map response) =>
-            _onSaveResult(sourceText, _documentTitle, response),
+            _onSaveResult(sourceText, _documentTitle, blocking, response),
         method: 'PUT');
       } else {
         print('Saving to document ${_documentId}');
@@ -96,7 +100,7 @@ class EditorPage extends BasePage {
             'text': _editor.sourceText,
             'title': _documentTitle,
         }, (Map response) =>
-            _onSaveResult(sourceText, _documentTitle, response));
+            _onSaveResult(sourceText, _documentTitle, blocking, response));
       }
     } else {
       if (blocking) {
@@ -109,13 +113,17 @@ class EditorPage extends BasePage {
   }
 
   // Invoked for a save API call response.
-  void _onSaveResult(String sourceText, String documentTitle, Map response) {
+  void _onSaveResult(
+      String sourceText, String documentTitle, bool blocking, Map response) {
     // TODO(cji): Update UI.
     if (!response['success']) {
       print('Save failed! Error: ' + response['error_message']);
       return;
     }
-    showDialogWithTimeout(_SAVING_SUCCESS_DIALOG);
+    if (blocking) {
+      showDialogWithTimeout(_SAVING_SUCCESS_DIALOG);
+    }
+    new Timer(_SAVING_BUTTON_HIDE_DELAY, _hideSavingButton);
     if (response['document_id'] != null) {
       _documentId = response['document_id'];
       window.history.replaceState({}, _pageTitle, _documentUri);
@@ -160,6 +168,17 @@ class EditorPage extends BasePage {
       _documentTitle == null ?
       _defaultPageTitle :
       '${_documentTitle}${_pageTitleSuffix}';
+
+  // Shows the saving button.
+  void _showSavingButton() {
+    _saveButton.classes.add('hidden');
+    _savingButton.classes.remove('hidden');
+  }
+  // Hides the saving button.
+  void _hideSavingButton() {
+    _saveButton.classes.remove('hidden');
+    _savingButton.classes.add('hidden');
+  }
 
   // Returns the document update URI.
   String get _documentPostUri => '${_DOCUMENT_POST_URI}${_documentId}';
@@ -222,6 +241,16 @@ class EditorPage extends BasePage {
           new RegExp(r'([^\n])\n([^\n])', multiLine: true),
           (Match m) => '${m[1]} ${m[2]}')
       .replaceAll(new RegExp(r'[ ]+'), ' '));
+  // DOM elements.
+  final Element _saveButton = querySelector('#save-button');
+  final Element _savingButton = querySelector('#saving-button');
+  // Timer for auto saving.
+  Timer _saveTimer;
+  // Auto save interval.
+  static const Duration _SAVE_INTERVAL = const Duration(seconds: 5);
+  // How long to wait before dismissing the saving button.
+  static const Duration _SAVING_BUTTON_HIDE_DELAY =
+      const Duration(milliseconds: 800);
 }
 
 void main() {

@@ -6,14 +6,16 @@
 {% extends 'header.html' %}
 
 {% block header_left_extra %}
-<li id="open-button" class="button">
-    <span class="fa fa-folder-open"></span>&nbsp;&nbsp;Open
-<li id="save-button" class="button">
-    <span class="fa fa-floppy-o"></span>&nbsp;&nbsp;Save
+  <li id="document-title-button" class="button">
+    <span class="fa fa-pencil"></span>&nbsp;&nbsp;
+    <span class="document-title"></span>
 {% endblock header_left_extra %}
 
 {% block header_right_extra %}
-<li id="document-title-button" class="button">
-  <span class="fa fa-pencil"></span>&nbsp;&nbsp;
-  <span class="document-title"></span>
+  <li id="open-button" class="button">
+      <span class="fa fa-folder-open"></span>&nbsp;&nbsp;Open
+  <li id="save-button" class="button">
+      <span class="fa fa-floppy-o"></span>&nbsp;&nbsp;Save
+  <li id="saving-button" class="button hidden">
+      <span class="fa fa-refresh fa-spin icon"></span>&nbsp;&nbsp;Saving
 {% endblock header_right_extra %}
