@@ -5,6 +5,7 @@
 """MongoEngine models."""
 
 from flask.ext import login
+import logging
 import os
 import random
 import string
@@ -151,8 +152,10 @@ class UserDocument(DB.Document):
   title = DB.StringField()
   # The source text of this document.
   text = DB.StringField(required=True)
-  # Rendered screenshot of the output, in PNG.
-  output_thumbnail = DB.BinaryField()
+  # The visibility of this document.
+  visibility = DB.StringField(
+      required=True,
+      choices=['private', 'public'])
 
   meta = {
       'collection': 'user_documents',
@@ -208,5 +211,12 @@ class UserDocument(DB.Document):
     Args:
       user: a User instance.
     """
-    # TODO(cji): Support sharing.
-    return user.is_authenticated() and self.owner.id == user.id
+    if self.visibility == 'public':
+      return True
+    elif self.visibility == 'private':
+      return user.is_authenticated() and self.owner.id == user.id
+    else:
+      logging.fatal(
+          'Invalid visibility for document %s: \'%s\'',
+          self.document_id, self.visibility)
+      return False

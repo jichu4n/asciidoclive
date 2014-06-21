@@ -277,6 +277,7 @@ def CreateDocument(request_data):
   document.owner = login.current_user._get_current_object()
   document.title = request_data.get('title', None)
   document.text = request_data['text']
+  document.visibility = 'private'
   while True:
     document.document_id = models_lib.UserDocument.NewDocumentId()
     try:
