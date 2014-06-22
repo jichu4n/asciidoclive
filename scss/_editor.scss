@@ -21,3 +21,34 @@
     font-style: normal;
   }
 }
+
+#sharing-settings-dialog {
+  @include UiFont();
+
+  .prompt {
+    margin-bottom: $DIALOG_PADDING;
+  }
+
+  .option {
+    cursor: pointer;
+
+    vertical-align: top;
+
+    .visibility-type {
+      font-weight: bold;
+    }
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .extra {
+      @include UiFontSmall();
+
+      input[type="text"].link {
+        width: 400px;
+        padding: 3px;
+        @include UiFontSmall();
+      }
+    }
+  }
+}

@@ -267,6 +267,7 @@ def CreateDocument(request_data):
   POST data: a JSON object:
     - title: the title of the document (optional).
     - text: the source text.
+    - visibility: the visibility of the document, as a string.
   Returns:
     A JSON objct:
       - success: a boolean.
@@ -277,13 +278,15 @@ def CreateDocument(request_data):
   document.owner = login.current_user._get_current_object()
   document.title = request_data.get('title', None)
   document.text = request_data['text']
-  document.visibility = 'private'
+  document.visibility = request_data['visibility']
   while True:
     document.document_id = models_lib.UserDocument.NewDocumentId()
     try:
       document.save()
     except mongoengine.errors.NotUniqueError:
       pass
+    except mongoengine.errors.ValidationError:
+      return _INVALID_REQUEST_RESPONSE
     else:
       break
   return {
@@ -304,6 +307,7 @@ def SaveDocument(request_data, document_id):
   POST data: a JSON object:
     - title: the title of the document (optional).
     - text: the source text.
+    - visibility: the visibility of the document, as a string.
   Returns:
     A JSON objct:
       - success: a boolean.
@@ -316,7 +320,11 @@ def SaveDocument(request_data, document_id):
     return _NOT_AUTHENTICATED_RESPONSE
   document.title = request_data.get('title', None)
   document.text = request_data['text']
-  document.save()
+  document.visibility = request_data['visibility']
+  try:
+    document.save()
+  except mongoengine.errors.ValidationError:
+    return _INVALID_REQUEST_RESPONSE
   return {
       'success': True,
   }

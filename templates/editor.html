@@ -26,6 +26,12 @@
             {% else %}
               null,
             {% endif %}
+        document_visibility:
+            {% if document and document.visibility: %}
+              '{{ document.visibility }}',
+            {% else %}
+              'private',
+            {% endif %}
         default_document_title: 'Untitled Document',
         default_page_title: '{{ default_page_title }}',
         page_title_suffix: ' - AsciiDocLIVE',
@@ -46,7 +52,7 @@
 
   {% call Dialog('edit-title') %}
     <div class="prompt">Edit title</div>
-      <input type="text" class="ui-input-text">
+    <input type="text" class="ui-input-text">
     <div class="actions">
       <a href="#"
          class="ui-button ui-button-cancel">Cancel</a>
@@ -58,6 +64,43 @@
   {{ LoadingDialog('saving', 'Saving...') }}
   {{ SuccessDialog('saving-success', 'Saved') }}
   {{ SuccessDialog('saving-not-changed', 'No changes since last save') }}
+
+  {% call Dialog('sharing-settings') %}
+    <div class="prompt">Sharing settings</div>
+    <table>
+      <tr class="option">
+        <td><input type="radio" name="visibility" value="public"></td>
+        <td>
+          <span class="visibility-type">Public</span>
+          - anyone can view, only you can edit
+          {% if document %}
+            <div class="extra">
+              Link:
+              <input type="text" class="link" readonly value="{{
+                  url_for(
+                      'RenderEditorForDocument',
+                      document_id=document.document_id,
+                      _external=True) }}">
+            </div>
+          {% endif %}
+        </td>
+      </tr>
+      <tr class="option">
+        <td><input type="radio" name="visibility" value="private"></td>
+        <td>
+          <span class="visibility-type">Private</span>
+          - only you can view or edit
+        </td>
+      </tr>
+    </table>
+    <div class="actions">
+      <a href="#"
+         class="ui-button ui-button-cancel">Cancel</a>
+      <span class="divider">&nbsp;</span>
+      <a href="#"
+         class="ui-button ui-button-ok">Save</a>
+    </div>
+  {% endcall %}
 
   {% call Dialog('confirm-delete') %}
     <div class="prompt">

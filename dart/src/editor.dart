@@ -37,8 +37,31 @@ class EditorPage extends BasePage {
     querySelector('#${_CONFIRM_DELETE_DIALOG}-dialog .ui-button-delete')
         .onClick.listen((_) => _deleteDocument());
 
+    querySelector('#${_SHARING_SETTINGS_DIALOG}-dialog .ui-button-ok')
+        .onClick.listen((_) {
+          hideDialog();
+          final RadioButtonInputElement checkedButton = querySelector(
+              '#${_SHARING_SETTINGS_DIALOG}-dialog '
+              'input[type="radio"]:checked');
+          assert(checkedButton != null);
+          _documentVisibility = checkedButton.value;
+          _save(blocking: true);
+        });
+    querySelector('#${_SHARING_SETTINGS_DIALOG}-dialog .ui-button-cancel')
+        .onClick.listen((_) => hideDialog());
+    querySelectorAll('#${_SHARING_SETTINGS_DIALOG}-dialog .option')
+        .forEach((Element e) {
+          e.onClick.listen((_) =>
+              e.querySelector('input[type="radio"]').click());
+          final linkElement = e.querySelector('input[type="text"].link');
+          if (linkElement != null) {
+            linkElement.onClick.listen((_) => linkElement.select());
+          }
+        });
+
     _lastSavedDocumentTitle = _documentTitle;
     _lastSavedSourceText = _editor.sourceText.trim();
+    _lastSavedDocumentVisibility = _documentVisibility;
 
     window.onBeforeUnload.listen(_onBeforeUnload);
 
@@ -62,9 +85,16 @@ class EditorPage extends BasePage {
       _editTitleInput.value = _documentTitle == null ? '' : _documentTitle;
       _editTitleInput..focus()..select();
     });
-    querySelector('#delete-button').onClick.listen((_) {
-      showDialog(_CONFIRM_DELETE_DIALOG);
+    querySelector('#share-button').onClick.listen((_) {
+      querySelectorAll(
+          '#${_SHARING_SETTINGS_DIALOG}-dialog input[type="radio"]')
+          .forEach((RadioButtonInputElement e) {
+            e.checked = e.value == _documentVisibility;
+          });
+      showDialog(_SHARING_SETTINGS_DIALOG);
     });
+    querySelector('#delete-button').onClick.listen((_) =>
+      showDialog(_CONFIRM_DELETE_DIALOG));
     _onDocumentTitleChange();
   }
 
@@ -100,16 +130,22 @@ class EditorPage extends BasePage {
         postJson(_DOCUMENT_PUT_URI, {
             'text': sourceText,
             'title': _documentTitle,
+            'visibility': _documentVisibility,
         }, (Map response) =>
-            _onSaveResult(sourceText, _documentTitle, blocking, response),
+            _onSaveResult(
+                sourceText, _documentTitle, _documentVisibility,
+                blocking, response),
         method: 'PUT');
       } else {
         print('Saving to document ${_documentId}');
         postJson(_documentPostUri, {
             'text': _editor.sourceText,
             'title': _documentTitle,
+            'visibility': _documentVisibility,
         }, (Map response) =>
-            _onSaveResult(sourceText, _documentTitle, blocking, response));
+            _onSaveResult(
+                sourceText, _documentTitle, _documentVisibility,
+                blocking, response));
       }
     } else {
       if (blocking) {
@@ -123,7 +159,9 @@ class EditorPage extends BasePage {
 
   // Invoked for a save API call response.
   void _onSaveResult(
-      String sourceText, String documentTitle, bool blocking, Map response) {
+      String sourceText, String documentTitle, String documentVisibility,
+      bool blocking,
+      Map response) {
     // TODO(cji): Update UI.
     if (!response['success']) {
       print('Save failed! Error: ' + response['error_message']);
@@ -142,6 +180,7 @@ class EditorPage extends BasePage {
     }
     _lastSavedSourceText = sourceText;
     _lastSavedDocumentTitle = documentTitle;
+    _lastSavedDocumentVisibility = documentVisibility;
   }
 
   // Sets the current document title.
@@ -200,7 +239,8 @@ class EditorPage extends BasePage {
   // Returns whether the user has made unsaved modifications.
   bool get _isDirty => (
       _editor.sourceText.trim() != _lastSavedSourceText ||
-      _documentTitle != _lastSavedDocumentTitle);
+      _documentTitle != _lastSavedDocumentTitle ||
+      _documentVisibility != _lastSavedDocumentVisibility);
 
   // Callback invoked when the user attempts to close the window.
   void _onBeforeUnload(BeforeUnloadEvent e) {
@@ -230,6 +270,7 @@ class EditorPage extends BasePage {
     new Timer(BasePage.DEFAULT_DIALOG_TIMEOUT, () {
       _lastSavedSourceText = _editor.sourceText.trim();
       _lastSavedDocumentTitle = _documentTitle;
+      _lastSavedDocumentVisibility = _documentVisibility;
       window.location.assign(ROOT_URI);
     });
   }
@@ -250,6 +291,8 @@ class EditorPage extends BasePage {
   static final String _SAVING_NOT_CHANGED_DIALOG = 'saving-not-changed';
   // Dialog for confirming document deletion.
   static final String _CONFIRM_DELETE_DIALOG = 'confirm-delete';
+  // Dialog for sharing settings.
+  static final String _SHARING_SETTINGS_DIALOG = 'sharing-settings';
   // Deletion progress dialog.
   static final String _DELETING_DIALOG = 'deleting';
   // Dialog shown after deletion.
@@ -266,6 +309,8 @@ class EditorPage extends BasePage {
   String _documentId = _editorParams['document_id'];
   // Document title.
   String _documentTitle = _editorParams['document_title'];
+  // The visibility of the document, as a string.
+  String _documentVisibility = _editorParams['document_visibility'];
   // The document title to use when user has not specified one.
   final String _defaultDocumentTitle = _editorParams['default_document_title'];
   // The page title to use when the document title is not set.
@@ -276,6 +321,8 @@ class EditorPage extends BasePage {
   String _lastSavedDocumentTitle;
   // The source text at the last save.
   String _lastSavedSourceText = null;
+  // The visibility of the document at the last save.
+  String _lastSavedDocumentVisibility = null;
   // Message to show when attempting to unload an editor with changes.
   final String _unloadConfirmationMessage = (
       querySelector('#unload-confirmation-message').text
