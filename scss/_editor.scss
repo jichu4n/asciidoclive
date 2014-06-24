@@ -52,3 +52,11 @@
     }
   }
 }
+
+#saving-error-dialog {
+  @include UiFont();
+
+  .prompt {
+    margin-bottom: $DIALOG_PADDING;
+  }
+}

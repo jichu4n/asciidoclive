@@ -59,6 +59,9 @@ class EditorPage extends BasePage {
           }
         });
 
+    querySelector('#${_SAVING_ERROR_DIALOG}-dialog .ui-button-ok')
+        .onClick.listen((_) => hideDialog());
+
     _lastSavedDocumentTitle = _documentTitle;
     _lastSavedSourceText = _editor.sourceText.trim();
     _lastSavedDocumentVisibility = _documentVisibility;
@@ -112,7 +115,6 @@ class EditorPage extends BasePage {
   // show the saving progress dialog.
   void _save({bool blocking: false}) {
     if (userManager.isSignedIn) {
-      // TODO(cji): Update UI; add title.
       final String sourceText = _editor.sourceText;
       if (!_isDirty) {
         print('Not changed since last save, not saving.');
@@ -162,15 +164,15 @@ class EditorPage extends BasePage {
       String sourceText, String documentTitle, String documentVisibility,
       bool blocking,
       Map response) {
-    // TODO(cji): Update UI.
+    new Timer(_SAVING_BUTTON_HIDE_DELAY, _hideSavingButton);
     if (!response['success']) {
       print('Save failed! Error: ' + response['error_message']);
+      showDialog(_SAVING_ERROR_DIALOG);
       return;
     }
     if (blocking) {
       showDialogWithTimeout(_SAVING_SUCCESS_DIALOG);
     }
-    new Timer(_SAVING_BUTTON_HIDE_DELAY, _hideSavingButton);
     if (response['document_id'] != null) {
       _documentId = response['document_id'];
       window.history.replaceState({}, _pageTitle, _documentUri);
@@ -281,22 +283,16 @@ class EditorPage extends BasePage {
   static final String _DOCUMENT_POST_URI = '/api/v1/documents/';
   // Delete document API.
   static final String _DOCUMENT_DELETE_URI = '/api/v1/documents/';
-  // Edit title dialog.
+  // Dialogs.
   static final String _EDIT_TITLE_DIALOG = 'edit-title';
-  // Saving progress dialog.
   static final String _SAVING_DIALOG = 'saving';
-  // Saving success dialog.
   static final String _SAVING_SUCCESS_DIALOG = 'saving-success';
-  // Dialog to show if the user clicks save without a change.
   static final String _SAVING_NOT_CHANGED_DIALOG = 'saving-not-changed';
-  // Dialog for confirming document deletion.
   static final String _CONFIRM_DELETE_DIALOG = 'confirm-delete';
-  // Dialog for sharing settings.
   static final String _SHARING_SETTINGS_DIALOG = 'sharing-settings';
-  // Deletion progress dialog.
   static final String _DELETING_DIALOG = 'deleting';
-  // Dialog shown after deletion.
   static final String _DELETE_SUCCESS_DIALOG = 'delete-success';
+  static final String _SAVING_ERROR_DIALOG = 'saving-error';
   // DOM elements.
   final TextInputElement _editTitleInput = querySelector(
       '#${_EDIT_TITLE_DIALOG}-dialog input[type="text"]');
