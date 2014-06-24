@@ -61,9 +61,20 @@
          class="ui-button ui-button-ok">Save</a>
     </div>
   {% endcall %}
+
   {{ LoadingDialog('saving', 'Saving...') }}
   {{ SuccessDialog('saving-success', 'Saved') }}
   {{ SuccessDialog('saving-not-changed', 'No changes since last save') }}
+  {% call Dialog('saving-error') %}
+    <div class="prompt">
+      <span class="fa fa-exclamation-circle icon-error"></span>&nbsp;&nbsp;
+      Save failed
+    </div>
+    Please backup your work locally and try reloading the page.
+    <div class="actions">
+      <a href="#" class="ui-button ui-button-ok">OK</a>
+    </div>
+  {% endcall %}
 
   {% call Dialog('sharing-settings') %}
     <div class="prompt">Sharing settings</div>
