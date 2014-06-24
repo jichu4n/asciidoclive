@@ -343,5 +343,6 @@ class EditorPage extends BasePage {
 }
 
 void main() {
+  setUpLogging();
   new EditorPage();
 }

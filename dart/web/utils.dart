@@ -9,6 +9,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'dart:js';
+import 'package:logging/logging.dart';
 
 // Converts a JsObject to a JSON string.
 String toJson(JsObject obj) {
@@ -110,4 +111,12 @@ void replaceWithHtml(String selector, String htmlString) {
   DocumentFragment fragment = new DocumentFragment.html(
       htmlString, validator: new DefaultNodeValidator());
   querySelector(selector).replaceWith(fragment.querySelector(selector));
+}
+
+// Initializes logging.
+void setUpLogging() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+      print('${rec.level.name}: ${rec.message}');
+  });
 }

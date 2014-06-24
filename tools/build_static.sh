@@ -26,14 +26,14 @@ function BuildDartFiles() {
   ( set -x;
     cd "$DART_DIR";
     pub get;
-    pub build src;
-    cp -R build/src/* "$STATIC_DIR" )
+    pub build;
+    cp -R build/web/* "$STATIC_DIR" )
 }
 
 # Copy misc assets into the static dir.
 function CopyAssets() {
   ( set -x;
-    cp "$DART_DIR"/src/*.dart "$STATIC_DIR";
+    cp "$DART_DIR"/web/*.dart "$STATIC_DIR";
     cp -R -L "$DART_DIR"/packages "$STATIC_DIR";
     cp -R misc/font-awesome "$STATIC_DIR";
     cp misc/logo.png "$STATIC_DIR" )

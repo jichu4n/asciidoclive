@@ -4,3 +4,4 @@ dependencies:
   crypto: any
   js: any
   utf: any
+  logging: any

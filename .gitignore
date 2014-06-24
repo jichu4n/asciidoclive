@@ -7,4 +7,5 @@ static/
 dart/build
 dart/packages
 dart/pubspec.lock
+dart/web/packages
 config.py
