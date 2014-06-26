@@ -27,6 +27,7 @@ Map toMap(JsObject obj) {
 //
 // The future returns the JsObject corresponding to the property.
 Future<JsObject> whenJsPropExists(String prop_string) {
+  final Logger _log = new Logger('whenJsPropExists');
   const Duration PROPERTY_POLL_INTERVAL = const Duration(milliseconds: 25);
   final List<String> props = prop_string.split('.');
 
@@ -47,7 +48,7 @@ Future<JsObject> whenJsPropExists(String prop_string) {
     }
 
     if (props_exist) {
-      print('Found JavaScript property ${prop_string}');
+      _log.finest('Found JavaScript property ${prop_string}');
       completer.complete(obj);
     } else {
       new Timer(PROPERTY_POLL_INTERVAL, completeIfJsAttrExists);
@@ -66,6 +67,7 @@ HttpRequest postJson(
     void onLoad(Map responseJson),
     {void onError(HttpRequest request, ProgressEvent e),
      String method: 'POST'}) {
+  final Logger _log = new Logger('postJson');
   HttpRequest httpRequest = new HttpRequest();
   httpRequest.open(method, url);
   httpRequest.setRequestHeader(
@@ -77,7 +79,7 @@ HttpRequest postJson(
       onLoad(JSON.decode(httpRequest.responseText));
     } else {
       if (onError == null) {
-        print('HttpRequest error: ${e.toString()}');
+        _log.warning('HttpRequest error: ${e.toString()}');
       } else {
         onError(httpRequest, e);
       }
