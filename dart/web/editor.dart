@@ -11,7 +11,8 @@ import 'dart:html';
 import 'dart:js';
 import 'base.dart';
 import 'asciidoc_editor.dart';
-import 'utils.dart';
+import 'lib/user_document.dart';
+import 'lib/utils.dart';
 
 
 // Implements the editor page.

@@ -5,6 +5,8 @@
  Misc utils.
 */
 
+library utils;
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
@@ -59,35 +61,66 @@ Future<JsObject> whenJsPropExists(String prop_string) {
   return completer.future;
 }
 
-// Sends a JSON POST request. Returns the request. On successful response, will
-// parse the response into JSON and invoke the onLoad callback.
-HttpRequest postJson(
+// Default number of milliseconds before timing out an API call.
+const int _DEFAULT_REQUEST_TIMEOUT_MS = 15 * 1000;
+
+// Sends a JSON request to an API endpoint on our server. Returns a Future<Map>
+// that will yield the response as JSON. If [request] is specified, will use
+// [request] instead of creating a new one.
+Future<Map> callApi(
     String url,
     Map args,
-    void onLoad(Map responseJson),
-    {void onError(HttpRequest request, ProgressEvent e),
-     String method: 'POST'}) {
-  final Logger _log = new Logger('postJson');
-  HttpRequest httpRequest = new HttpRequest();
+    {String method: 'POST',
+     int timeoutMs: _DEFAULT_REQUEST_TIMEOUT_MS,
+     HttpRequest request}) {
+  final Logger _log = new Logger('callApi');
+  Completer completer;
+
+  HttpRequest httpRequest = request == null ? new HttpRequest() : request;
   httpRequest.open(method, url);
   httpRequest.setRequestHeader(
       'Content-Type', 'application/json; charset=UTF-8');
-  httpRequest.onLoad.listen((ProgressEvent e) {
+  httpRequest.timeout = timeoutMs;
+  httpRequest.onLoad.listen((_) {
     // Note: file:// URIs have status of 0.
     if ((httpRequest.status >= 200 && httpRequest.status < 300) ||
         httpRequest.status == 0 || httpRequest.status == 304) {
-      onLoad(JSON.decode(httpRequest.responseText));
-    } else {
-      if (onError == null) {
-        _log.warning('HttpRequest error: ${e.toString()}');
+      final Map response = JSON.decode(httpRequest.responseText);
+      if (response != null && response['success']) {
+        completer.complete(response);
       } else {
-        onError(httpRequest, e);
+        _log.severe(
+            'API call failed! ' + (
+                response == null ? '' : 'Error: ' + response['error_message']));
+        completer.completeError(response);
       }
+    } else {
+      _log.severe(
+          'API request failed! '
+          'Status: ${httpRequest.status}, response: ${httpRequest.responseText}');
+      completer.completeError({
+        'success': false,
+        'error_message': request.responseText,
+      });
     }
+  });
+  httpRequest.onTimeout.listen((_) {
+    _log.severe('API call timed out!');
+    completer.completeError({
+      'success': false,
+      'error_message': 'Time out',
+    });
+  });
+  httpRequest.onError.listen((e) {
+    _log.severe('API request failed! Error: ${e.toString()}');
+    completer.completeError({
+      'success': false,
+      'error_message': e.toString(),
+    });
   });
   httpRequest.send(JSON.encode(args));
 
-  return httpRequest;
+  return completer.future;
 }
 
 // A custom NodeValidatorBuilder based on NodeValidator.common() that accepts
@@ -119,6 +152,6 @@ void replaceWithHtml(String selector, String htmlString) {
 void setUpLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
-      print('${rec.level.name}: ${rec.message}');
+    print('${rec.level.name}: ${rec.message}');
   });
 }

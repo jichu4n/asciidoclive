@@ -45,8 +45,6 @@ class UserDocument {
   static Future<UserDocument> load(String documentId) {
   }
 
-  // Returns the document update URI.
-  String get _documentPostUri => '${_DOCUMENT_POST_URI}${_documentId}';
   // Saves a document on the server.
   Future<Map> save() {
     Completer completer = new Completer();
@@ -63,18 +61,64 @@ class UserDocument {
       method = 'POST';
     }
 
-    /*
     postJson(
         uri,
         toJson(),
-        (Map response) => completer.complete(response),
-    */
+        (Map response) {
+          if (response['success']) {
+            completer.complete(response);
+            if (response['document_id'] != null) {
+              documentId = response['document_id'];
+            }
+          } else {
+            _log.severe('Save failed! Error: ' + response['error_message']);
+            completer.completeError(response);
+          }
+        },
+        onError: (HttpRequest request, ProgressEvent) {
+          _log.severe(
+              'Save request failed! '
+              'Status: ${request.status}, response: ${request.responseText}');
+          completer.completeError({
+            'success': false,
+            'error_message': request.responseText,
+          });
+        },
+        method: method);
+
+    return completer.future;
   }
 
-  // Returns the document delete URI.
-  String get _documentDeleteUri => '${_DOCUMENT_DELETE_URI}${documentId}';
   // Deletes the document on the server.
-  Future delete() {
+  Future<Map> delete() {
+    Completer completer = new Completer();
+    if (documentId == null) {
+      _log.finest('Document not yet saved, not deleting.');
+      completer.complete(future);
+    } else {
+      postJson(
+          _documentDeleteUri,
+          {},
+          (Map response) {
+            if (response['success']) {
+              completer.complete(response);
+            } else {
+              _log.severe('Delete failed! Error: ' + response['error_message']);
+              completer.completeError(response);
+            }
+          },
+          onError: (HttpRequest request, ProgressEvent) {
+            _log.severe(
+              'Delete request failed! '
+              'Status: ${request.status}, response: ${request.responseText}');
+            completer.completeError({
+              'success': false,
+              'error_message': request.responseText,
+            });
+          },
+          method: 'DELETE');
+    }
+    return completer.future;
   }
 
   // Logger.
@@ -84,4 +128,8 @@ class UserDocument {
   static final String _DOCUMENT_PUT_URI = '/api/v1/documents';
   static final String _DOCUMENT_POST_URI = '/api/v1/documents/';
   static final String _DOCUMENT_DELETE_URI = '/api/v1/documents/';
+  // Returns the document update URI.
+  String get _documentPostUri => '${_DOCUMENT_POST_URI}${_documentId}';
+  // Returns the document delete URI.
+  String get _documentDeleteUri => '${_DOCUMENT_DELETE_URI}${documentId}';
 }
