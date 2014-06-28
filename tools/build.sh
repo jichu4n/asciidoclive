@@ -8,7 +8,7 @@
 # Directory paths.
 ROOT_DIR=$(realpath "$(dirname $0)/..")
 SCSS_DIR="$ROOT_DIR/scss"
-DART_DIR="$ROOT_DIR/dart"
+CLIENT_DIR="$ROOT_DIR/client"
 STATIC_DIR="$ROOT_DIR/static"
 
 
@@ -21,10 +21,10 @@ function BuildScssFiles() {
 }
 
 
-# Build Dart files in the static dir.
-function BuildDartFiles() {
+# Build client-side code in the static dir.
+function BuildClient() {
   ( set -x;
-    cd "$DART_DIR";
+    cd "$CLIENT_DIR";
     pub get;
     pub build;
     cp -R build/web/* "$STATIC_DIR" )
@@ -33,8 +33,9 @@ function BuildDartFiles() {
 # Copy misc assets into the static dir.
 function CopyAssets() {
   ( set -x;
-    cp "$DART_DIR"/web/*.dart "$STATIC_DIR";
-    cp -R -L "$DART_DIR"/packages "$STATIC_DIR";
+    cp "$CLIENT_DIR"/web/*.dart "$STATIC_DIR";
+    cp -R "$CLIENT_DIR"/web/lib "$STATIC_DIR";
+    cp -R -L "$CLIENT_DIR"/packages "$STATIC_DIR";
     cp -R misc/font-awesome "$STATIC_DIR";
     cp misc/logo.png "$STATIC_DIR" )
 }
@@ -45,7 +46,7 @@ while true; do
   rm -r "$STATIC_DIR"/*
   time BuildScssFiles
   time CopyAssets
-  time BuildDartFiles
+  time BuildClient
   chmod -R o+r "$STATIC_DIR"
   echo
   echo -n 'Rebuild? [Y/n] '

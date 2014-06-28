@@ -4,8 +4,8 @@
 *.dart.js*
 *.precompiled.js
 static/
-dart/build
-dart/packages
-dart/pubspec.lock
-dart/web/packages
+client/build
+client/packages
+client/pubspec.lock
+client/web/packages
 config.py
