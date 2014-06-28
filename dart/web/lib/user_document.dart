@@ -40,6 +40,12 @@ class UserDocument {
     };
   }
 
+  // Retrieves the list of document IDs owned by the current user.
+  static Future<List<String>> list() {
+    return callApi(_DOCUMENT_URI_BASE, {}, method: 'GET')
+        .then((Map response) => response['document_ids']);
+  }
+
   // Retrieves a document from the server.
   static Future<UserDocument> load(String documentId) {
     return callApi(_getDocumentUri(documentId), {}, method: 'GET')

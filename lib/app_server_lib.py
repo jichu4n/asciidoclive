@@ -133,7 +133,6 @@ def RenderScratchEditor():
   })
 
 
-
 @app.route('/d/<document_id>')
 @login.login_required
 def RenderEditorForDocument(document_id):
@@ -253,6 +252,18 @@ def Logout(_):
   """
   login.logout_user()
   return _SUCCESS_RESPONSE
+
+
+@app.route('/api/v1/documents', methods=['GET'])
+@_JsonView
+@_RequireAuth
+def ListDocuments(_):
+  """Lists the documents owned by the current user."""
+  documents = login.current_user.GetOwnedDocuments()
+  return {
+      'success': True,
+      'document_ids': [document.document_id for document in documents],
+  }
 
 
 @app.route('/api/v1/documents', methods=['PUT'])

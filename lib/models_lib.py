@@ -224,9 +224,10 @@ class UserDocument(DB.Document):
   def ToJson(self):
     """Returns the model instance in dict form.
 
-    Excludes the document_id and owner fields.
+    Excludes the owner field.
     """
     return {
+        'document_id': self.document_id,
         'title': self.title,
         'text': self.text,
         'visibility': self.visibility,
