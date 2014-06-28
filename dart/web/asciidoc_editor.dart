@@ -6,13 +6,12 @@
 */
 
 import 'dart:async';
-import 'dart:collection';
 import 'dart:html';
 import 'dart:js';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:utf/utf.dart';
-import 'utils.dart';
+import 'lib/utils.dart';
 
 // AsciiDoc editor component client-side implementation.
 class AsciiDocEditor {
@@ -183,10 +182,12 @@ class AsciiDocEditor {
         if (_httpRequest != null) {
           _httpRequest.abort();
         }
-        _httpRequest = postJson(
-            _ASCIIDOC_TO_HTML_URI, {
-                'text': sourceTextToSend,
-            }, (Map response) =>
+        _httpRequest = new HttpRequest();
+        callApi(
+            _ASCIIDOC_TO_HTML_URI,
+            {'text': sourceTextToSend},
+            request: _httpRequest)
+            .then((Map response) =>
                 _onServerResponseReceived(sourceTextDigest, response));
       }
 

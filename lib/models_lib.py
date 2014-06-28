@@ -220,3 +220,23 @@ class UserDocument(DB.Document):
           'Invalid visibility for document %s: \'%s\'',
           self.document_id, self.visibility)
       return False
+
+  def ToJson(self):
+    """Returns the model instance in dict form.
+
+    Excludes the document_id and owner fields.
+    """
+    return {
+        'title': self.title,
+        'text': self.text,
+        'visibility': self.visibility,
+    }
+
+  def FromJson(self, json_dict):
+    """Populates fields from a dict.
+
+    Excludes the document_id and owner fields.
+    """
+    self.title = json_dict.get('title', self.title)
+    self.text = json_dict.get('text', self.text)
+    self.visibility = json_dict.get('visibility', self.visibility)

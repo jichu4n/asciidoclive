@@ -76,16 +76,18 @@ Future<Map> callApi(
   final Logger _log = new Logger('callApi');
   Completer completer;
 
-  HttpRequest httpRequest = request == null ? new HttpRequest() : request;
-  httpRequest.open(method, url);
-  httpRequest.setRequestHeader(
+  if (request == null) {
+    request = new HttpRequest();
+  }
+  request.open(method, url);
+  request.setRequestHeader(
       'Content-Type', 'application/json; charset=UTF-8');
-  httpRequest.timeout = timeoutMs;
-  httpRequest.onLoad.listen((_) {
+  request.timeout = timeoutMs;
+  request.onLoad.listen((_) {
     // Note: file:// URIs have status of 0.
-    if ((httpRequest.status >= 200 && httpRequest.status < 300) ||
-        httpRequest.status == 0 || httpRequest.status == 304) {
-      final Map response = JSON.decode(httpRequest.responseText);
+    if ((request.status >= 200 && request.status < 300) ||
+        request.status == 0 || request.status == 304) {
+      final Map response = JSON.decode(request.responseText);
       if (response != null && response['success']) {
         completer.complete(response);
       } else {
@@ -97,28 +99,28 @@ Future<Map> callApi(
     } else {
       _log.severe(
           'API request failed! '
-          'Status: ${httpRequest.status}, response: ${httpRequest.responseText}');
+          'Status: ${request.status}, response: ${request.responseText}');
       completer.completeError({
         'success': false,
         'error_message': request.responseText,
       });
     }
   });
-  httpRequest.onTimeout.listen((_) {
+  request.onTimeout.listen((_) {
     _log.severe('API call timed out!');
     completer.completeError({
       'success': false,
       'error_message': 'Time out',
     });
   });
-  httpRequest.onError.listen((e) {
+  request.onError.listen((e) {
     _log.severe('API request failed! Error: ${e.toString()}');
     completer.completeError({
       'success': false,
       'error_message': e.toString(),
     });
   });
-  httpRequest.send(JSON.encode(args));
+  request.send(JSON.encode(args));
 
   return completer.future;
 }

@@ -7,7 +7,6 @@
 import flask
 from flask.ext import login
 import functools
-import jinja2
 import json
 import logging
 import mongoengine
@@ -31,6 +30,9 @@ env_lib.LOGIN_MANAGER.init_app(app)
 
 
 # Some stock responses.
+_SUCCESS_RESPONSE = {
+    'success': True,
+}
 _INVALID_REQUEST_RESPONSE = {
     'success': False,
     'error_message': 'Invalid request',
@@ -250,9 +252,7 @@ def Logout(_):
       - error_message: warnings or error messages.
   """
   login.logout_user()
-  return {
-      'success': True,
-  }
+  return _SUCCESS_RESPONSE
 
 
 @app.route('/api/v1/documents', methods=['PUT'])
@@ -276,9 +276,7 @@ def CreateDocument(request_data):
   """
   document = models_lib.UserDocument()
   document.owner = login.current_user._get_current_object()
-  document.title = request_data.get('title', None)
-  document.text = request_data['text']
-  document.visibility = request_data['visibility']
+  document.FromJson(request_data)
   while True:
     document.document_id = models_lib.UserDocument.NewDocumentId()
     try:
@@ -293,6 +291,23 @@ def CreateDocument(request_data):
       'success': True,
       'document_id': document.document_id,
   }
+
+
+@app.route('/api/v1/documents/<document_id>', methods=['POST'])
+@_JsonView
+@_RequireAuth
+def GetDocument(_, document_id):
+  document = models_lib.UserDocument.Get(document_id)
+  if not document:
+    return _INVALID_DOCUMENT_ID_RESPONSE
+  if not document.IsReadableByUser(login.current_user):
+    return _NOT_AUTHENTICATED_RESPONSE
+  response = document.toJson()
+  response.update({
+      'success': True,
+  })
+  return response
+
 
 
 @app.route('/api/v1/documents/<document_id>', methods=['POST'])
@@ -318,21 +333,18 @@ def SaveDocument(request_data, document_id):
     return _INVALID_DOCUMENT_ID_RESPONSE
   if not document.IsWritableByUser(login.current_user):
     return _NOT_AUTHENTICATED_RESPONSE
-  document.title = request_data.get('title', None)
-  document.text = request_data['text']
-  document.visibility = request_data['visibility']
+  document.FromJson(request_data)
   try:
     document.save()
   except mongoengine.errors.ValidationError:
     return _INVALID_REQUEST_RESPONSE
-  return {
-      'success': True,
-  }
+  return _SUCCESS_RESPONSE
+
 
 @app.route('/api/v1/documents/<document_id>', methods=['DELETE'])
 @_JsonView
 @_RequireAuth
-def DeleteDocument(request_data, document_id):
+def DeleteDocument(_, document_id):
   """Deletes a document.
 
   Login required.
@@ -349,6 +361,4 @@ def DeleteDocument(request_data, document_id):
   if not document.IsWritableByUser(login.current_user):
     return _NOT_AUTHENTICATED_RESPONSE
   document.delete()
-  return {
-      'success': True
-  }
+  return _SUCCESS_RESPONSE
