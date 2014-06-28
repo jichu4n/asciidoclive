@@ -52,7 +52,7 @@ class UserDocument {
     String method;
     if (documentId == null) {
       _log.fine('Saving to new document');
-      uri = _DOCUMENT_PUT_URI;
+      uri = _DOCUMENT_URI_BASE;
       method = 'PUT';
     } else {
       _log.fine('Saving to document ${documentId}');
@@ -76,11 +76,10 @@ class UserDocument {
   static final Logger _log = new Logger('UserDocument');
 
   // API endpoints.
-  static final String _DOCUMENT_PUT_URI = '/api/v1/documents';
-  static final String _DOCUMENT_URI_BASE = '/api/v1/documents/';
+  static final String _DOCUMENT_URI_BASE = '/api/v1/documents';
   // Returns the document get/post/delete URI.
   static String _getDocumentUri(String documentId) =>
-      '${_DOCUMENT_URI_BASE}${documentId}';
+      '${_DOCUMENT_URI_BASE}/${documentId}';
   // Returns the document get/post/delete URI.
   String get _documentUri => _getDocumentUri(documentId);
 }
