@@ -74,7 +74,7 @@ Future<Map> callApi(
      int timeoutMs: _DEFAULT_REQUEST_TIMEOUT_MS,
      HttpRequest request}) {
   final Logger _log = new Logger('callApi');
-  Completer completer;
+  Completer completer = new Completer();
 
   if (request == null) {
     request = new HttpRequest();

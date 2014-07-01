@@ -6,6 +6,7 @@
 */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html';
 import 'dart:js';
 import 'dart:math';
@@ -56,10 +57,41 @@ class EditorView {
 
   // Updates the output given the current source text.
   void _update() {
-    _log.info('_update()');
+    String sourceTextToCompile = sourceText;
+    if (sourceTextToCompile.length > _MAX_SOURCE_TEXT_SIZE) {
+      _log.warning(
+          'Source text size exceeds maximum of ${_MAX_SOURCE_TEXT_SIZE}');
+      sourceTextToCompile = sourceTextToCompile.substring(
+          0, _MAX_SOURCE_TEXT_SIZE);
+    }
+
+    if (sourceTextToCompile != _sourceTextAtLastUpdate) {
+      _sourceTextAtLastUpdate = sourceTextToCompile;
+      _compiler.compile(sourceTextToCompile)
+          .then(_updateUI)
+          .catchError(_updateUI);
+    }
 
     // Schedule this method to run again after _UPDATE_INTERVAL.
     _updateTimer = new Timer(_UPDATE_INTERVAL, _update);
+  }
+
+  // Updates the UI given a server response.
+  void _updateUI(response) {
+    if (response == null) {
+      // Request was aborted.
+      _log.finest('Update aborted');
+      return;
+    }
+    if (!(response is Map)) {
+      // Error.
+      _log.finest('Error: ${response}');
+      return;
+    }
+
+    assert(response is Map);
+
+    _outputNode.setInnerHtml(response['html'], validator: _outputNodeValidator);
   }
 
   // Returns the source text in the editor.
@@ -124,6 +156,9 @@ class EditorView {
   // Logger.
   final Logger _log = new Logger('EditorView');
 
+  // Document compiler.
+  final Compiler _compiler = new Compiler();
+
   // DOM components.
   static final String _SOURCE_NODE_ID = 'g-source';
   final DivElement _sourceNode = querySelector('#${_SOURCE_NODE_ID}');
@@ -143,6 +178,9 @@ class EditorView {
   // prevents scrolling callbacks on other elements.
   DivElement _scrollEventSource = null;
 
+  // The maximum source text size supported, in bytes. This should match the
+  // limit set on the server.
+  static const int _MAX_SOURCE_TEXT_SIZE = 32 * 1024;
 
   // The amount of time to wait between two subsequent output updates.
   static const Duration _UPDATE_INTERVAL = const Duration(milliseconds: 3000);
@@ -150,6 +188,9 @@ class EditorView {
   static const Duration _UPDATE_DELAY = const Duration(milliseconds: 600);
   // Timer for executing _update.
   Timer _updateTimer = null;
+
+  // The source text retrieved during the previous update.
+  String _sourceTextAtLastUpdate = null;
 }
 
 
