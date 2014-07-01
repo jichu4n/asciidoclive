@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+ |                         Copyright (C) 2014 Chuan Ji                         |
+ |                             All Rights Reserved                             |
+ + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- Base page template. -->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- Direct search engine crawlers to the static version. -->
+    <meta name="fragment" content="!">
+
+    <title></title>
+    <link rel="stylesheet" type="text/css"
+          href="static/all.css">
+
+    <!-- Font Awesome. -->
+    <link rel="stylesheet" type="text/css"
+          href="static/font-awesome/css/font-awesome.min.css">
+  </head>
+
+  <body>
+    <div id="body-wrapper">
+
+
+<!-- Editor view. -->
+<div id="g-editor-wrapper">
+  <div id="g-editor">
+    <div id="g-source-container">
+      <div id="g-source"
+          class="uninitialized"></div>
+    </div>
+    <div id="g-output-container">
+      <div id="g-output">&nbsp;</div>
+      <div id="g-messages"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Ace. -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+
+<!-- Editor. -->
+<script type="application/dart" src="editor_view.dart"></script>
+<script src="packages/browser/dart.js"></script>
+
+    </div>
+  </body>
+</html>

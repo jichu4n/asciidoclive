@@ -36,7 +36,6 @@ function CopyAssets() {
     cp "$CLIENT_DIR"/web/*.dart "$STATIC_DIR";
     cp -R "$CLIENT_DIR"/web/lib "$STATIC_DIR";
     cp -R -L "$CLIENT_DIR"/packages "$STATIC_DIR";
-    cp -R misc/font-awesome "$STATIC_DIR";
     cp misc/logo.png "$STATIC_DIR" )
 }
 
