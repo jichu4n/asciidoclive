@@ -4,16 +4,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  Document compilation and client-side caching.
 */
-library compilation;
-
-import 'dart:async';
-import 'dart:collection';
-import 'dart:html';
-import 'package:crypto/crypto.dart';
-import 'package:logging/logging.dart';
-import 'package:utf/utf.dart';
-import 'utils.dart';
-
+part of editor_view;
 
 // Interface for compiling documents.
 //

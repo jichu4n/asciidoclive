@@ -2,8 +2,13 @@
  *                         Copyright (C) 2014 Chuan Ji                         *
  *                             All Rights Reserved                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- One stylesheet to rule them all.
+ Entry point to client-side code.
 */
 
-@import '../../lib/_base.scss';
-@import '../../lib/editor_view/_editor_view.scss';
+import 'package:goby/editor_view/editor_view.dart';
+import 'package:goby/utils.dart';
+
+void main() {
+  setUpLogging();
+  final EditorView editorView = new EditorView();
+}

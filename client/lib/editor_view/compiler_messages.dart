@@ -5,10 +5,7 @@
  Compiler error messages and parser.
 */
 
-library compiler_messages;
-
-import 'package:logging/logging.dart';
-
+part of editor_view;
 
 // Model of a message emitted by a document compiler.
 class CompilerMessage {

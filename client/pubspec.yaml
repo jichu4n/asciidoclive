@@ -7,4 +7,5 @@ dependencies:
   logging: any
   sass: any
 transformers:
-  - sass
+  - sass:
+      style: compressed
