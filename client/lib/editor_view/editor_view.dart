@@ -19,8 +19,9 @@ import 'package:goby/utils.dart';
 
 part 'compiler.dart';
 part 'compiler_messages.dart';
-part 'editor_view_context.dart';
+part 'editor_view_messages.dart';
 part 'editor_view_scroll_syncer.dart';
+part 'utils.dart';
 
 
 // Editor view controller.
@@ -52,6 +53,8 @@ class EditorView {
 
     // Sync scrolling.
     _scrollSyncer = new _EditorViewScrollSyncer(_context);
+    // Messages controller.
+    _messages = new _EditorViewMessages(_context);
 
     // Construct node validator for output HTML.
     NodeValidatorBuilder builder = new NodeValidatorBuilder.common();
@@ -98,8 +101,13 @@ class EditorView {
     }
 
     assert(response is Map);
-
     _context.outputNode.setInnerHtml(response['html'], validator: _outputNodeValidator);
+    final List<_EditorMessage> messages = _asciidocMessageParser.parseMessages(
+        response['success'], response['error_message']);
+    _messages.clear();
+    for (_EditorMessage message in messages) {
+      _messages.add(message);
+    }
   }
 
   // Returns the source text in the editor.
@@ -116,12 +124,15 @@ class EditorView {
 
   // Common editor view context.
   final _EditorViewContext _context = new _EditorViewContext();
-
   // Scroll syncer.
   _EditorViewScrollSyncer _scrollSyncer;
-
+  // Messages controller.
+  _EditorViewMessages _messages;
   // Document compiler.
   final Compiler _compiler = new Compiler();
+  // Compiler message parser.
+  final AsciiDocMessageParser _asciidocMessageParser =
+      new AsciiDocMessageParser();
 
   // Node validator for output HTML.
   NodeValidator _outputNodeValidator = null;

@@ -7,35 +7,20 @@
 
 part of editor_view;
 
-// Model of a message emitted by a document compiler.
-class CompilerMessage {
-  // Message types.
-  static final String WARNING = 'warning';
-  static final String ERROR = 'error';
-
-  // The message type.
-  String type;
-  // The message text.
-  String text;
-  // The line number (optional).
-  int lineNumber = null;
-}
-
-
 // Parser for AsciiDoc compiler messages.
 class AsciiDocMessageParser {
   // Parses AsciiDoc stderr output into a list of messages.
-  List<CompilerMessage> parseMessages(bool success, String errorMessage) {
-    List<CompilerMessage> messages = [];
+  List<_EditorMessage> parseMessages(bool success, String errorMessage) {
+    List<_EditorMessage> messages = [];
 
     for (String line in errorMessage.split('\n')) {
-      CompilerMessage message = new CompilerMessage();
+      _EditorMessage message = new _EditorMessage();
       message.text = line.replaceAllMapped(
           _ERROR_MESSAGE_RE, (Match m) => m[1]);
       if (message.text.isEmpty) {
         continue;
       }
-      message.type = success ? CompilerMessage.WARNING : CompilerMessage.ERROR;
+      message.type = success ? _EditorMessage.WARNING : _EditorMessage.ERROR;
       try {
         message.lineNumber = int.parse(
             message.text.replaceAllMapped(

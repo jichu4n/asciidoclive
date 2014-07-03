@@ -26,6 +26,9 @@ function BuildClient() {
   ( set -x;
     cd "$CLIENT_DIR";
     pub get;
+    for f in web/*.dart; do
+      dart2js --analyze-only --show-package-warnings "$f";
+    done;
     pub build;
     cp -R build/web/* "$STATIC_DIR" )
 }
@@ -34,7 +37,7 @@ function BuildClient() {
 function CopyAssets() {
   ( set -x;
     cp "$CLIENT_DIR"/web/*.dart "$STATIC_DIR";
-    cp -R "$CLIENT_DIR"/web/lib "$STATIC_DIR";
+    cp -R "$CLIENT_DIR"/lib "$STATIC_DIR";
     cp -R -L "$CLIENT_DIR"/packages "$STATIC_DIR";
     cp misc/logo.png "$STATIC_DIR" )
 }
