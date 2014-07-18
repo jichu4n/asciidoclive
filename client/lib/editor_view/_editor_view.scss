@@ -77,64 +77,13 @@ $OUTPUT_H_PADDING: 20px;
       @include AsciiDocOutputStyles();
       @include PygmentsOutputStyles();
     }
+  }
+}
 
-    div.message {
-      padding: 0;
-
-      table {
-        // We need to clear the default border spacing.
-        border-spacing: 0;
-        // This will automatically stretch the text td as well.
-        width: 100%;
-
-        td.handle {
-          width: 10px;
-        }
-
-        td.text {
-          padding: 8px 12px;
-          font-size: 85%;
-
-          .icon {
-            margin-right: 10px;
-          }
-        }
-      }
-      @include BorderRadius(2px);
-    }
-
-    div.message-with-line-number {
-      cursor: pointer;
-      td.text:hover {
-        text-decoration: underline;
-      }
-    }
-
-    div.message-success, div.message-loading {
-      background-color: #f3faef;
-      color: #325d1d;
-      td.handle {
-        background-color: #77b259;
-      }
-    }
-    div.message-warning {
-      background-color: #fdf8ed;
-      color: #6f4700;
-      td.handle {
-        background-color: #e09600;
-      }
-    }
-    div.message-error {
-      background-color: #fcf4f2;
-      color: #9f0b00;
-      td.handle {
-        background-color: #e62600;
-      }
-    }
-    div.message-loading {
-      td.text {
-        font-style: italic;
-      }
+#g-messages {
+  a.list-group-item.clickable:hover {
+    .text {
+      text-decoration: underline;
     }
   }
 }

@@ -73,9 +73,8 @@ class EditorView {
       // Set editor text to loaded document text.
       _context.aceEditor.callMethod(
           'setValue', [_document.text]);
-      _context.aceEditor.callMethod('clearSelection');
       _context.aceEditor.callMethod(
-          'moveCursorTo', [0, 0]);
+          'gotoLine', [0, 0]);
       // Register event handler for source text.
       _context.aceEditorSession.callMethod(
           'on', ['change', _onSourceTextChange]);

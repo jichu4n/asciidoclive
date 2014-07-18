@@ -18,16 +18,27 @@ class _EditorViewMessages {
     _log.fine(message.toString());
     assert(_EditorMessage.MESSAGE_TYPES.contains(message.type));
 
-    final Element messageNode = new Element.a();
+    final AnchorElement messageNode = new AnchorElement();
     messageNode.classes.addAll([
         'list-group-item', _MESSAGE_TYPE_TO_CLASS[message.type]]);
     final Element iconNode = new Element.span();
-    iconNode.classes..add('fa')
+    iconNode.classes..addAll(['fa', 'space'])
                     ..addAll(_MESSAGE_TYPE_TO_ICON_CLASSES[message.type]);
-    messageNode..children.add(iconNode)
-               ..appendText('  ')
-               ..appendText(message.text);
-    // TODO(cji): Line numbers.
+    final Element textNode = new Element.span();
+    textNode..appendText(message.text)
+            ..classes.add('text');
+    messageNode.children.addAll([iconNode, textNode]);
+    if (message.lineNumber != null) {
+      messageNode..href = '#'
+                 ..classes.add('clickable')
+                 ..onClick.listen((MouseEvent e) {
+        e.preventDefault();
+        e.stopPropagation();
+        _context.aceEditor.callMethod(
+            'gotoLine', [message.lineNumber, 0, true]);
+        _context.aceEditor.callMethod('focus');
+      });
+    }
     _context.messagesNode.children.add(messageNode);
 
     _resize();
