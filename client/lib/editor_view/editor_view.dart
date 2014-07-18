@@ -15,6 +15,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:logging/logging.dart';
 import 'package:utf/utf.dart';
+import 'package:goby/user_document.dart';
 import 'package:goby/utils.dart';
 
 part 'compiler.dart';
@@ -29,6 +30,9 @@ class EditorView {
 
   // Constructor. Initializes the view.
   EditorView() {
+    // Load document asynchronously.
+    _loadDocument();
+
     // Initialize Ace editor.
     _context.aceEditor = context['ace'].callMethod(
         'edit', [_EditorViewContext.SOURCE_NODE_ID]);
@@ -42,14 +46,6 @@ class EditorView {
         'setUseWrapMode', [true]);
     _context.aceEditorSession.callMethod(
         'setWrapLimitRange', [80, 80]);
-    // Register event handler for source text.
-    _context.aceEditorSession.callMethod(
-        'on', ['change', _onSourceTextChange]);
-    // Set focus on editor now.
-    _context.aceEditor.callMethod('focus');
-    // Now we can remove the unitialized class from source node to unhide the
-    // text.
-    _context.sourceNode.classes.remove('uninitialized');
 
     // Sync scrolling.
     _scrollSyncer = new _EditorViewScrollSyncer(_context);
@@ -61,9 +57,47 @@ class EditorView {
     builder.allowNavigation(new _AllowAllUriPolicy());
     builder.allowImages(new _AllowAllUriPolicy());
     _outputNodeValidator = builder;
+  }
 
-    // Start request timer.
-    _update();
+  // Loads a document into the editor view.
+  void _loadDocument() {
+    _showLoadingDialog();
+    UserDocument.loadScratch().then((UserDocument document) {
+      _log.fine('Document loaded');
+
+      _document = document;
+
+      // Set editor text to loaded document text.
+      _context.aceEditor.callMethod(
+          'setValue', [_document.text]);
+      _context.aceEditor.callMethod('clearSelection');
+      _context.aceEditor.callMethod(
+          'moveCursorTo', [0, 0]);
+      // Register event handler for source text.
+      _context.aceEditorSession.callMethod(
+          'on', ['change', _onSourceTextChange]);
+      // Start request timer.
+      _update();
+
+      hideDialog();
+      // Set focus on editor now.
+      _context.aceEditor.callMethod('focus');
+    });
+  }
+
+  // Shows the loading dialog.
+  void _showLoadingDialog() {
+    // Placeholder element.
+    Element container = new Element.div();
+    Element icon = new Element.span();
+    icon.classes.addAll(['fa', 'fa-spin', 'fa-spinner', 'space']);
+    container.children.add(icon);
+    container.appendText('Loading...');
+
+    showDialog({
+        'closeButton': false,
+        'message': container.innerHtml,
+    });
   }
 
   // Updates the output given the current source text.
@@ -124,6 +158,8 @@ class EditorView {
 
   // Common editor view context.
   final _EditorViewContext _context = new _EditorViewContext();
+  // The document currently displayed.
+  UserDocument _document;
   // Scroll syncer.
   _EditorViewScrollSyncer _scrollSyncer;
   // Messages controller.

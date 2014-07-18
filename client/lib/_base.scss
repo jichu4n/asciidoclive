@@ -301,14 +301,7 @@ html, body {
   border: 1px solid #4183f0;
 }
 
-$OVERLAY_Z_INDEX: 10000;
-
-#overlay {
-  background-color: #000;
-  @include Opacity(0.3);
-
-  // Place above regular page.
-  z-index: $OVERLAY_Z_INDEX;
-
-  @include FullWindowFixed;
+// A class for adding space between icons and text.
+.fa.space {
+  margin-right: 0.5em;
 }

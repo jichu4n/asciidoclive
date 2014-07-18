@@ -6,6 +6,7 @@
 */
 
 import 'dart:async';
+import 'dart:html';
 import 'package:logging/logging.dart';
 import 'utils.dart';
 
@@ -52,6 +53,15 @@ class UserDocument {
         .then((Map response) => new UserDocument.fromJson(response));
   }
 
+  // Returns a scratch document.
+  static Future<UserDocument> loadScratch() {
+    return HttpRequest.getString(_SCRATCH_DOCUMENT_URI)
+        .then((String text) => new UserDocument.fromJson({
+            'text': text,
+            'visibility': PRIVATE,
+        }));
+  }
+
   // Saves a document on the server.
   Future<Map> save() {
     String uri;
@@ -88,4 +98,6 @@ class UserDocument {
       '${_DOCUMENT_URI_BASE}/${documentId}';
   // Returns the document get/post/delete URI.
   String get _documentUri => _getDocumentUri(documentId);
+  // Scratch document URI.
+  static final String _SCRATCH_DOCUMENT_URI = 'static/scratch.txt';
 }

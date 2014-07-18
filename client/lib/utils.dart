@@ -125,6 +125,18 @@ Future<Map> callApi(
   return completer.future;
 }
 
+// Displays a dialog using Bootbox.js. The arguments are passed directly to the
+// underlying bootbox.dialog() function.
+void showDialog(Map params) {
+  // Show dialog via Bootbox.js.
+  context['bootbox'].callMethod('dialog', [new JsObject.jsify(params)]);
+}
+
+// Hides currently active dialogs.
+void hideDialog() {
+  context['bootbox'].callMethod('hideAll');
+}
+
 // A custom NodeValidatorBuilder based on NodeValidator.common() that accepts
 // attributes beginning with "data-".
 class DefaultNodeValidator extends NodeValidatorBuilder {
