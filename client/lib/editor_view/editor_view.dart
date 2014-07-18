@@ -57,6 +57,9 @@ class EditorView {
     builder.allowNavigation(new _AllowAllUriPolicy());
     builder.allowImages(new _AllowAllUriPolicy());
     _outputNodeValidator = builder;
+
+    // Set up onload confirmation dialog.
+    window.onBeforeUnload.listen(_onBeforeUnload);
   }
 
   // Loads a document into the editor view.
@@ -153,6 +156,15 @@ class EditorView {
     _updateTimer = new Timer(_UPDATE_DELAY, _update);
   }
 
+  // Callback invoked when the user attempts to close this window / tab.
+  void _onBeforeUnload(BeforeUnloadEvent e) {
+    if (sourceText.trim() == _document.text.trim()) {
+      return;
+    }
+
+    e.returnValue = _UNLOAD_CONFIRMATION_MESSAGE;
+  }
+
   // Logger.
   final Logger _log = new Logger('EditorView');
 
@@ -186,6 +198,14 @@ class EditorView {
 
   // The source text retrieved during the previous update.
   String _sourceTextAtLastUpdate = null;
+
+  // Message displayed if the user has modified the document.
+  static final String _UNLOAD_CONFIRMATION_MESSAGE = '''
+If you leave this page, all data you have entered on this page will be lost.
+
+Please make sure to save any data you would like to keep by copying it from this
+page and saving it on your computer.
+''';
 }
 
 
