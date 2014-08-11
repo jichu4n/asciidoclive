@@ -3,9 +3,9 @@
 .sass-cache
 *.dart.js*
 *.precompiled.js
-/static/
+/site/
 /client/build
 /client/packages
 /client/pubspec.lock
 /client/web/packages
-/config.py
+/server/config.py

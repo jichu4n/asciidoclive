@@ -7,18 +7,8 @@
 
 # Directory paths.
 ROOT_DIR=$(realpath "$(dirname $0)/..")
-SCSS_DIR="$ROOT_DIR/scss"
 CLIENT_DIR="$ROOT_DIR/client"
-STATIC_DIR="$ROOT_DIR/static"
-
-
-# Build SCSS files in the SCSS dir to CSS files in the static dir.
-function BuildScssFiles() {
-  ( set -x;
-    scss \
-        --update \
-        "$SCSS_DIR:$STATIC_DIR" )
-}
+SITE_DIR="$ROOT_DIR/site"
 
 
 # Build client-side code in the static dir.
@@ -30,26 +20,26 @@ function BuildClient() {
       dart2js --analyze-only --show-package-warnings "$f";
     done;
     pub build;
-    cp -R build/web/* "$STATIC_DIR" )
+    cp -R build/web/* "$SITE_DIR"/ )
 }
 
 # Copy misc assets into the static dir.
 function CopyAssets() {
   ( set -x;
-    cp "$CLIENT_DIR"/web/*.dart "$STATIC_DIR";
-    cp -R "$CLIENT_DIR"/lib "$STATIC_DIR";
-    cp -R -L "$CLIENT_DIR"/packages "$STATIC_DIR";
-    cp misc/logo.png "$STATIC_DIR" )
+    cp "$CLIENT_DIR"/web/*.dart "$SITE_DIR"/;
+    cp -R "$CLIENT_DIR"/lib "$SITE_DIR"/;
+    cp -R -L "$CLIENT_DIR"/packages "$SITE_DIR"/;
+    cp misc/logo.png "$SITE_DIR"/static/ )
 }
 
 
 TIMEFORMAT=$'\033[32m[ %Us ]\033[m'
 while true; do
-  rm -r "$STATIC_DIR"/*
-  time BuildScssFiles
-  time CopyAssets
+  mkdir -p "$SITE_DIR"
+  rm -r "$SITE_DIR"/*
   time BuildClient
-  chmod -R o+r "$STATIC_DIR"
+  time CopyAssets
+  chmod -R o+r "$SITE_DIR"
   echo
   echo -n 'Rebuild? [Y/n] '
   read r

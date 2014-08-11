@@ -103,64 +103,6 @@ def _RenderTemplate(template, extra_args=None):
   return flask.render_template(template, **args).strip()
 
 
-@app.route('/')
-def RenderRoot():
-  """Handler for the root URI."""
-  if '_escaped_fragment_' in flask.request.args:
-    # Static version for search engine crawlers.
-    return _RenderTemplate('static.html')
-
-  if login.current_user.is_authenticated():
-    return flask.redirect(flask.url_for('.RenderDocumentList'))
-
-  return flask.redirect(flask.url_for('.RenderScratchEditor'))
-
-
-@app.route('/scratch')
-def RenderScratchEditor():
-  """Handler for rendering an unsaved document editor."""
-  if 'new' in flask.request.args:
-    default_text = ''
-  else:
-    default_text = _RenderTemplate('intro.txt')
-  if 'header' in flask.request.args:
-    template = 'editor_header.html'
-  else:
-    template = 'editor.html'
-  return _RenderTemplate(template, {
-      'document': None,
-      'asciidoc_editor_text': default_text,
-  })
-
-
-@app.route('/d/<document_id>')
-@login.login_required
-def RenderEditorForDocument(document_id):
-  """Handler for the main editor page with a previously saved document."""
-  document = models_lib.UserDocument.Get(document_id)
-  if document is None or not document.IsReadableByUser(login.current_user):
-    return flask.redirect(flask.url_for('.RenderRoot'))
-  if 'header' in flask.request.args:
-    template = 'editor_header.html'
-  else:
-    template = 'editor.html'
-  return _RenderTemplate(template, {'document': document})
-
-
-@app.route('/home')
-@login.login_required
-def RenderDocumentList():
-  """Handler for the document list page."""
-  documents = login.current_user.GetOwnedDocuments()
-  return _RenderTemplate('document_list.html', {'documents': documents})
-
-
-@app.route('/sitemap.xml')
-def RenderSitemap():
-  """Handler for a sitemap request."""
-  return _RenderTemplate('sitemap.xml')
-
-
 @app.route('/api/v1/asciidoc-to-html', methods=['POST'])
 @_JsonView
 @_RequireText
