@@ -3,7 +3,7 @@
 .sass-cache
 *.dart.js*
 *.precompiled.js
-/site/
+/build/
 /client/build
 /client/packages
 /client/pubspec.lock

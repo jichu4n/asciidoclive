@@ -8,7 +8,7 @@
 # Directory paths.
 ROOT_DIR=$(realpath "$(dirname $0)/..")
 CLIENT_DIR="$ROOT_DIR/client"
-SITE_DIR="$ROOT_DIR/site"
+BUILD_DIR="$ROOT_DIR/build"
 
 
 # Build client-side code in the static dir.
@@ -20,26 +20,26 @@ function BuildClient() {
       dart2js --analyze-only --show-package-warnings "$f";
     done;
     pub build;
-    cp -R build/web/* "$SITE_DIR"/ )
+    cp -R build/web/* "$BUILD_DIR"/ )
 }
 
 # Copy misc assets into the static dir.
 function CopyAssets() {
   ( set -x;
-    cp "$CLIENT_DIR"/web/*.dart "$SITE_DIR"/;
-    cp -R "$CLIENT_DIR"/lib "$SITE_DIR"/;
-    cp -R -L "$CLIENT_DIR"/packages "$SITE_DIR"/;
-    cp misc/logo.png "$SITE_DIR"/static/ )
+    cp "$CLIENT_DIR"/web/*.dart "$BUILD_DIR"/;
+    cp -R "$CLIENT_DIR"/lib "$BUILD_DIR"/;
+    cp -R -L "$CLIENT_DIR"/packages "$BUILD_DIR"/;
+    cp misc/logo.png "$BUILD_DIR"/static/ )
 }
 
 
 TIMEFORMAT=$'\033[32m[ %Us ]\033[m'
 while true; do
-  mkdir -p "$SITE_DIR"
-  rm -r "$SITE_DIR"/*
+  mkdir -p "$BUILD_DIR"
+  rm -r "$BUILD_DIR"/*
   time BuildClient
   time CopyAssets
-  chmod -R o+r "$SITE_DIR"
+  chmod -R o+r "$BUILD_DIR"
   echo
   echo -n 'Rebuild? [Y/n] '
   read r
