@@ -39,3 +39,6 @@ InstallPackage ruby-sass
 InstallPackage mongodb
 InstallPackage python-mongoengine-git
 InstallPackage python-flask-mongoengine
+InstallPackage python-flask-login
+InstallPackage uwsgi
+InstallPackage uwsgi-plugin-python

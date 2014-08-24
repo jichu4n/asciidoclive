@@ -1,0 +1,128 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Styles for the page header.
+*/
+
+// Settings.
+$HEADER_FG_COLOR: #fff;
+$HEADER_V_PADDING: 6px;
+$HEADER_INNER_HEIGHT: $HEADER_HEIGHT - 2 * $HEADER_V_PADDING;
+$LOGO_H_PADDING_RIGHT: 20px;
+$LOGO_V_PADDING: 4px;
+$LOGO_V_ADJUSTMENT: -5px;
+$HEADER_FONT_SIZE: 14px;
+$HEADER_ITEM_H_PADDING: 15px;
+$HEADER_ITEM_BAR_HEIGHT: 5px;
+
+@mixin HeaderUiContainer() {
+  // This allows us to use opacity to highlight UI elements.
+  background: #fff;
+}
+@mixin HeaderUi() {
+  background-color: $HEADER_BG_COLOR;
+  @include Opacity(1.0);
+}
+@mixin HeaderUiHighlight() {
+  @include Opacity(0.95);
+}
+@mixin HeaderUiNoBar() {
+  border-bottom: $HEADER_ITEM_BAR_HEIGHT solid $HEADER_BG_COLOR;
+}
+@mixin HeaderUiBar() {
+  border-bottom: $HEADER_ITEM_BAR_HEIGHT solid
+      $HEADER_ITEM_BAR_COLOR;
+}
+
+// Styles.
+
+#header {
+  height: $HEADER_HEIGHT;
+  margin: -$HEADER_HEIGHT 0 0 0;
+  padding: 0;
+
+  background-color: $HEADER_BG_COLOR;
+  color: $HEADER_FG_COLOR;
+
+  ul {
+    list-style-type: none;
+    // Without margin: 0, there is a weird gap at the top of the page :-/
+    margin: 0;
+    padding: 0;
+    height: $HEADER_HEIGHT;
+
+    @include UiFont();
+    @include HeaderUiContainer();
+
+    li {
+      // All list items on one line.
+      display: inline-block;
+
+      height: $HEADER_HEIGHT;
+      line-height: $HEADER_HEIGHT;
+      padding: 0 $HEADER_ITEM_H_PADDING;
+      @include HeaderUiNoBar();
+    }
+
+    li.button, li.menu-button {
+      cursor: pointer;
+      @include HeaderUi();
+    }
+    li.button:hover, li.menu-button:hover {
+      @include HeaderUiHighlight;
+    }
+    li.button:hover {
+      @include HeaderUiBar();
+    }
+  }
+
+  ul.left {
+    float: left;
+
+    li#logo {
+      padding: 0 $LOGO_H_PADDING_RIGHT 0 ($HEADER_ITEM_H_PADDING / 2);
+      img {
+        margin-top: $LOGO_V_ADJUSTMENT;
+        height: $HEADER_INNER_HEIGHT - 2 * $LOGO_V_PADDING;
+        vertical-align: middle;
+      }
+      @include HeaderUi();
+    }
+  }
+
+  ul.right {
+    float: right;
+  }
+
+}
+
+$MENU_Z_INDEX: 5000;
+$MENU_ITEM_V_PADDING: 8px;
+$MENU_ITEM_PADDING_LEFT: 20px;
+$MENU_ITEM_PADDING_RIGHT: 30px;
+.menu {
+  position: absolute;
+  z-index: $MENU_Z_INDEX;
+
+  color: $HEADER_FG_COLOR;
+  @include UiFont();
+  @include HeaderUiContainer();
+  // We need to clear the default border spacing.
+  border-spacing: 0;
+
+  .item {
+    cursor: pointer;
+    @include HeaderUi();
+    padding: $MENU_ITEM_V_PADDING $MENU_ITEM_PADDING_RIGHT
+        $MENU_ITEM_V_PADDING $MENU_ITEM_PADDING_LEFT;
+    @include HeaderUiNoBar();
+  }
+  .item:hover {
+    @include HeaderUiHighlight();
+  }
+  .item:last-child {
+    @include HeaderUiBar();
+  }
+}
+

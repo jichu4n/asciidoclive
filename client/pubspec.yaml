@@ -1,0 +1,11 @@
+name: goby
+dependencies:
+  browser: any
+  crypto: any
+  js: any
+  utf: any
+  logging: any
+  sass: any
+transformers:
+  - sass:
+      style: compressed

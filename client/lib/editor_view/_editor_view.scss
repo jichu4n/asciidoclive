@@ -1,0 +1,89 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                         Copyright (C) 2014 Chuan Ji                         *
+ *                             All Rights Reserved                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ Styles for editor view.
+*/
+
+@import '_asciidoc.scss';
+@import '_pygments.scss';
+
+
+// Settings.
+
+$UI_BG_COLOR: #f1f1f1;
+$UI_MARGIN: 12px;
+$COLUMN_MIN_WIDTH: 200px;
+$COLUMN_MAX_WIDTH: 800px;
+$OUTPUT_BG_COLOR: #fbfbfb;
+$OUTPUT_H_PADDING: 20px;
+
+
+// Styles.
+#g-editor-wrapper {
+  height: 100%;
+  width: 100%;
+
+  background-color: $UI_BG_COLOR;
+
+  #g-editor {
+    height: 100%;
+    width: 100%;
+    min-width: 2 * $COLUMN_MIN_WIDTH + 2 * $UI_MARGIN;
+    // Let's not enable max-width yet...
+    // max-width: 2 * $COLUMN_MAX_WIDTH + 2 * $UI_MARGIN;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: $UI_MARGIN;
+    @include ContainFloating();
+
+    #g-source-container,
+    #g-output-container {
+      border: 1px solid #bbb;
+      float: left;
+      height: 99.5%;
+      min-width: $COLUMN_MIN_WIDTH;
+      width: 50%;
+      padding: 0;
+    }
+
+    #g-source,
+    #g-output {
+      height: 100%;
+      width: 100%;
+
+      overflow: auto;
+    }
+
+    #g-source {
+      @include MonospaceFont();
+    }
+
+    // Hides the original text until Ace is initialized. This prevents a "flash"
+    // before Ace takes control of the element.
+    #g-source.uninitialized {
+      background-color: $UI_BG_COLOR;
+      color: $UI_BG_COLOR;
+    }
+
+    #g-output {
+      background-color: $OUTPUT_BG_COLOR;
+      padding: 0 $OUTPUT_H_PADDING;
+
+      @include TextFont();
+
+      @include AsciiDocOutputStyles();
+      @include PygmentsOutputStyles();
+    }
+  }
+}
+
+#g-messages {
+  a.list-group-item.clickable:hover {
+    .text {
+      text-decoration: underline;
+    }
+  }
+}

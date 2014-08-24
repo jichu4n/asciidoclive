@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+ |                         Copyright (C) 2014 Chuan Ji                         |
+ |                             All Rights Reserved                             |
+ + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- Base page template. -->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- Direct search engine crawlers to the static version. -->
+    <meta name="fragment" content="!">
+
+    <title></title>
+
+    <!-- Font Awesome. -->
+    <link rel="stylesheet" type="text/css"
+          href="static/font-awesome/css/font-awesome.min.css">
+    <!-- Bootstrap. -->
+    <link rel="stylesheet" type="text/css"
+          href="static/bootstrap/css/bootstrap.min.css">
+
+    <!-- Custom CSS. This comes last and allows us to override default styles
+         set above. -->
+    <link rel="stylesheet" type="text/css"
+          href="static/all.css">
+  </head>
+
+  <body>
+    <div id="body-wrapper">
+
+
+<!-- Header. -->
+<div id="header">
+  <ul class="left">
+    <li id="logo">
+      <a href="/">
+        <img src="static/logo.png">
+      </a>
+  </ul>
+  <ul class="right">
+  </ul>
+</div>
+
+<!-- Editor view. -->
+<div id="g-editor-wrapper">
+  <div id="g-editor">
+    <div id="g-source-container">
+      <div id="g-source"></div>
+    </div>
+    <div id="g-output-container">
+      <div id="g-output">&nbsp;</div>
+      <div id="g-messages" class="list-group"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Ace. -->
+<script src="static/ace/ace.js"></script>
+<!-- jQuery. -->
+<script src="static/jquery.min.js"></script>
+<!-- Bootstrap. -->
+<script src="static/bootstrap/js/bootstrap.min.js"></script>
+<!-- Bootbox. -->
+<script src="static/bootbox/bootbox.min.js"></script>
+<!-- Client-side entry point. -->
+<script type="application/dart" src="main.dart"></script>
+<script src="packages/browser/dart.js"></script>
+
+
+    </div>
+  </body>
+</html>
