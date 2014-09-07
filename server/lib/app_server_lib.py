@@ -103,6 +103,19 @@ def _RenderTemplate(template, extra_args=None):
   return flask.render_template(template, **args).strip()
 
 
+@app.route('/ok', methods=['GET', 'POST'])
+def RootOk():
+  """Debug handler that just prints out OK."""
+  return '/ OK'
+
+
+@app.route('/api/v1/ok', methods=['GET', 'POST'])
+@_JsonView
+def ApiRootOk(_):
+  """Debug handler that just prints out OK."""
+  return '/api/v1/ OK'
+
+
 @app.route('/api/v1/asciidoc-to-html', methods=['POST'])
 @_JsonView
 @_RequireText
