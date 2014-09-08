@@ -10,6 +10,7 @@ import functools
 import json
 import logging
 import mongoengine
+import urllib.parse
 
 from lib import auth_lib
 from lib import asciidoc_lib
@@ -114,6 +115,14 @@ def RootOk():
 def ApiRootOk(_):
   """Debug handler that just prints out OK."""
   return '/api/v1/ OK'
+
+
+@app.route('/api/v1/sitemap', methods=['GET'])
+def Sitemap():
+  """Generates a sitemap."""
+  return _RenderTemplate('sitemap.xml', {
+      'site_root': urllib.parse.urljoin(flask.request.url, '/'),
+  })
 
 
 @app.route('/api/v1/asciidoc-to-html', methods=['POST'])
