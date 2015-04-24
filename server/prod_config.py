@@ -7,6 +7,8 @@
 This is a config module intended to be used with Flask.
 """
 
+import os
+
 
 class ProdConfig(object):
   """Config settings for production."""
@@ -23,7 +25,11 @@ class ProdConfig(object):
 
   # MongoEngine settings.
   MONGODB_SETTINGS = {
-      'DB': 'asciidoclive-prod',
+      'db': 'asciidoclive-prod',
+      'host': os.environ.get(
+          'MONGODB_PORT_27017_TCP_ADDR', 'localhost'),
+      'port': int(os.environ.get(
+          'MONGODB_PORT_27017_TCP_PORT', '27017')),
   }
 
   # Session protection mode for Flast-Login.

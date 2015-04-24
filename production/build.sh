@@ -5,8 +5,11 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Script to build static files for the site.
 
+set -ex
+
 # Directory paths.
-ROOT_DIR=$(realpath "$(dirname $0)/..")
+export PATH="/usr/lib/dart/bin:$PATH"
+ROOT_DIR="$(dirname $0)/.."
 CLIENT_DIR="$ROOT_DIR/client"
 BUILD_DIR="$ROOT_DIR/build"
 
@@ -29,21 +32,13 @@ function CopyAssets() {
     cp "$CLIENT_DIR"/web/*.dart "$BUILD_DIR"/;
     cp -R "$CLIENT_DIR"/lib "$BUILD_DIR"/;
     cp -R -L "$CLIENT_DIR"/packages "$BUILD_DIR"/;
-    cp misc/logo.png "$BUILD_DIR"/static/ )
+    cp "$ROOT_DIR/misc/logo.png" "$BUILD_DIR"/static/ )
 }
 
 
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
 TIMEFORMAT=$'\033[32m[ %Us ]\033[m'
-while true; do
-  mkdir -p "$BUILD_DIR"
-  rm -r "$BUILD_DIR"/*
-  time BuildClient
-  time CopyAssets
-  chmod -R o+r "$BUILD_DIR"
-  echo
-  echo -n 'Rebuild? [Y/n] '
-  read r
-  if [ -n "$r" ] && [ "$r" != 'y' ]; then
-    break
-  fi
-done
+time BuildClient
+time CopyAssets
+chmod -R o+r "$BUILD_DIR"

@@ -7,6 +7,7 @@
 This is a config module intended to be used with Flask.
 """
 
+import os
 import prod_config
 
 
@@ -23,6 +24,10 @@ class TestConfig(prod_config.ProdConfig):
 
   MONGODB_SETTINGS = {
       'DB': 'asciidoclive-test',
+      'host': os.environ.get(
+          'MONGODB_PORT_27017_TCP_ADDR', 'localhost'),
+      'port': int(os.environ.get(
+          'MONGODB_PORT_27017_TCP_PORT', '27017')),
   }
 
   LOG_FILE_PATH = '/var/log/asciidoclive/test.log'
