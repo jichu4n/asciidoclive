@@ -3,6 +3,5 @@
   "disableAnalytics": true,
   "watcher": "polling",
   "port": 8001,
-  "liveReloadPort": 8002,
-  "proxy": "http://localhost:8003/"
+  "liveReloadPort": 8002
 }
