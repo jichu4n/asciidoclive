@@ -2,10 +2,9 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-@import 'app/styles/bootstrap-vars';
-@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
+import DS from 'ember-data';
 
-@import "bower_components/font-awesome/scss/font-awesome";
-
-@import 'app/application/styles';
-
+export default DS.Model.extend({
+  title: DS.attr('string'),
+  body: DS.attr('string')
+});

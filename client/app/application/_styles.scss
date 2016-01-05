@@ -2,10 +2,14 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-@import 'app/styles/bootstrap-vars';
-@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
+$navbar-brand-img-height: 30px;
+.navbar-brand > img {
+  height: $navbar-brand-img-height;
+  margin-top: (
+      ($navbar-height - $navbar-brand-img-height) / 2 -
+      $navbar-padding-vertical);
+}
 
-@import "bower_components/font-awesome/scss/font-awesome";
-
-@import 'app/application/styles';
-
+.navbar-toggle {
+  color: #fff;
+}
