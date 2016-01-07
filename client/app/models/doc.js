@@ -13,13 +13,12 @@ export default DS.Model.extend({
 
   compiledBody: Ember.computed('body', function() {
     var body = (this.get('body') || '').toString();
-    console.log('Compiling: %o', body);
+    console.info('Compiling...');
     if (Ember.isEmpty(body)) {
       return '';
     }
     var result = Opal.Asciidoctor.$convert(body, Opal.hash({
     }));
-    console.log('Compile result: %o', result);
     return result;
   })
 });

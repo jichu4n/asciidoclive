@@ -13,6 +13,8 @@ export default Ember.Component.extend({
   height: null,
   classNames: ['ace-editor'],
 
+  debounceMs: 200,
+
   editor: null,
   session: null,
   didInsertElement() {
@@ -23,7 +25,7 @@ export default Ember.Component.extend({
       this.set('session', this.get('editor').getSession());
       this.get('session').setValue(this.get('doc.body') || '');
       this.get('session').on('change', function() {
-        Ember.run.once(this.onEditorChange.bind(this));
+        Ember.run.debounce(this, this.onEditorChange, this.get('debounceMs'));
       }.bind(this));
       this.get('session').setMode('ace/mode/asciidoc');
       this.get('session').setUseWrapMode(true);
