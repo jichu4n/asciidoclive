@@ -14,8 +14,10 @@ export default Ember.Component.extend({
 
   editor: null,
   didInsertElement() {
-    this.set('editor', ace.edit(this.$()[0]));
-    this.$().css('width', this.get('width') + 'px');
+    Ember.run.next(this, function() {
+      this.set('editor', ace.edit(this.$()[0]));
+      this.$().css('width', this.get('width') + 'px');
+    });
   },
   updateWidth: Ember.observer('width', 'height', function() {
     Ember.run.once(this, function() {

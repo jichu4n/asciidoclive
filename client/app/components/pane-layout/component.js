@@ -34,16 +34,18 @@ export default Ember.Component.extend(ResizeAware, {
   initialized: false,
   didInsertElement() {
     this._super();
-    this.getEditorPane().resizable({
-      handles: {
-        e: this.getResizeHandle()
-      },
-      minWidth: this.get('minPaneWidth'),
-      maxWidth: this.getMaxPaneWidth(),
-      resize: this.updateEditorPaneSize.bind(this)
+    Ember.run.next(this, function() {
+      this.getEditorPane().resizable({
+        handles: {
+          e: this.getResizeHandle()
+        },
+        minWidth: this.get('minPaneWidth'),
+        maxWidth: this.getMaxPaneWidth(),
+        resize: this.updateEditorPaneSize.bind(this)
+      });
+      this.updateEditorPaneSize();
+      this.initialized = true;
     });
-    this.updateEditorPaneSize();
-    this.initialized = true;
   },
   debouncedDidResize() {
     if (!this.get('initialized')) {
