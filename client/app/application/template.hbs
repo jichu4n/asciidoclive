@@ -21,6 +21,30 @@
             &nbsp;
             {{fa-icon "caret-down"}}
           </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" {{action "open-dropbox"}}>
+                {{fa-icon "dropbox"}}
+                {{t "header.dropbox"}}
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            {{fa-icon "floppy-o"}}
+            {{t "header.save"}}
+            &nbsp;
+            {{fa-icon "caret-down"}}
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" {{action "save-dropbox"}}>
+                {{fa-icon "dropbox"}}
+                {{t "header.dropbox"}}
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>

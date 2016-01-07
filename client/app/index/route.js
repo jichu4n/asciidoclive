@@ -2,10 +2,7 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default {
-  header: {
-    open: 'Open',
-    save: 'Save',
-    dropbox: 'Dropbox'
-  }
-};
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+});

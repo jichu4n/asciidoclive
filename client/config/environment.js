@@ -13,6 +13,9 @@ module.exports = function(environment) {
       }
     },
 
+    i18n: {
+      defaultLocale: 'en'
+    },
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created

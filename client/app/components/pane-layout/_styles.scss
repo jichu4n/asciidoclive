@@ -1,0 +1,27 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                           Copyright 2016 Chuan Ji                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+.pane-layout {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+
+  .editor-pane{
+    flex: 0 0 auto;
+    width: 50%;
+    background: orange;
+  }
+  .resize-handle {
+    flex: 0 0 auto;
+    width: 7px;
+    background: $gray-lighter;
+    cursor: col-resize;
+  }
+  .preview-pane {
+    flex: 1 1 auto;
+    width: 50%;
+    background: olive;
+  }
+}
+

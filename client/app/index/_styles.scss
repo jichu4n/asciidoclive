@@ -2,10 +2,10 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default {
-  header: {
-    open: 'Open',
-    save: 'Save',
-    dropbox: 'Dropbox'
-  }
-};
+#main-layout {
+  position: absolute;
+  top: $navbar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
