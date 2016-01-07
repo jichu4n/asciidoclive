@@ -10,7 +10,6 @@
   .editor-pane{
     flex: 0 0 auto;
     width: 50%;
-    background: orange;
   }
   .resize-handle {
     flex: 0 0 auto;
@@ -21,7 +20,7 @@
   .preview-pane {
     flex: 1 1 auto;
     width: 50%;
-    background: olive;
+    padding: 10px;
   }
 }
 

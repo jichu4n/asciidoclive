@@ -6,10 +6,16 @@ import Ember from 'ember';
 import ResizeAware from 'ember-resize/mixins/resize-aware';
 
 export default Ember.Component.extend(ResizeAware, {
+  // To be injected
+  store: null,
+
   classNames: ['pane-layout'],
   minPaneWidth: 200,
 
+  doc: null,
   editorPaneWidth: null,
+
+  i18n: Ember.inject.service(),
 
   getContainer() {
     return this.$();
@@ -35,6 +41,10 @@ export default Ember.Component.extend(ResizeAware, {
   didInsertElement() {
     this._super();
     Ember.run.next(this, function() {
+      this.set('doc', this.get('store').createRecord('doc', {
+        title: this.get('i18n').t('defaultTitle'),
+        body: this.get('i18n').t('defaultBody')
+      }));
       this.getEditorPane().resizable({
         handles: {
           e: this.getResizeHandle()

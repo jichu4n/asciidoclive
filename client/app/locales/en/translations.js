@@ -7,5 +7,7 @@ export default {
     open: 'Open',
     save: 'Save',
     dropbox: 'Dropbox'
-  }
+  },
+  defaultTitle: 'Untitled Document',
+  defaultBody: 'blah blah'
 };

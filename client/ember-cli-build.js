@@ -35,6 +35,11 @@ module.exports = function(defaults) {
     {
       type: 'vendor'
     });
+  app.import(
+    'bower_components/asciidoctor.js/dist/asciidoctor-all.js',
+    {
+      type: 'vendor'
+    });
 
   var aceEditor = new Funnel(
     'bower_components/ace-builds/src-min-noconflict',

@@ -1,5 +1,7 @@
 <div class="editor-pane pane">
-  {{ace-editor width=editorPaneWidth height=editorPaneHeight}}
+  {{ace-editor doc=doc width=editorPaneWidth height=editorPaneHeight}}
 </div>
 <div class="resize-handle ui-resizable-handle ui-resizable-e"></div>
-<div class="preview-pane pane"></div>
+<div class="preview-pane pane">
+  {{{doc.compiledBody}}}
+</div>
