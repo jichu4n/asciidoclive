@@ -13,10 +13,16 @@ export default Ember.Component.extend({
   classNames: ['ace-editor'],
 
   editor: null,
+  session: null,
   didInsertElement() {
     Ember.run.next(this, function() {
-      this.set('editor', ace.edit(this.$()[0]));
       this.$().css('width', this.get('width') + 'px');
+
+      this.set('editor', ace.edit(this.$()[0]));
+      this.set('session', this.get('editor').getSession());
+      this.get('session').setMode('ace/mode/asciidoc');
+      this.get('session').setUseWrapMode(true);
+      this.get('editor').setShowPrintMargin(false);
     });
   },
   updateWidth: Ember.observer('width', 'height', function() {
