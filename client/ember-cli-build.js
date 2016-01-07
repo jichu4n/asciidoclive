@@ -5,6 +5,7 @@
 /*jshint node:true*/
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var Funnel = require('broccoli-funnel');
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
@@ -24,10 +25,22 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
-  app.import('bower_components/bootstrap-sass/' +
-             'assets/javascripts/bootstrap.js');
-  app.import('bower_components/jquery-ui/' +
-             'jquery-ui.js');
+  app.import(
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
+    {
+      type: 'vendor'
+    });
+  app.import(
+    'bower_components/jquery-ui/jquery-ui.js',
+    {
+      type: 'vendor'
+    });
 
-  return app.toTree();
+  var aceEditor = new Funnel(
+    'bower_components/ace-builds/src-min-noconflict',
+    {
+      destDir: '/assets/ace-editor'
+    });
+
+  return app.toTree(aceEditor);
 };

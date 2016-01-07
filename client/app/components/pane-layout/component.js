@@ -9,6 +9,8 @@ export default Ember.Component.extend(ResizeAware, {
   classNames: ['pane-layout'],
   minPaneWidth: 200,
 
+  editorPaneWidth: null,
+
   getContainer() {
     return this.$();
   },
@@ -23,6 +25,11 @@ export default Ember.Component.extend(ResizeAware, {
       this.get('minPaneWidth') -
       this.getResizeHandle().width();
   },
+  updateEditorPaneSize() {
+    var editorPane = this.getEditorPane();
+    this.set('editorPaneWidth', editorPane.width());
+    this.set('editorPaneHeight', editorPane.height());
+  },
 
   initialized: false,
   didInsertElement() {
@@ -32,8 +39,10 @@ export default Ember.Component.extend(ResizeAware, {
         e: this.getResizeHandle()
       },
       minWidth: this.get('minPaneWidth'),
-      maxWidth: this.getMaxPaneWidth()
+      maxWidth: this.getMaxPaneWidth(),
+      resize: this.updateEditorPaneSize.bind(this)
     });
+    this.updateEditorPaneSize();
     this.initialized = true;
   },
   debouncedDidResize() {
@@ -46,5 +55,6 @@ export default Ember.Component.extend(ResizeAware, {
     if (editorPane.width() > maxPaneWidth) {
       editorPane.width(maxPaneWidth);
     }
+    this.updateEditorPaneSize();
   },
 });

@@ -2,7 +2,7 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-.pane-layout {
+.ember-view.pane-layout {
   display: flex;
   flex-direction: row;
   overflow: hidden;
