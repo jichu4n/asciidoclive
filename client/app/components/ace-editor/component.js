@@ -61,7 +61,7 @@ export default Ember.Component.extend({
     var now = new Date();
     var timeSinceLastUpdate = now - debounceState.lastUpdateTs;
     if (timeSinceLastUpdate > debounceState.debounceMs) {
-      debounceState.nextUpdate = Ember.run.next(this, this.update));
+      debounceState.nextUpdate = Ember.run.next(this, this.update);
     } else {
       debounceState.nextUpdate = Ember.run.later(
         this, this.update, debounceState.debounceMs - timeSinceLastUpdate);
