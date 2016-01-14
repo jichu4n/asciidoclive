@@ -14,12 +14,10 @@
 
     <div id="header-menu" class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
+        <li class="dropdown" title="{{t "header.open"}}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            {{fa-icon "folder-open"}}
-            {{t "header.open"}}
-            &nbsp;
-            {{fa-icon "caret-down"}}
+            {{fa-icon "folder-open" size="lg" fixedWidth=true}}
+            <span class="icon-label">{{t "header.open"}}</span>
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -30,12 +28,10 @@
             </li>
           </ul>
         </li>
-        <li class="dropdown">
+        <li class="dropdown" title="{{t "header.save"}}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            {{fa-icon "floppy-o"}}
-            {{t "header.save"}}
-            &nbsp;
-            {{fa-icon "caret-down"}}
+            {{fa-icon "floppy-o" size="lg" fixedWidth=true}}
+            <span class="icon-label">{{t "header.save"}}</span>
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -45,6 +41,12 @@
               </a>
             </li>
           </ul>
+        </li>
+        <li class="dropdown" title="{{t "header.settings"}}">
+          <a href="#">
+            {{fa-icon "gears" size="lg" fixedWidth=true}}
+            <span class="icon-label">{{t "header.settings"}}</span>
+          </a>
         </li>
       </ul>
     </div>

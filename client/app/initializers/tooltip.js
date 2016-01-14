@@ -2,13 +2,13 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+import Ember from 'ember';
+
 export default {
-  header: {
-    open: 'Open',
-    save: 'Save',
-    settings: 'Settings',
-    dropbox: 'Dropbox'
-  },
-  defaultTitle: 'Untitled Document',
-  defaultBody: 'blah blah'
+  name: 'tooltip',
+  initialize: function() {
+    Ember.$(document.body).tooltip({
+      selector: '[data-toggle="tooltip"]'
+    });
+  }
 };

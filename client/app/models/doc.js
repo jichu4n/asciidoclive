@@ -2,7 +2,7 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/** global Opal */
+/* global Opal */
 
 import Ember from 'ember';
 import DS from 'ember-data';

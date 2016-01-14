@@ -23,3 +23,15 @@ $navbar-brand-img-height: 30px;
   color: #fff;
 }
 
+.navbar #header-menu {
+  li.dropdown > a {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    @media (min-width: $grid-float-breakpoint) {
+      span.icon-label {
+        display: none;
+      }
+    }
+  }
+}
