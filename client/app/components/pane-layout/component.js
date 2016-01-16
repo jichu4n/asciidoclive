@@ -12,10 +12,12 @@ export default Ember.Component.extend(ResizeAware, {
   classNames: ['pane-layout'],
   minPaneWidth: 200,
 
-  doc: null,
   editorPaneWidth: null,
 
   i18n: Ember.inject.service(),
+  docStorage: Ember.inject.service(),
+
+  doc: Ember.computed.alias('docStorage.doc'),
 
   getContainer() {
     return this.$();
@@ -41,10 +43,6 @@ export default Ember.Component.extend(ResizeAware, {
   didInsertElement() {
     this._super();
     Ember.run.next(this, function() {
-      this.set('doc', this.get('store').createRecord('doc', {
-        title: this.get('i18n').t('defaultTitle'),
-        body: this.get('i18n').t('defaultBody')
-      }));
       this.getEditorPane().resizable({
         handles: {
           e: this.getResizeHandle()
