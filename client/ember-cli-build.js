@@ -31,21 +31,25 @@ module.exports = function(defaults) {
   app.import(
     'bower_components/jquery-ui/jquery-ui.js',
     { type: 'vendor' });
-  app.import(
-    'bower_components/web-workers-fallback/Worker.js',
-    { type: 'vendor' });
+
+  // Keep asciidoctor.js and compile worker as separate files for use with Web
+  // Worker, but also import them into the main app for older browsers.
   var asciidoctor = new Funnel(
     'bower_components/asciidoctor.js/dist',
     {
       destDir: '/assets/asciidoctor.js',
       files: ['asciidoctor-all.min.js']
     });
-  var aceEditor = new Funnel(
-    'bower_components/ace-builds/src-min-noconflict',
-    { destDir: '/assets/ace-editor' });
   var workers = new Funnel(
     'workers',
     { destDir: '/assets/workers' });
+  app.import(
+    'bower_components/asciidoctor.js/dist/asciidoctor-all.js',
+    { type: 'vendor' });
+
+  var aceEditor = new Funnel(
+    'bower_components/ace-builds/src-min-noconflict',
+    { destDir: '/assets/ace-editor' });
 
   return app.toTree([asciidoctor, aceEditor, workers]);
 };

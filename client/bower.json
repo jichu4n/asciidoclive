@@ -16,7 +16,6 @@
     "font-awesome": "~4.4.0",
     "jquery-ui": "jqueryui#~1.11.4",
     "ace-builds": "~1.2.2",
-    "asciidoctor.js": "~1.5.2",
-    "web-workers-fallback": "typpo/web-workers-fallback"
+    "asciidoctor.js": "~1.5.2"
   }
 }

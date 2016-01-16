@@ -4,13 +4,22 @@
 
 /* global self, Opal */
 
-self.importScripts('/assets/asciidoctor.js/asciidoctor-all-min.js');
+var isInWebWorker = typeof document === 'undefined';
 
-self.addEventListener('message', function(ev) {
+function asciidoctorJsCompile(ev) {
   var body = ev.data.body;
   ev.data.body = null;
   var response = JSON.parse(JSON.stringify(ev.data));
   response.compiledBody = Opal.Asciidoctor.$convert(body, Opal.hash({
   }));
-  self.postMessage(response);
-});
+  if (isInWebWorker) {
+    self.postMessage(response);
+  }
+  return response;
+}
+
+if (isInWebWorker) {
+  console.info('Starting Asciidoctor compile worker');
+  self.importScripts('/assets/asciidoctor.js/asciidoctor-all.min.js');
+  self.addEventListener('message', asciidoctorJsCompile);
+}
