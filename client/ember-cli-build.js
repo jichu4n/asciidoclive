@@ -27,25 +27,25 @@ module.exports = function(defaults) {
 
   app.import(
     'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
-    {
-      type: 'vendor'
-    });
+    { type: 'vendor' });
   app.import(
     'bower_components/jquery-ui/jquery-ui.js',
-    {
-      type: 'vendor'
-    });
+    { type: 'vendor' });
   app.import(
-    'bower_components/asciidoctor.js/dist/asciidoctor-all.js',
+    'bower_components/web-workers-fallback/Worker.js',
+    { type: 'vendor' });
+  var asciidoctor = new Funnel(
+    'bower_components/asciidoctor.js/dist',
     {
-      type: 'vendor'
+      destDir: '/assets/asciidoctor.js',
+      files: ['asciidoctor-all.min.js']
     });
-
   var aceEditor = new Funnel(
     'bower_components/ace-builds/src-min-noconflict',
-    {
-      destDir: '/assets/ace-editor'
-    });
+    { destDir: '/assets/ace-editor' });
+  var workers = new Funnel(
+    'workers',
+    { destDir: '/assets/workers' });
 
-  return app.toTree(aceEditor);
+  return app.toTree([asciidoctor, aceEditor, workers]);
 };

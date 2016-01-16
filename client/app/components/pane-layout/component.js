@@ -15,9 +15,9 @@ export default Ember.Component.extend(ResizeAware, {
   editorPaneWidth: null,
 
   i18n: Ember.inject.service(),
-  docStorage: Ember.inject.service(),
+  docManager: Ember.inject.service(),
 
-  doc: Ember.computed.alias('docStorage.doc'),
+  doc: Ember.computed.alias('docManager.doc'),
 
   getContainer() {
     return this.$();

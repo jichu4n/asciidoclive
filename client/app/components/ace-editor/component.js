@@ -14,7 +14,7 @@ export default Ember.Component.extend({
   classNames: ['ace-editor'],
 
   debounceState: {
-    debounceMs: 150,
+    debounceMs: 100,
     lastUpdateTs: new Date(),
     nextUpdate: null,
   },
