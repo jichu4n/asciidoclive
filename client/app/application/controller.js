@@ -7,7 +7,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  docStorage: Ember.inject.service(),
+  docManager: Ember.inject.service(),
 
   actions: {
     openFromDropbox() {
@@ -20,7 +20,7 @@ export default Ember.Controller.extend({
               title: selectedFile.name,
               body: body
             });
-            this.get('docStorage').set('doc', doc);
+            this.get('docManager').set('doc', doc);
           }.bind(this));
         }.bind(this),
         linkType: 'direct',
