@@ -27,7 +27,7 @@ export default Ember.Component.extend({
 
       this.set('editor', ace.edit(this.$()[0]));
       this.set('session', this.get('editor').getSession());
-      this.get('session').setValue(this.get('doc.body') || '');
+      this.get('session').setValue(this.get('doc.body').toString() || '');
       this.get('session').on('change', this.debouncedUpdate.bind(this));
       this.get('session').setMode('ace/mode/asciidoc');
       this.get('session').setUseWrapMode(true);
@@ -48,8 +48,8 @@ export default Ember.Component.extend({
     if (Ember.isNone(this.get('editor'))) {
       return;
     }
-    var body = (this.get('doc.body') || '').toString();
-    if (this.get('doc.body') !== this.get('session').getValue()) {
+    var body = (this.get('doc.body').toString() || '').toString();
+    if (body !== this.get('session').getValue()) {
       this.get('session').setValue(body);
     }
   }),
