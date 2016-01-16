@@ -15,6 +15,8 @@ export default Ember.Service.extend({
 
   compileWorker: null,
   compileCount: 0,
+  runningCompileRequest: null,
+  pendingCompileRequest: null,
 
   init() {
     this.set('doc', this.get('store').createRecord('doc', {
@@ -45,7 +47,19 @@ export default Ember.Service.extend({
     if (Ember.isNone(this.get('compileWorker'))) {
       Ember.run.next(this, this.compileInMainThread, request);
     } else {
-      this.get('compileWorker').postMessage(request);
+      if (Ember.isNone(this.get('runningCompileRequest'))) {
+        console.info('[%d] Compiling immediately', this.get('compileCount'));
+        this.set('runningCompileRequest', request);
+        this.get('compileWorker').postMessage(request);
+      } else {
+        if (!Ember.isNone(this.get('pendingCompileRequest'))) {
+          console.info(
+            '[%d] Discarding previously scheduled compiled run',
+            this.get('pendingCompileRequest.compileCount'));
+        }
+        console.info('[%d] Scheduling compile run', this.get('compileCount'));
+        this.set('pendingCompileRequest', request);
+      }
     }
   })),
   compileInMainThread(request) {
@@ -59,9 +73,16 @@ export default Ember.Service.extend({
       ev.data.compileCount,
       endTs.valueOf(),
       endTs - (new Date(ev.data.startTs)));
-    if (ev.data.compileCount !== this.get('compileCount')) {
-      console.info('Discarding outdated compiled body');
-      return;
+    var pendingRequest = this.get('pendingCompileRequest');
+    if (Ember.isNone(pendingRequest)) {
+      this.set('runningCompileRequest', null);
+    } else {
+      console.info(
+        '[%d] Running previously scheduled compile',
+        pendingRequest.compileCount);
+      this.set('runningCompileRequest', pendingRequest);
+      this.set('pendingCompileRequest', null);
+      this.get('compileWorker').postMessage(pendingRequest);
     }
     this.get('doc').set('compiledBody', ev.data.compiledBody);
   }
