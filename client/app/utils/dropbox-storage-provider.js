@@ -22,7 +22,8 @@ export default StorageProvider.extend({
               var doc = this.get('store').createRecord('doc', {
                 title: selectedFile.name,
                 body: body,
-                storageType: this.get('storageType')
+                storageType: this.get('storageType'),
+                storagePath: this.parseStoragePath(selectedFile.link)
               });
               resolve(doc);
             }.bind(this), reject);
@@ -33,5 +34,14 @@ export default StorageProvider.extend({
         });
       }.bind(this))
     });
+  },
+  storagePathRE: /.*\/view\/[^\/]+\/(.*)$/,
+  parseStoragePath(link) {
+    var match = link.match(this.get('storagePathRE'));
+    if (Ember.isNone(match)) {
+      console.error('Failed to parse Dropbox download link: %s', link);
+      return null;
+    }
+    return match[1];
   }
 });

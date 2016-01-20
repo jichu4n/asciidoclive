@@ -102,8 +102,7 @@ export default Ember.Service.extend({
   },
 
   open(storageType) {
-    this.get('storageProviders')[storageType].open().then(function(doc) {
-      this.set('doc', doc);
-    }.bind(this));
+    this.get('storageProviders')[storageType].open().then(
+      this.set.bind(this, 'doc'));
   }
 });
