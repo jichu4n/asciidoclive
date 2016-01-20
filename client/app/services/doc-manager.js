@@ -5,6 +5,8 @@
 /* global asciidoctorJsCompile */
 
 import Ember from 'ember';
+import StorageType from '../utils/storage-type';
+import DropboxStorageProvider from '../utils/dropbox-storage-provider';
 
 export default Ember.Service.extend({
   // The current doc object.
@@ -18,11 +20,20 @@ export default Ember.Service.extend({
   runningCompileRequest: null,
   pendingCompileRequest: null,
 
+  storageProviders: {},
+
   init() {
-    this.set('doc', this.get('store').createRecord('doc', {
+    var storageProviders = this.get('storageProviders');
+    storageProviders[StorageType.DROPBOX] = DropboxStorageProvider.create({
+      store: this.get('store')
+    });
+
+    var doc = this.get('store').createRecord('doc', {
       title: this.get('i18n').t('defaultTitle'),
       body: this.get('i18n').t('defaultBody')
-    }));
+    });
+    doc.set('storageType', StorageType.NONE);
+    this.set('doc', doc);
     if (window.Worker) {
       this.set('compileWorker', new Worker(
         '/assets/workers/asciidoctor-js-compile-worker.js'));
@@ -33,6 +44,7 @@ export default Ember.Service.extend({
         'Browser does not support Web Workers, will compile in main thread.');
     }
   },
+
   compile: Ember.on('init', Ember.observer('doc.body', function() {
     if (Ember.isNone(this.get('doc'))) {
       return;
@@ -73,17 +85,25 @@ export default Ember.Service.extend({
       ev.data.compileCount,
       endTs.valueOf(),
       endTs - (new Date(ev.data.startTs)));
-    var pendingRequest = this.get('pendingCompileRequest');
-    if (Ember.isNone(pendingRequest)) {
-      this.set('runningCompileRequest', null);
-    } else {
-      console.info(
-        '[%d] Running previously scheduled compile',
-        pendingRequest.compileCount);
-      this.set('runningCompileRequest', pendingRequest);
-      this.set('pendingCompileRequest', null);
-      this.get('compileWorker').postMessage(pendingRequest);
+    if (!Ember.isNone(this.get('compileWorker'))) {
+      var pendingRequest = this.get('pendingCompileRequest');
+      if (Ember.isNone(pendingRequest)) {
+        this.set('runningCompileRequest', null);
+      } else {
+        console.info(
+          '[%d] Running previously scheduled compile',
+          pendingRequest.compileCount);
+        this.set('runningCompileRequest', pendingRequest);
+        this.set('pendingCompileRequest', null);
+        this.get('compileWorker').postMessage(pendingRequest);
+      }
     }
     this.get('doc').set('compiledBody', ev.data.compiledBody);
+  },
+
+  open(storageType) {
+    this.get('storageProviders')[storageType].open().then(function(doc) {
+      this.set('doc', doc);
+    }.bind(this));
   }
 });
