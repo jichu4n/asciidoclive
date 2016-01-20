@@ -3,6 +3,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 export default {
+  titleSuffix: ' - AsciiDocLIVE',
   header: {
     open: 'Open',
     save: 'Save',
@@ -10,5 +11,8 @@ export default {
     dropbox: 'Dropbox'
   },
   defaultTitle: 'Untitled Document',
-  defaultBody: 'blah blah'
+  defaultBody: 'blah blah',
+  storageType: {
+    dropbox: '[Dropbox] '
+  }
 };

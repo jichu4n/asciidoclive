@@ -18,12 +18,13 @@ export default StorageProvider.extend({
         Dropbox.choose({
           success: function(selectedFiles) {
             var selectedFile = selectedFiles[0];
+            var storagePath = this.parseStoragePath(selectedFile.link);
             Ember.$.get(selectedFile.link).then(function(body) {
               var doc = this.get('store').createRecord('doc', {
-                title: selectedFile.name,
+                title: storagePath,
                 body: body,
                 storageType: this.get('storageType'),
-                storagePath: this.parseStoragePath(selectedFile.link)
+                storagePath: storagePath
               });
               resolve(doc);
             }.bind(this), reject);
