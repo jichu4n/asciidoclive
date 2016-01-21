@@ -35,8 +35,9 @@ export default Ember.Route.extend({
     }));
   },
 
-  afterModel() {
+  afterModel(model) {
     Cookies.remove('redirect');
+    this.send('setNavbarSaveStorageSpec', model.get('storageSpec'));
   },
 
   serialize(doc) {
@@ -57,5 +58,11 @@ export default Ember.Route.extend({
   },
   title(tokens) {
     return tokens[0] + this.get('i18n').t('titleSuffix');
+  },
+
+  actions: {
+    didTransition() {
+      this.send('setNavbarActionHandler', this.get('controller'));
+    }
   }
 });

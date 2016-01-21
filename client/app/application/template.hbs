@@ -34,6 +34,16 @@
             <span class="icon-label">{{t "header.save"}}</span>
           </a>
           <ul class="dropdown-menu">
+            {{#if navbarSaveStorageSpec}}
+            <li>
+              <a href="#" {{action "save"}}>
+                {{fa-icon navbarSaveStorageTypeIcon}}
+                {{t navbarSaveStorageTypeTranslation}}
+                {{navbarSaveStorageSpec.storagePath}}
+              </a>
+            </li>
+            <li class="divider"></li>
+            {{/if}}
             <li>
               <a href="#" {{action "save" "dropbox"}}>
                 {{fa-icon "dropbox"}}

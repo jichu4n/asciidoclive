@@ -13,6 +13,7 @@ import StorageType from '../utils/storage-type';
 
 export default StorageProvider.extend({
   storageType: StorageType.DROPBOX,
+  storageTypeIcon: 'dropbox',
 
   client: null,
 

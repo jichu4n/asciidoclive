@@ -7,5 +7,5 @@ import StorageType from '../utils/storage-type';
 
 export default Ember.Object.extend({
   storageType: StorageType.NONE,
-  storagePath: null
+  storagePath: null,
 });
