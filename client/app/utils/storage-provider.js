@@ -11,6 +11,9 @@ export default Ember.Object.extend({
 
   // The storage type correponding to this provider.
   storageType: StorageType.NONE,
+  // The FontAwesome icon corresponding to this provider.
+  storageTypeIcon: null,
+
   // Prompt the user to open a document from this provider. Returns a
   // Promise that yields a StorageSpec.
   open() {
