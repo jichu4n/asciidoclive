@@ -82,6 +82,27 @@ export default StorageProvider.extend({
     });
   },
 
+  save(doc) {
+    if (doc.get('storageSpec.storageType') !== this.get('storageType')) {
+      throw new Error(
+        'Unexpected storage type: %o', doc.get('storageSpec.storageType'));
+    }
+    return this.authenticate().then(function() {
+      return new Ember.RSVP.Promise(function(resolve, reject) {
+        this.get('client').writeFile(
+          doc.get('storageSpec.storagePath'),
+          doc.get('body').toString() || '',
+          function(error) {
+            if (error) {
+              reject(error);
+            } else {
+              resolve();
+            }
+          });
+      }.bind(this));
+    }.bind(this)).then(function() {});
+  },
+
   storagePathRE: /.*\/view\/[^\/]+\/(.*)$/,
   parseStoragePath(link) {
     var match = link.match(this.get('storagePathRE'));

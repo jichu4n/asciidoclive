@@ -44,5 +44,13 @@ export default Ember.Service.extend({
       });
     }
     return storageProvider.load(storageSpec.get('storagePath'));
+  },
+
+  save(doc) {
+    var storageProvider = this.getStorageProvider(doc.get('storageSpec'));
+    if (Ember.isNone(storageProvider)) {
+      return Ember.RSVP.reject();
+    }
+    return storageProvider.save(doc);
   }
 });
