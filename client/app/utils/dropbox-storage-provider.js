@@ -75,7 +75,7 @@ export default StorageProvider.extend({
                 }));
               }
             }.bind(this));
-        }.bind(this))
+        }.bind(this));
       }.bind(this)).then(function(doc) {
         return doc;
       })
