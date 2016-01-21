@@ -21,7 +21,7 @@ export default StorageProvider.extend({
       key: ENV.APP.DROPBOX_APP_KEY
     }));
     this.get('client').authDriver(new Dropbox.AuthDriver.Redirect({
-      redirectUrl: ENV.APP.SERVER_URL + '/dropbox_auth_success'
+      redirectUrl: ENV.APP.SERVER_URL + '/auth_success'
     }));
   },
 
