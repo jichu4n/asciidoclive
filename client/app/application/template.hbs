@@ -20,6 +20,7 @@
             <span class="icon-label">{{t "header.open"}}</span>
           </a>
           <ul class="dropdown-menu">
+            <li class="dropdown-header">{{t "header.openHeader"}}</li>
             <li>
               <a href="#" {{action "open" "dropbox"}}>
                 {{fa-icon "dropbox"}}
@@ -35,6 +36,7 @@
           </a>
           <ul class="dropdown-menu">
             {{#if navbarSaveStorageSpec}}
+            <li class="dropdown-header">{{t "header.saveHeader"}}</li>
             <li>
               <a href="#" {{action "save"}}>
                 {{fa-icon navbarSaveStorageTypeIcon}}
@@ -44,6 +46,7 @@
             </li>
             <li class="divider"></li>
             {{/if}}
+            <li class="dropdown-header">{{t "header.saveAsHeader"}}</li>
             <li>
               <a href="#" {{action "save" "dropbox"}}>
                 {{fa-icon "dropbox"}}
