@@ -34,6 +34,10 @@ $navbar-brand-img-height: 30px;
       }
     }
   }
+  li.dropdown-header {
+    text-transform: uppercase;
+    letter-spacing: 1.25px;
+  }
 }
 
 #loading-banner {

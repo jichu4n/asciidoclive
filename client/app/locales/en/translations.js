@@ -6,7 +6,10 @@ export default {
   titleSuffix: ' - AsciiDocLIVE',
   header: {
     open: 'Open',
+    openHeader: 'Open from',
     save: 'Save',
+    saveHeader: 'Save',
+    saveAsHeader: 'Save as new file',
     settings: 'Settings',
     dropbox: 'Dropbox'
   },
