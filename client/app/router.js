@@ -10,6 +10,12 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('edit', {
+    path: '/edit/:storage_type/*storage_path'
+  });
+  this.route('authSuccess', {
+    path: '/auth_success'
+  });
 });
 
 export default Router;

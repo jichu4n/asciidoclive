@@ -6,8 +6,8 @@ import Ember from 'ember';
 import ResizeAware from 'ember-resize/mixins/resize-aware';
 
 export default Ember.Component.extend(ResizeAware, {
-  // To be injected
-  store: null,
+  // To be injected.
+  doc: null,
 
   classNames: ['pane-layout'],
   minPaneWidth: 200,
@@ -15,9 +15,6 @@ export default Ember.Component.extend(ResizeAware, {
   editorPaneWidth: null,
 
   i18n: Ember.inject.service(),
-  docManager: Ember.inject.service(),
-
-  doc: Ember.computed.alias('docManager.doc'),
 
   getContainer() {
     return this.$();

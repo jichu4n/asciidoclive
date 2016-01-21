@@ -51,5 +51,13 @@ module.exports = function(defaults) {
     'bower_components/ace-builds/src-min-noconflict',
     { destDir: '/assets/ace-editor' });
 
+  app.import(
+    'bower_components/dropbox/dropbox.js',
+    { type: 'vendor' });
+
+  app.import(
+    'bower_components/js-cookie/src/js.cookie.js',
+    { type: 'vendor' });
+
   return app.toTree([asciidoctor, aceEditor, workers]);
 };

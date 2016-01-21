@@ -2,10 +2,6 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#main-layout {
-  position: absolute;
-  top: $navbar-height;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.loading-banner {
+  color: $gray;
 }
