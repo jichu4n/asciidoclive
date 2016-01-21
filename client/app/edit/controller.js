@@ -15,7 +15,10 @@ export default Ember.Controller.extend({
           'edit', storageSpec.storageType, storageSpec.storagePath);
       }.bind(this));
     },
-    save(storageType) {
+    save() {
+      this.get('storageProviders').save(this.get('model'));
+    },
+    saveAs(storageType) {
     }
   }
 });

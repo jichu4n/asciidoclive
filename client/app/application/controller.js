@@ -48,5 +48,8 @@ export default Ember.Controller.extend({
     save() {
       this.sendToNavbarActionHandler('save', arguments);
     }
+    saveAs() {
+      this.sendToNavbarActionHandler('saveAs', arguments);
+    }
   }
 });

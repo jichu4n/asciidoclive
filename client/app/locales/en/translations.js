@@ -11,7 +11,9 @@ export default {
     saveHeader: 'Save',
     saveAsHeader: 'Save as new file',
     settings: 'Settings',
-    dropbox: 'Dropbox'
+    dropbox: 'Dropbox',
+    saving: 'Saving...',
+    saved: 'Saved'
   },
   defaultTitle: 'Untitled Document',
   defaultBody: 'blah blah',
