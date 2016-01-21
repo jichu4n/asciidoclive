@@ -14,14 +14,16 @@ export default Ember.Route.extend({
 
   model(params) {
     if (params.storage_type === StorageType.NONE) {
-      return this.get('store').createRecord('doc', {
-        title: this.get('i18n').t('defaultTitle'),
-        body: this.get('i18n').t('defaultBody'),
-        storageSpec: StorageSpec.create({
-          storageType: StorageType.NONE,
-          storagePath: ''
-        })
-      });
+      return Ember.$.get('/assets/scratch.txt').then(function(fileContent) {
+        return this.get('store').createRecord('doc', {
+          title: this.get('i18n').t('defaultTitle'),
+          body: fileContent,
+          storageSpec: StorageSpec.create({
+            storageType: StorageType.NONE,
+            storagePath: ''
+          })
+        });
+      }.bind(this));
     }
     Cookies.set('redirect', {
       route: this.get('routeName'),
