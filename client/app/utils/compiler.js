@@ -5,35 +5,17 @@
 /* global asciidoctorJsCompile */
 
 import Ember from 'ember';
-import StorageType from '../utils/storage-type';
-import DropboxStorageProvider from '../utils/dropbox-storage-provider';
 
-export default Ember.Service.extend({
-  // The current doc object.
+export default Ember.Object.extend({
+  // To be injected.
   doc: null,
-
-  store: Ember.inject.service(),
-  i18n: Ember.inject.service(),
 
   compileWorker: null,
   compileCount: 0,
   runningCompileRequest: null,
   pendingCompileRequest: null,
 
-  storageProviders: {},
-
   init() {
-    var storageProviders = this.get('storageProviders');
-    storageProviders[StorageType.DROPBOX] = DropboxStorageProvider.create({
-      store: this.get('store')
-    });
-
-    var doc = this.get('store').createRecord('doc', {
-      title: this.get('i18n').t('defaultTitle'),
-      body: this.get('i18n').t('defaultBody')
-    });
-    doc.set('storageType', StorageType.NONE);
-    this.set('doc', doc);
     if (window.Worker) {
       this.set('compileWorker', new Worker(
         '/assets/workers/asciidoctor-js-compile-worker.js'));
@@ -45,8 +27,8 @@ export default Ember.Service.extend({
     }
   },
 
-  compile: Ember.on('init', Ember.observer('doc.body', function() {
-    if (Ember.isNone(this.get('doc'))) {
+  compile: function() {
+    if (Ember.isNone(this.get('doc')) || Ember.isNone(this.get('doc.body'))) {
       return;
     }
     this.set('compileCount', this.get('compileCount') + 1);
@@ -73,7 +55,7 @@ export default Ember.Service.extend({
         this.set('pendingCompileRequest', request);
       }
     }
-  })),
+  },
   compileInMainThread(request) {
     var response = asciidoctorJsCompile({ data: request });
     this.onCompileDone({ data: response });
@@ -99,10 +81,5 @@ export default Ember.Service.extend({
       }
     }
     this.get('doc').set('compiledBody', ev.data.compiledBody);
-  },
-
-  open(storageType) {
-    this.get('storageProviders')[storageType].open().then(
-      this.set.bind(this, 'doc'));
   }
 });

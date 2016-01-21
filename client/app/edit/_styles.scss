@@ -2,7 +2,10 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default {
-  NONE: 'scratch',
-  DROPBOX: 'dropbox'
-};
+#edit-layout {
+  position: absolute;
+  top: $navbar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

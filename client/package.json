@@ -41,6 +41,7 @@
     "ember-disable-proxy-controllers": "^1.0.1",
     "ember-export-application-global": "^1.0.4",
     "ember-i18n": "4.2.0",
-    "ember-resize": "0.0.10"
+    "ember-resize": "0.0.10",
+    "js-cookie": "2.1.0"
   }
 }

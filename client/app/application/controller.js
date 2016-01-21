@@ -3,14 +3,17 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import Ember from 'ember';
-import StorageType from '../utils/storage-type';
 
 export default Ember.Controller.extend({
-  docManager: Ember.inject.service(),
+  storageProviders: Ember.inject.service(),
 
   actions: {
-    openFromDropbox() {
-      this.get('docManager').open(StorageType.DROPBOX);
+    open(storageType) {
+      this.get('storageProviders').open(storageType)
+      .then(function(storageSpec) {
+        this.transitionToRoute(
+          'edit', storageSpec.storageType, storageSpec.storagePath);
+      }.bind(this));
     }
   }
 });

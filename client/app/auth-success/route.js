@@ -2,7 +2,13 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default {
-  NONE: 'scratch',
-  DROPBOX: 'dropbox'
-};
+/* global Cookies */
+
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  redirect() {
+    var redirect = Cookies.getJSON('redirect');
+    this.transitionTo.apply(this, [redirect.route].concat(redirect.args));
+  }
+});

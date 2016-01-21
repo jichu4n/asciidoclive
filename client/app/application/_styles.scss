@@ -35,3 +35,8 @@ $navbar-brand-img-height: 30px;
     }
   }
 }
+
+#loading-banner {
+  padding-top: ($navbar-height * 3);
+  text-align: center;
+}
