@@ -7,6 +7,9 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   storageProviders: Ember.inject.service(),
 
+  showSavingStatus: false,
+  showSavedStatus: false,
+
   actions: {
     open(storageType) {
       this.get('storageProviders').open(storageType)
@@ -16,7 +19,11 @@ export default Ember.Controller.extend({
       }.bind(this));
     },
     save() {
-      this.get('storageProviders').save(this.get('model'));
+      this.set('showSavingStatus', true);
+      this.get('storageProviders').save(this.get('model')).then(function() {
+        this.set('showSavingStatus', false);
+        this.set('showSavedStatus', true);
+      }.bind(this));
     },
     saveAs(storageType) {
     }
