@@ -13,7 +13,8 @@ export default {
     settings: 'Settings',
     dropbox: 'Dropbox',
     saving: 'Saving...',
-    saved: 'Saved'
+    saved: 'Saved',
+    saveError: 'Could not save document'
   },
   defaultTitle: 'Untitled Document',
   defaultBody: 'blah blah',
