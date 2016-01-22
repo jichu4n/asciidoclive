@@ -1,1 +1,11 @@
 {{pane-layout doc=model id="edit-layout"}}
+
+{{#header-status show=showSavingStatus}}
+  {{fa-icon "spinner" spin=true}}
+  {{t "header.saving"}}
+{{/header-status}}
+
+{{#header-status show=showSavedStatus durationMs=5000}}
+  {{fa-icon "check"}}
+  {{t "header.saved"}}
+{{/header-status}}

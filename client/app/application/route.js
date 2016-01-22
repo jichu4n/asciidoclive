@@ -7,14 +7,14 @@ import StorageType from '../utils/storage-type';
 
 export default Ember.Route.extend({
   actions: {
-    setNavbarActionHandler(controller) {
-      this.get('controller').set('navbarActionHandler', controller);
+    setHeaderActionHandler(controller) {
+      this.get('controller').set('headerActionHandler', controller);
     },
-    setNavbarSaveStorageSpec(storageSpec) {
+    setHeaderSaveStorageSpec(storageSpec) {
       if (storageSpec.get('storageType') === StorageType.NONE) {
         storageSpec = null;
       }
-      this.get('controller').set('navbarSaveStorageSpec', storageSpec);
+      this.get('controller').set('headerSaveStorageSpec', storageSpec);
     }
   }
 });

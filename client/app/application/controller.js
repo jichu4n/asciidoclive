@@ -7,13 +7,13 @@ import StorageType from '../utils/storage-type';
 
 export default Ember.Controller.extend({
   // Injected by route.
-  navbarActionHandler: null,
-  navbarSaveStorageSpec: null,
+  headerActionHandler: null,
+  headerSaveStorageSpec: null,
 
   storageProviders: Ember.inject.service(),
 
-  sendToNavbarActionHandler(action, args) {
-    var handler = this.get('navbarActionHandler');
+  sendToHeaderActionHandler(action, args) {
+    var handler = this.get('headerActionHandler');
     if (Ember.isNone(handler)) {
       console.warning('No navbar action handler registered!');
       return;
@@ -22,9 +22,9 @@ export default Ember.Controller.extend({
       Array.prototype.slice.call(args)));
   },
 
-  navbarSaveStorageTypeIcon: Ember.computed(
-    'navbarSaveStorageSpec.storageType', function() {
-      var storageType = this.get('navbarSaveStorageSpec.storageType');
+  headerSaveStorageTypeIcon: Ember.computed(
+    'headerSaveStorageSpec.storageType', function() {
+      var storageType = this.get('headerSaveStorageSpec.storageType');
       if (Ember.isNone(storageType)) {
         return null;
       }
@@ -32,9 +32,9 @@ export default Ember.Controller.extend({
         .get('storageTypeIcon');
     }),
 
-  navbarSaveStorageTypeTranslation: Ember.computed(
-    'navbarSaveStorageSpec.storageType', function() {
-      var storageType = this.get('navbarSaveStorageSpec.storageType');
+  headerSaveStorageTypeTranslation: Ember.computed(
+    'headerSaveStorageSpec.storageType', function() {
+      var storageType = this.get('headerSaveStorageSpec.storageType');
       if (Ember.isNone(storageType)) {
         return null;
       }
@@ -43,13 +43,13 @@ export default Ember.Controller.extend({
 
   actions: {
     open() {
-      this.sendToNavbarActionHandler('open', arguments);
+      this.sendToHeaderActionHandler('open', arguments);
     },
     save() {
-      this.sendToNavbarActionHandler('save', arguments);
+      this.sendToHeaderActionHandler('save', arguments);
     },
     saveAs() {
-      this.sendToNavbarActionHandler('saveAs', arguments);
+      this.sendToHeaderActionHandler('saveAs', arguments);
     }
   }
 });

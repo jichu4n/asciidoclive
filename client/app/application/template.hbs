@@ -35,13 +35,13 @@
             <span class="icon-label">{{t "header.save"}}</span>
           </a>
           <ul class="dropdown-menu">
-            {{#if navbarSaveStorageSpec}}
+            {{#if headerSaveStorageSpec}}
             <li class="dropdown-header">{{t "header.saveHeader"}}</li>
             <li>
               <a href="#" {{action "save"}}>
-                {{fa-icon navbarSaveStorageTypeIcon}}
-                {{t navbarSaveStorageTypeTranslation}}
-                {{navbarSaveStorageSpec.storagePath}}
+                {{fa-icon headerSaveStorageTypeIcon}}
+                {{t headerSaveStorageTypeTranslation}}
+                {{headerSaveStorageSpec.storagePath}}
               </a>
             </li>
             <li class="divider"></li>

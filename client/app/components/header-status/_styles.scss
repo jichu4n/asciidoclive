@@ -1,0 +1,24 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                           Copyright 2016 Chuan Ji                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+.header-status {
+  position: fixed;
+  top: 0;
+  right: 190px;
+  line-height: $navbar-height;
+  z-index: ($zindex-navbar-fixed + 1);
+  color: #fff;
+  opacity: 0.9;
+  transition: opacity 0.4s;
+
+  @media (max-width: $grid-float-breakpoint) {
+    right: 60px;
+    line-height: $navbar-height-collapsed;
+  }
+
+  &.hidden {
+    display: block !important;
+    opacity: 0.0;
+  }
+}
