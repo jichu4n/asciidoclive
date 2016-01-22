@@ -9,6 +9,7 @@ export default Ember.Controller.extend({
 
   showSavingStatus: false,
   showSavedStatus: false,
+  showSaveErrorStatus: false,
 
   actions: {
     open(storageType) {
@@ -19,10 +20,15 @@ export default Ember.Controller.extend({
       }.bind(this));
     },
     save() {
+      this.set('showSavedStatus', false);
+      this.set('showSaveErrorStatus', false);
       this.set('showSavingStatus', true);
       this.get('storageProviders').save(this.get('model')).then(function() {
         this.set('showSavingStatus', false);
         this.set('showSavedStatus', true);
+      }.bind(this), function(error) {
+        this.set('showSavingStatus', false);
+        this.set('showSaveErrorStatus', true);
       }.bind(this));
     },
     saveAs(storageType) {
