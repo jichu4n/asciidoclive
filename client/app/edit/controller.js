@@ -32,6 +32,10 @@ export default Ember.Controller.extend({
       }.bind(this));
     },
     saveAs(storageType) {
+      this.get('storageProviders').saveAs(this.get('model'), storageType)
+      .then(function() {
+        console.log('Save as success! arguments: %o', arguments);
+      }.bind(this));
     }
   }
 });

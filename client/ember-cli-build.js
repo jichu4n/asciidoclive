@@ -31,6 +31,15 @@ module.exports = function(defaults) {
   app.import(
     'bower_components/jquery-ui/jquery-ui.js',
     { type: 'vendor' });
+  app.import(
+    'bower_components/dropbox/dropbox.js',
+    { type: 'vendor' });
+  app.import(
+    'bower_components/js-cookie/src/js.cookie.js',
+    { type: 'vendor' });
+  app.import(
+    'bower_components/js-base64/base64.js',
+    { type: 'vendor' });
 
   // Keep asciidoctor.js and compile worker as separate files for use with Web
   // Worker, but also import them into the main app for older browsers.
@@ -50,14 +59,6 @@ module.exports = function(defaults) {
   var aceEditor = new Funnel(
     'bower_components/ace-builds/src-min-noconflict',
     { destDir: '/assets/ace-editor' });
-
-  app.import(
-    'bower_components/dropbox/dropbox.js',
-    { type: 'vendor' });
-
-  app.import(
-    'bower_components/js-cookie/src/js.cookie.js',
-    { type: 'vendor' });
 
   return app.toTree([asciidoctor, aceEditor, workers]);
 };
