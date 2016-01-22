@@ -2,7 +2,7 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* global Dropbox */
+/* global Dropbox, Base64 */
 
 import Ember from 'ember';
 import DS from 'ember-data';
@@ -101,6 +101,21 @@ export default StorageProvider.extend({
           });
       }.bind(this));
     }.bind(this)).then(function() {});
+  },
+
+  saveAs(doc) {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      Dropbox.save({
+        files: [{
+          url: 'data:text/plain;base64,' +
+            Base64.encode(doc.get('body').toString() || ''),
+          filename: 'test2.txt'
+        }],
+        success: resolve,
+        cancel: reject,
+        error: reject
+      });
+    }.bind(this));
   },
 
   storagePathRE: /.*\/view\/[^\/]+\/(.*)$/,

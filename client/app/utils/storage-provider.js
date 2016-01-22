@@ -24,14 +24,14 @@ export default Ember.Object.extend({
   load(storagePath) {
     throw new Error('Unimplemented');
   },
-  // Prompts the user to save a document to this provider. Returns a promise
-  // that resolves when the document is saved.
-  saveAs(doc) {
-    throw new Error('Unimplemented');
-  },
   // Save a document back to the provider. Returns a promise that resolves when
   // the document is saved.
   save(doc) {
+    throw new Error('Unimplemented');
+  },
+  // Prompts the user to save a document to this provider. Returns a promise
+  // that resolves when the document is saved.
+  saveAs(doc) {
     throw new Error('Unimplemented');
   }
 });

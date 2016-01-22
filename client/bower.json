@@ -18,6 +18,7 @@
     "ace-builds": "~1.2.2",
     "asciidoctor.js": "~1.5.2",
     "dropbox": "dropbox-build#*",
-    "js-cookie": "~2.1.0"
+    "js-cookie": "~2.1.0",
+    "js-base64": "~2.1.9"
   }
 }

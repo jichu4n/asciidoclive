@@ -52,5 +52,13 @@ export default Ember.Service.extend({
       return Ember.RSVP.reject();
     }
     return storageProvider.save(doc);
+  },
+
+  saveAs(doc, storageType) {
+    var storageProvider = this.getStorageProvider(storageType);
+    if (Ember.isNone(storageProvider)) {
+      return Ember.RSVP.reject();
+    }
+    return storageProvider.saveAs(doc);
   }
 });
