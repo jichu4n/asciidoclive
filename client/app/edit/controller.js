@@ -21,7 +21,9 @@ export default Ember.Controller.extend({
       .then(function(storageSpec) {
         this.transitionToRoute(
           'edit', storageSpec.storageType, storageSpec.storagePath);
-      }.bind(this));
+      }.bind(this), function(error) {
+        console.error('Open error: %o', error);
+      });
     },
     save() {
       this.set('showSavedStatus', false);
@@ -30,7 +32,8 @@ export default Ember.Controller.extend({
       this.get('storageProviders').save(this.get('model')).then(function() {
         this.set('showSavingStatus', false);
         this.set('showSavedStatus', true);
-      }.bind(this), function() {
+      }.bind(this), function(error) {
+        console.error('Save error: %o', error);
         this.set('showSavingStatus', false);
         this.set('showSaveErrorStatus', true);
       }.bind(this));
@@ -53,7 +56,8 @@ export default Ember.Controller.extend({
           this.transitionToRoute(
             'edit', storageSpec.storageType, storageSpec.storagePath);
         }
-      }.bind(this), function() {
+      }.bind(this), function(error) {
+        console.error('Save error: %o', error);
         this.set('showSavingStatus', false);
         this.set('showSaveErrorStatus', true);
       }.bind(this));

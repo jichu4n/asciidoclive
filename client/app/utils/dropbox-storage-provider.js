@@ -109,7 +109,7 @@ export default StorageProvider.extend({
         files: [{
           url: 'data:text/plain;base64,' +
             Base64.encode(doc.get('body').toString() || ''),
-          filename: doc.get('title').indexOf('.') > -1 ?
+          filename: (doc.get('title').toString() || '').indexOf('.') > -1 ?
             doc.get('title') :
             doc.get('title') + '.adoc'
         }],
