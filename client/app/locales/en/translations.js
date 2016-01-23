@@ -18,7 +18,19 @@ export default {
   },
   defaultTitle: 'Untitled Document',
   defaultBody: 'blah blah',
-  storageType: {
+  storageTypePrefix: {
     dropbox: '[Dropbox] '
+  },
+  storageType: {
+    dropbox: 'Dropbox'
+  },
+  edit: {
+    reopen: {
+      title: 'Open from {{storageType}}',
+      prompt: 'Would you like to open the newly saved file from ' +
+        '{{storageType}}?',
+      ok: 'Open from {{storageType}}',
+      cancel: 'Cancel'
+    }
   }
 };

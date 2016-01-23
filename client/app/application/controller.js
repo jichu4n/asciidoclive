@@ -38,7 +38,7 @@ export default Ember.Controller.extend({
       if (Ember.isNone(storageType)) {
         return null;
       }
-      return 'storageType.' + storageType;
+      return 'storageTypePrefix.' + storageType;
     }),
 
   actions: {

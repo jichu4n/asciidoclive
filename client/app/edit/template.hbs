@@ -14,3 +14,29 @@
   {{fa-icon "exclamation-circle"}}
   {{t "header.saveError"}}
 {{/header-status}}
+
+<div id="reopen-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          {{fa-icon "times"}}
+        </button>
+        <h4 class="modal-title">
+          {{t "edit.reopen.title" storageType=reopenStorageTypeTranslation}}
+        </h4>
+      </div>
+      <div class="modal-body">
+        {{t "edit.reopen.prompt" storageType=reopenStorageTypeTranslation}}
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">
+          {{t "edit.reopen.cancel"}}
+        </button>
+        <button class="btn btn-success" {{action "reopen" reopenStorageType}}>
+          {{t "edit.reopen.ok" storageType=reopenStorageTypeTranslation}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

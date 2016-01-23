@@ -25,10 +25,15 @@ export default Ember.Service.extend({
     var storageType = (typeof storageTypeOrStorageSpec === 'string') ?
       storageTypeOrStorageSpec :
       storageTypeOrStorageSpec.get('storageType');
-    return this.get('storageProviders')[storageType] || null;
+    var storageProvider = this.get('storageProviders')[storageType] || null;
+    if (storageProvider === null) {
+      console.error('Could not find storage provider "%s"', storageType);
+    }
+    return storageProvider;
   },
 
   open(storageType) {
+    console.info('Opening from storage type: %o', storageType);
     var storageProvider = this.getStorageProvider(storageType);
     if (Ember.isNone(storageProvider)) {
       return Ember.RSVP.reject();
@@ -37,6 +42,7 @@ export default Ember.Service.extend({
   },
 
   load(storageSpec) {
+    console.info('Loading from spec: %o', storageSpec);
     var storageProvider = this.getStorageProvider(storageSpec);
     if (Ember.isNone(storageProvider)) {
       return DS.PromiseObject.create({
@@ -47,6 +53,7 @@ export default Ember.Service.extend({
   },
 
   save(doc) {
+    console.info('Saving doc: %o', doc);
     var storageProvider = this.getStorageProvider(doc.get('storageSpec'));
     if (Ember.isNone(storageProvider)) {
       return Ember.RSVP.reject();
@@ -55,6 +62,7 @@ export default Ember.Service.extend({
   },
 
   saveAs(doc, storageType) {
+    console.info('Saving doc to storage type "%s": %o', storageType, doc);
     var storageProvider = this.getStorageProvider(storageType);
     if (Ember.isNone(storageProvider)) {
       return Ember.RSVP.reject();

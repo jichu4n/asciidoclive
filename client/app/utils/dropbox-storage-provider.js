@@ -66,7 +66,7 @@ export default StorageProvider.extend({
                 reject(error);
               } else {
                 resolve(this.get('store').createRecord('doc', {
-                  title: storagePath,
+                  title: storagePath.split('/').pop(),
                   body: fileContent,
                   storageSpec: StorageSpec.create({
                     storageType: this.get('storageType'),
@@ -109,7 +109,9 @@ export default StorageProvider.extend({
         files: [{
           url: 'data:text/plain;base64,' +
             Base64.encode(doc.get('body').toString() || ''),
-          filename: 'test2.txt'
+          filename: doc.get('title').indexOf('.') > -1 ?
+            doc.get('title') :
+            doc.get('title') + '.adoc'
         }],
         success: resolve,
         cancel: reject,
