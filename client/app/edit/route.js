@@ -31,7 +31,7 @@ export default Ember.Route.extend({
     });
     return this.get('storageProviders').load(StorageSpec.create({
       storageType: params.storage_type,
-      storagePath: params.storage_path
+      storagePath: decodeURI(params.storage_path)
     }));
   },
 
@@ -51,7 +51,7 @@ export default Ember.Route.extend({
     var title = '';
     if (model.get('storageSpec.storageType') !== StorageType.NONE) {
       title += this.get('i18n').t(
-        'storageType.' + model.get('storageSpec.storageType'));
+        'storageTypePrefix.' + model.get('storageSpec.storageType'));
     }
     title += model.get('title');
     return title;
