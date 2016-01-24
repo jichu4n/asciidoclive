@@ -12,6 +12,17 @@ module.exports = function(environment) {
         // e.g. 'with-controller': true
       }
     },
+    contentSecurityPolicy: {
+      'default-src': "'none'",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval'",
+      'font-src': "'self'",
+      'connect-src': "'self' ws://localhost:8001 localhost:8001",
+      'img-src': "'self' data:",
+      'report-uri':"'localhost'",
+      'style-src': "'self' 'unsafe-inline'",
+      'frame-src': "'none'",
+      'child-src': "'self' ws://localhost:8001 localhost:8001"
+    },
 
     i18n: {
       defaultLocale: 'en'
