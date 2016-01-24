@@ -13,6 +13,8 @@ export default Ember.Object.extend({
   storageType: StorageType.NONE,
   // The FontAwesome icon corresponding to this provider.
   storageTypeIcon: null,
+  // A promise that resolves when all necessary initialization has completed.
+  ready: null,
 
   // Prompt the user to open a document from this provider. Returns a
   // Promise that yields a StorageSpec.

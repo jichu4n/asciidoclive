@@ -15,7 +15,7 @@ export default Ember.Component.extend({
   autoHide: Ember.observer('show', function() {
     if (this.get('show') && !Ember.isNone(this.get('durationMs'))) {
       Ember.run.later(
-        this, this.set.bind(this, 'show', false), this.get('durationMs'));
+        this, this.set, 'show', false, this.get('durationMs'));
     }
   })
 });

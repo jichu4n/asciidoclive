@@ -12,34 +12,35 @@ export default StorageProvider.extend({
   storageType: StorageType.GOOGLE_DRIVE,
   storageTypeIcon: 'google',
 
-  allApisLoaded: null,
+  ready: null,
 
   init() {
-    if (Ember.isNone(window.onGoogleApiLoaded)) {
-      console.info('Loading Google API');
-      var resolveAuthApi = null, resolvePickerApi = null;
-      var authApiLoaded = new Ember.RSVP.Promise(function(resolve) {
-        resolveAuthApi = resolve;
-      });
-      var pickerApiLoaded = new Ember.RSVP.Promise(function(resolve) {
-        resolvePickerApi = resolve;
-      });
-      this.set(
-        'allApisLoaded',
-        Ember.RSVP.all([authApiLoaded, pickerApiLoaded])
-        .then(function() {
-          console.info('All Google APIs loaded');
-        }));
+    console.info('Loading Google API');
+    this.set(
+      'ready',
+      this.loadGoogleApi().then(function() {
+        return Ember.RSVP.all([
+          this.loadGoogleApiModule('auth'),
+          this.loadGoogleApiModule('picker')
+        ]);
+      }.bind(this)).then(function() {
+        console.info('All Google APIs loaded');
+      }));
+  },
+
+  loadGoogleApi() {
+    return new Ember.RSVP.Promise(function(resolve) {
       window.onGoogleApiLoaded = function() {
         console.info('Google API loaded');
-        gapi.load('auth', { callback: resolveAuthApi });
-        gapi.load('picker', { callback: resolvePickerApi });
+        resolve();
       };
-      Ember.run.next(this, function() {
-        Ember.$('<script>', {
-          src: 'https://apis.google.com/js/api.js?onload=onGoogleApiLoaded'
-        }).appendTo(Ember.$('body'));
-      });
-    }
+      Ember.$.getScript(
+        'https://apis.google.com/js/api.js?onload=onGoogleApiLoaded');
+    });
+  },
+  loadGoogleApiModule(module) {
+    return new Ember.RSVP.Promise(function(resolve) {
+      gapi.load(module, { callback: resolve });
+    });
   }
 });
