@@ -5,6 +5,7 @@
 import Ember from 'ember';
 import DS from 'ember-data';
 import DropboxStorageProvider from '../utils/dropbox-storage-provider';
+import GoogleDriveStorageProvider from '../utils/google-drive-storage-provider';
 
 export default Ember.Service.extend({
   store: Ember.inject.service(),
@@ -14,8 +15,12 @@ export default Ember.Service.extend({
   init() {
     this._super.apply(this, arguments);
     [
-      DropboxStorageProvider.create({ store: this.get('store') })
+      DropboxStorageProvider.create({ store: this.get('store') }),
+      GoogleDriveStorageProvider.create({ store: this.get('store') })
     ].forEach(function(storageProvider) {
+      console.info(
+        'Registering storage provider "%s"',
+        storageProvider.get('storageType'));
       this.get('storageProviders')[storageProvider.get('storageType')] =
         storageProvider;
     }, this);

@@ -19,10 +19,12 @@ export default {
   defaultTitle: 'Untitled Document',
   defaultBody: 'blah blah',
   storageTypePrefix: {
-    dropbox: '[Dropbox] '
+    dropbox: '[Dropbox] ',
+    'google-drive': '[Google Drive] '
   },
   storageType: {
-    dropbox: 'Dropbox'
+    dropbox: 'Dropbox',
+    'google-drive': 'Google Drive'
   },
   edit: {
     reopen: {
