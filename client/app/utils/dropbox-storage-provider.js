@@ -16,14 +16,36 @@ export default StorageProvider.extend({
   storageTypeIcon: 'dropbox',
 
   client: null,
+  ready: null,
 
   init() {
+    this.set(
+      'ready',
+      (new Ember.RSVP.Promise(function(resolve) {
+        this.checkDropinsLoaded(resolve);
+      }.bind(this))).then(function() {
+        console.info('Dropbox dropins loaded');
+      }));
+    Ember.$('<script>', {
+      src: 'https://www.dropbox.com/static/api/2/dropins.js',
+      id: 'dropboxjs',
+      'data-app-key': ENV.APP.DROPBOX_APP_KEY,
+      async: true
+    }).prependTo(Ember.$('head'));
     this.set('client', new Dropbox.Client({
       key: ENV.APP.DROPBOX_APP_KEY
     }));
     this.get('client').authDriver(new Dropbox.AuthDriver.Redirect({
       redirectUrl: ENV.APP.SERVER_URL + '/auth_success'
     }));
+  },
+
+  checkDropinsLoaded(onDropinsLoaded) {
+    if (Ember.isNone(Dropbox.choose && Dropbox.save)) {
+      Ember.run.next(this, this.checkDropinsLoaded, onDropinsLoaded);
+    } else {
+      onDropinsLoaded.apply(this);
+    }
   },
 
   authenticate() {
@@ -33,7 +55,6 @@ export default StorageProvider.extend({
           reject(error);
           console.log('Failed to authenticate!');
         } else {
-          console.log('Successfully authenticated!');
           resolve();
         }
       });

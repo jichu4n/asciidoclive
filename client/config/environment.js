@@ -14,13 +14,13 @@ module.exports = function(environment) {
     },
     contentSecurityPolicy: {
       'default-src': "'none'",
-      'script-src': "'self' 'unsafe-inline' 'unsafe-eval'",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' https://www.dropbox.com https://apis.google.com",
       'font-src': "'self'",
       'connect-src': "'self' ws://localhost:8001 localhost:8001",
       'img-src': "'self' data:",
       'report-uri':"'localhost'",
       'style-src': "'self' 'unsafe-inline'",
-      'frame-src': "'none'",
+      'frame-src': "'self' https://accounts.google.com",
       'child-src': "'self' ws://localhost:8001 localhost:8001"
     },
 
