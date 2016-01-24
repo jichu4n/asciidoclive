@@ -19,7 +19,11 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-      DROPBOX_APP_KEY: '1vw50awieht2oti'
+      DROPBOX_APP_KEY: '1vw50awieht2oti',
+      GOOGLE_CLIENT_ID: '1017992774581-kfuj6nosle515treluvrc62rhdcrkjtl' +
+        '.apps.googleusercontent.com',
+      GOOGLE_APP_ID: '1017992774581',
+      GOOGLE_API_KEY: 'AIzaSyB1ttlIJpcBOZ4kMjaHCBYVCy4u9-jxlo0'
     }
   };
 
