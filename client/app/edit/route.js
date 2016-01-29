@@ -31,7 +31,7 @@ export default Ember.Route.extend({
     });
     return this.get('storageProviders').load(StorageSpec.create({
       storageType: params.storage_type,
-      storagePath: decodeURI(params.storage_path)
+      storagePath: decodeURIComponent(params.storage_path)
     }));
   },
 

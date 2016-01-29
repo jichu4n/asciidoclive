@@ -23,8 +23,14 @@
             <li class="dropdown-header">{{t "header.openHeader"}}</li>
             <li>
               <a href="#" {{action "open" "dropbox"}}>
-                {{fa-icon "dropbox"}}
-                {{t "header.dropbox"}}
+                {{fa-icon "dropbox" fixedWidth=true}}
+                {{t "storageType.dropbox"}}
+              </a>
+            </li>
+            <li>
+              <a href="#" {{action "open" "google-drive"}}>
+                {{fa-icon "google" fixedWidth=true}}
+                {{t "storageType.google-drive"}}
               </a>
             </li>
           </ul>
@@ -49,8 +55,14 @@
             <li class="dropdown-header">{{t "header.saveAsHeader"}}</li>
             <li>
               <a href="#" {{action "saveAs" "dropbox"}}>
-                {{fa-icon "dropbox"}}
-                {{t "header.dropbox"}}
+                {{fa-icon "dropbox" fixedWidth=true}}
+                {{t "storageType.dropbox"}}
+              </a>
+            </li>
+            <li>
+              <a href="#" {{action "saveAs" "google-drive"}}>
+                {{fa-icon "google" fixedWidth=true}}
+                {{t "storageType.google-drive"}}
               </a>
             </li>
           </ul>

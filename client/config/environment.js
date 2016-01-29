@@ -16,11 +16,11 @@ module.exports = function(environment) {
       'default-src': "'none'",
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval' https://www.dropbox.com https://apis.google.com",
       'font-src': "'self'",
-      'connect-src': "'self' ws://localhost:8001 localhost:8001",
+      'connect-src': "'self' ws://localhost:8001 localhost:8001 https://*.googleusercontent.com",
       'img-src': "'self' data:",
       'report-uri':"'localhost'",
       'style-src': "'self' 'unsafe-inline'",
-      'frame-src': "'self' https://accounts.google.com",
+      'frame-src': "'self' https://accounts.google.com https://content.googleapis.com https://docs.google.com",
       'child-src': "'self' ws://localhost:8001 localhost:8001"
     },
 

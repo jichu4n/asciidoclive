@@ -53,8 +53,9 @@ export default StorageProvider.extend({
       this.get('client').authenticate(function(error) {
         if (error) {
           reject(error);
-          console.log('Failed to authenticate!');
+          console.error('Failed to authenticate with Dropbox!');
         } else {
+          console.info('Authenticated with Dropbox');
           resolve();
         }
       });
