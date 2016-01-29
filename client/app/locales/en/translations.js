@@ -11,7 +11,6 @@ export default {
     saveHeader: 'Save',
     saveAsHeader: 'Save as new file',
     settings: 'Settings',
-    dropbox: 'Dropbox',
     saving: 'Saving...',
     saved: 'Saved',
     saveError: 'Could not save document'
