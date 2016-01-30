@@ -109,8 +109,8 @@ export default StorageProvider.extend({
       throw new Error(
         'Unexpected storage type: %o', doc.get('storageSpec.storageType'));
     }
-    return this.authenticate().then(function() {
-      return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      this.authenticate().then(function() {
         this.get('client').writeFile(
           doc.get('storageSpec.storagePath'),
           doc.get('body').toString() || '',
@@ -122,7 +122,7 @@ export default StorageProvider.extend({
             }
           });
       }.bind(this));
-    }.bind(this)).then(function() {});
+    }.bind(this));
   },
 
   saveAs(doc) {

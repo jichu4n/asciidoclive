@@ -2,7 +2,7 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* global gapi, google, Cookies */
+/* global gapi, google, Cookies, Base64 */
 
 import Ember from 'ember';
 import DS from 'ember-data';
@@ -130,6 +130,7 @@ export default StorageProvider.extend({
       }
     }.bind(this)).then(function() {});
   },
+
   open() {
     return new Ember.RSVP.Promise(function(resolve, reject) {
       this.authenticate(AuthMode.POPUP).then(function() {
@@ -155,6 +156,7 @@ export default StorageProvider.extend({
       }.bind(this));
     }.bind(this));
   },
+
   load(storagePath) {
     return DS.PromiseObject.create({
       promise: new Ember.RSVP.Promise(function(resolve) {
@@ -187,5 +189,34 @@ export default StorageProvider.extend({
         }.bind(this));
       }.bind(this))
     });
+  },
+
+  save(doc) {
+    if (doc.get('storageSpec.storageType') !== this.get('storageType')) {
+      throw new Error(
+        'Unexpected storage type: %o', doc.get('storageSpec.storageType'));
+    }
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      this.authenticate(AuthMode.SILENT).then(function() {
+        gapi.client.request({
+          path: '/upload/drive/v2/files/' + doc.get('storageSpec.storagePath'),
+          method: 'PUT',
+          params: {
+            uploadType: 'media'
+          },
+          headers: {
+            'Content-Type': 'text/plain',
+            'Content-Transfer-Encoding': 'base64'
+          },
+          body: Base64.encode(doc.get('body').toString() || '')
+        }).execute(function(response) {
+          if (response && !response.error) {
+            resolve(response);
+          } else {
+            reject(response);
+          }
+        });
+      }.bind(this));
+    }.bind(this));
   }
 });
