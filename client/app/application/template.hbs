@@ -68,10 +68,19 @@
           </ul>
         </li>
         <li class="dropdown" title="{{t "header.settings"}}">
-          <a href="#">
-            {{fa-icon "gears" size="lg" fixedWidth=true}}
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            {{fa-icon "gear" size="lg" fixedWidth=true}}
             <span class="icon-label">{{t "header.settings"}}</span>
           </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" {{action "toggleSetting" "syncScroll"}}
+                class="{{if settings.syncScroll "on" "off"}}">
+                {{fa-icon "check" fixedWidth=true}}
+                {{t "settings.syncScroll"}}
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>

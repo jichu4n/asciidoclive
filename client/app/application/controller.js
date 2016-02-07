@@ -3,7 +3,6 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import Ember from 'ember';
-import StorageType from '../utils/storage-type';
 
 export default Ember.Controller.extend({
   // Injected by route.
@@ -11,6 +10,7 @@ export default Ember.Controller.extend({
   headerSaveStorageSpec: null,
 
   storageProviders: Ember.inject.service(),
+  settings: Ember.inject.service(),
 
   sendToHeaderActionHandler(action, args) {
     var handler = this.get('headerActionHandler');
@@ -50,6 +50,9 @@ export default Ember.Controller.extend({
     },
     saveAs() {
       this.sendToHeaderActionHandler('saveAs', arguments);
+    },
+    toggleSetting(key) {
+      this.get('settings').set(key, !this.get('settings.' + key));
     }
   }
 });
