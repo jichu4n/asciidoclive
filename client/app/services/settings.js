@@ -4,9 +4,12 @@
 
 import Ember from 'ember';
 
-function localStorageProperty(propertyName) {
+function localStorageProperty(propertyName, defaultValue) {
   return {
     get() {
+      if (window.localStorage[propertyName] === undefined) {
+        window.localStorage[propertyName] = defaultValue;
+      }
       return window.localStorage[propertyName];
     },
     set(key, value) {
@@ -26,5 +29,5 @@ export default Ember.Service.extend({
     }
   },
 
-  syncScroll: Ember.computed(localStorageProperty('syncScroll'))
+  syncScroll: Ember.computed(localStorageProperty('syncScroll', true))
 });
