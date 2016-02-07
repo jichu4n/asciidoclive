@@ -33,5 +33,8 @@ export default {
       ok: 'Open from {{storageType}}',
       cancel: 'Cancel'
     }
+  },
+  settings: {
+    syncScroll: 'Sync Scrolling'
   }
 };

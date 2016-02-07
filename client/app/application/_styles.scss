@@ -43,6 +43,10 @@ $navbar-brand-img-height: 30px;
       opacity: 0.85;
     }
   }
+
+  li > a.off > .fa {
+    opacity: 0;
+  }
 }
 
 #loading-banner {
