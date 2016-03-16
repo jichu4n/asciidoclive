@@ -39,7 +39,7 @@ export default Ember.Component.extend({
       this.onScroll();
     });
   },
-  updateWidth: Ember.observer('width', 'height', function() {
+  updateSize: Ember.observer('width', 'height', function() {
     Ember.run.once(this, function() {
       this.$().css('width', this.get('width') + 'px');
       this.$().css('height', this.get('height') + 'px');
