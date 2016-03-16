@@ -8,12 +8,12 @@ function localStorageProperty(propertyName, defaultValue) {
   return {
     get() {
       if (window.localStorage[propertyName] === undefined) {
-        window.localStorage[propertyName] = defaultValue;
+        window.localStorage[propertyName] = JSON.stringify(defaultValue);
       }
-      return window.localStorage[propertyName];
+      return JSON.parse(window.localStorage[propertyName]);
     },
     set(key, value) {
-      window.localStorage[propertyName] = value;
+      window.localStorage[propertyName] = JSON.stringify(value);
       return value;
     }
   };
