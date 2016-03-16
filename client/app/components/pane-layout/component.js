@@ -16,8 +16,12 @@ export default Ember.Component.extend(ResizeAware, {
   editorPaneWidth: null,
   editorScrollState: null,
   previewScrollState: ScrollState.create(),
+  isSyncedScroll: false,
+  editorLastScrollRatio: 0,
+  previewLastScrollRatio: 0,
 
   i18n: Ember.inject.service(),
+  settings: Ember.inject.service(),
 
   getContainer() {
     return this.$();
@@ -58,6 +62,7 @@ export default Ember.Component.extend(ResizeAware, {
       this.getPreviewPane().scroll(function() {
         Ember.run.once(this, this.updatePreviewScrollState);
       }.bind(this));
+      this.updatePreviewScrollState();
       this.initialized = true;
     });
   },
@@ -72,30 +77,50 @@ export default Ember.Component.extend(ResizeAware, {
       editorPane.width(maxPaneWidth);
     }
     this.updateEditorPaneSize();
+    this.updatePreviewScrollState();
   },
 
-  debounceEditorScroll: Ember.observer(
-    'editorScrollState.scrollRatio', function() {
-      Ember.run.once(this, this.onEditorScroll);
-    }),
-  onEditorScroll() {
-    console.info(
-      'Editor scroll ratio: %f', this.get('editorScrollState.scrollRatio'));
+  onEditorScroll: Ember.observer('editorScrollState.scrollTop', function() {
+    if (this.get('settings.syncScroll') && !this.get('isSyncedScroll')) {
+      this.set('isSyncedScroll', true);
+      var editorScrollRatioDelta = this.get('editorScrollState.scrollRatio') -
+        this.get('editorLastScrollRatio');
+      this.get('previewScrollState').set(
+        'scrollRatio',
+        this.get('previewScrollState.scrollRatio') + editorScrollRatioDelta);
+      console.info('Updating preview scroll top: %s %o', JSON.stringify(this.get('previewScrollState')), this.get('previewScrollState'));
+      this.getPreviewPane().scrollTop(this.get('previewScrollState.scrollTop'));
+      this.set('isSyncedScroll', false);
+    }
+    this.set(
+      'editorLastScrollRatio', this.get('editorScrollState.scrollRatio'));
+  }),
+  onDocCompiledBodyChanged: Ember.observer('doc.compiledBody', function() {
+    Ember.run.scheduleOnce('afterRender', this, this.onPreviewChanged);
+  }),
+  onPreviewChanged() {
+    this.set('isSyncedScroll', true);
+    this.updatePreviewScrollState();
+    this.set('isSyncedScroll', false);
   },
   updatePreviewScrollState() {
     var scrollState = this.get('previewScrollState');
     var previewPane = this.getPreviewPane();
     scrollState.set('viewportHeight', previewPane.innerHeight());
     scrollState.set('contentHeight', previewPane.prop('scrollHeight'));
-    scrollState.set('scrollTop', previewPane.scrollTop());
+    scrollState.set('scrollTop', previewPane.scrollTop() || 0);
   },
-  debouncePreviewScroll: Ember.observer(
-    'previewScrollState.scrollRatio', function() {
-      console.info('Updated preview scroll state');
-      Ember.run.once(this, this.onPreviewScroll);
-    }),
-  onPreviewScroll() {
-    console.info(
-      'Preview scroll ratio: %f', this.get('previewScrollState.scrollRatio'));
-  }
+  onPreviewScroll: Ember.observer('previewScrollState.scrollTop', function() {
+      if (this.get('settings.syncScroll') && !this.get('isSyncedScroll')) {
+        this.set('isSyncedScroll', true);
+        var previewScrollRatioDelta = this.get('previewScrollState.scrollRatio') -
+          this.get('previewLastScrollRatio');
+        this.get('editorScrollState').set(
+          'scrollRatio',
+          this.get('editorScrollState.scrollRatio') + previewScrollRatioDelta);
+        this.set('isSyncedScroll', false);
+      }
+      this.set(
+        'previewLastScrollRatio', this.get('previewScrollState.scrollRatio'));
+    })
 });

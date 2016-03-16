@@ -89,6 +89,10 @@ export default Ember.Component.extend({
       'contentHeight',
       this.get('session').getScreenLength() *
         this.get('editor').renderer.lineHeight);
-    scrollState.set('scrollTop', this.get('session').getScrollTop());
-  }
+    scrollState.set('scrollTop', this.get('session').getScrollTop() || 0);
+  },
+  onScrollTopChanged: Ember.observer('scrollState.scrollTop', function() {
+    console.info('Updating editor scroll top: %s %o', JSON.stringify(this.get('scrollState')), this.get('scrollState'));
+    this.get('session').setScrollTop(this.get('scrollState.scrollTop'));
+  })
 });
