@@ -5,6 +5,7 @@
 /* global ace */
 
 import Ember from 'ember';
+import ScrollState from '../../utils/scroll-state';
 
 export default Ember.Component.extend({
   // To be injected.
@@ -12,15 +13,16 @@ export default Ember.Component.extend({
   width: null,
   height: null,
   classNames: ['ace-editor'],
+  scrollState: null,
 
+  editor: null,
+  session: null,
   debounceState: {
     debounceMs: 100,
     lastUpdateTs: new Date(),
     nextUpdate: null,
   },
 
-  editor: null,
-  session: null,
   didInsertElement() {
     Ember.run.next(this, function() {
       this.$().css('width', this.get('width') + 'px');
@@ -32,6 +34,9 @@ export default Ember.Component.extend({
       this.get('session').setMode('ace/mode/asciidoc');
       this.get('session').setUseWrapMode(true);
       this.get('editor').setShowPrintMargin(false);
+      this.get('session').on('change', this.onScroll.bind(this));
+      this.get('session').on('changeScrollTop', this.onScroll.bind(this));
+      this.onScroll();
     });
   },
   updateWidth: Ember.observer('width', 'height', function() {
@@ -42,6 +47,7 @@ export default Ember.Component.extend({
         return;
       }
       this.get('editor').resize();
+      this.onScroll();
     });
   }),
   onDocBodyChange: Ember.observer('doc.body', function() {
@@ -72,5 +78,17 @@ export default Ember.Component.extend({
     debounceState.lastUpdateTs = new Date();
     debounceState.nextUpdate = null;
     this.get('doc').set('body', this.get('session').getValue());
+  },
+  onScroll() {
+    var scrollState = this.get('scrollState');
+    if (Ember.isNone(scrollState)) {
+      this.set('scrollState', scrollState = ScrollState.create());
+    }
+    scrollState.set('viewportHeight', this.get('height'));
+    scrollState.set(
+      'contentHeight',
+      this.get('session').getScreenLength() *
+        this.get('editor').renderer.lineHeight);
+    scrollState.set('scrollTop', this.get('session').getScrollTop());
   }
 });
