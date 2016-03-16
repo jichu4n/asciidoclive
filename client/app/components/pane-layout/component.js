@@ -4,6 +4,7 @@
 
 import Ember from 'ember';
 import ResizeAware from 'ember-resize/mixins/resize-aware';
+import ScrollState from '../../utils/scroll-state';
 
 export default Ember.Component.extend(ResizeAware, {
   // To be injected.
@@ -14,6 +15,7 @@ export default Ember.Component.extend(ResizeAware, {
 
   editorPaneWidth: null,
   editorScrollState: null,
+  previewScrollState: ScrollState.create(),
 
   i18n: Ember.inject.service(),
 
@@ -22,6 +24,9 @@ export default Ember.Component.extend(ResizeAware, {
   },
   getEditorPane() {
     return this.$('.editor-pane');
+  },
+  getPreviewPane() {
+    return this.$('.preview-pane');
   },
   getResizeHandle() {
     return this.$('.resize-handle');
@@ -50,6 +55,9 @@ export default Ember.Component.extend(ResizeAware, {
         resize: this.updateEditorPaneSize.bind(this)
       });
       this.updateEditorPaneSize();
+      this.getPreviewPane().scroll(function() {
+        Ember.run.once(this, this.updatePreviewScrollState);
+      }.bind(this));
       this.initialized = true;
     });
   },
@@ -66,7 +74,28 @@ export default Ember.Component.extend(ResizeAware, {
     this.updateEditorPaneSize();
   },
 
-  onEditorScroll: Ember.observer('editorScrollState.scrollRatio', function() {
-    console.info('Editor scroll ratio: %.2f', this.get('editorScrollState.scrollRatio'));
-  })
+  debounceEditorScroll: Ember.observer(
+    'editorScrollState.scrollRatio', function() {
+      Ember.run.once(this, this.onEditorScroll);
+    }),
+  onEditorScroll() {
+    console.info(
+      'Editor scroll ratio: %f', this.get('editorScrollState.scrollRatio'));
+  },
+  updatePreviewScrollState() {
+    var scrollState = this.get('previewScrollState');
+    var previewPane = this.getPreviewPane();
+    scrollState.set('viewportHeight', previewPane.innerHeight());
+    scrollState.set('contentHeight', previewPane.prop('scrollHeight'));
+    scrollState.set('scrollTop', previewPane.scrollTop());
+  },
+  debouncePreviewScroll: Ember.observer(
+    'previewScrollState.scrollRatio', function() {
+      console.info('Updated preview scroll state');
+      Ember.run.once(this, this.onPreviewScroll);
+    }),
+  onPreviewScroll() {
+    console.info(
+      'Preview scroll ratio: %f', this.get('previewScrollState.scrollRatio'));
+  }
 });
