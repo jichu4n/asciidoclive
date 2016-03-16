@@ -13,6 +13,7 @@ export default Ember.Component.extend(ResizeAware, {
   minPaneWidth: 200,
 
   editorPaneWidth: null,
+  editorScrollState: null,
 
   i18n: Ember.inject.service(),
 
@@ -64,4 +65,8 @@ export default Ember.Component.extend(ResizeAware, {
     }
     this.updateEditorPaneSize();
   },
+
+  onEditorScroll: Ember.observer('editorScrollState.scrollRatio', function() {
+    console.info('Editor scroll ratio: %.2f', this.get('editorScrollState.scrollRatio'));
+  })
 });
