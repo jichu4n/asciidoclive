@@ -44,6 +44,9 @@ $navbar-brand-img-height: 30px;
     }
   }
 
+  li > a.on > .fa {
+    color: $brand-success;
+  }
   li > a.off > .fa {
     opacity: 0;
   }
