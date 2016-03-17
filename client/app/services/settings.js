@@ -3,8 +3,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import Ember from 'ember';
-import { localStorageProperty } from 'ember-local-storage-proxy';
+import { localStorageProxy } from 'ember-local-storage-proxy';
 
 export default Ember.Service.extend({
-  syncScroll: Ember.computed(localStorageProperty('syncScroll', true))
+  syncScroll: Ember.computed(localStorageProxy('v1/syncScroll', true))
 });
