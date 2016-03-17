@@ -140,6 +140,8 @@ export default StorageProvider.extend({
             .setSelectFolderEnabled(false))
           .setOAuthToken(this.get('oauthToken'))
           .setDeveloperKey(ENV.APP.GOOGLE_API_KEY)
+          .setMaxItems(1)
+          .hideTitleBar()
           .setCallback(function(data) {
             if (data[google.picker.Response.ACTION] ===
                 google.picker.Action.PICKED) {
@@ -149,6 +151,9 @@ export default StorageProvider.extend({
                 storageType: this.get('storageType'),
                 storagePath: doc[google.picker.Document.ID]
               }));
+            } else if (data[google.picker.Response.ACTION] ===
+                       google.picker.Action.CANCEL) {
+              reject();
             }
           }.bind(this))
           .build();
@@ -216,6 +221,77 @@ export default StorageProvider.extend({
             reject(response);
           }
         });
+      }.bind(this));
+    }.bind(this));
+  },
+
+  saveAs(doc) {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      this.authenticate(AuthMode.POPUP).then(function() {
+        var picker = new google.picker.PickerBuilder()
+          .addView(
+            new google.picker.DocsView(google.picker.ViewId.DOCS)
+            .setIncludeFolders(true)
+            .setMimeTypes('application/vnd.google-apps.folder')
+            .setSelectFolderEnabled(true))
+          .setOAuthToken(this.get('oauthToken'))
+          .setDeveloperKey(ENV.APP.GOOGLE_API_KEY)
+          .setMaxItems(1)
+          .hideTitleBar()
+          .setCallback(function(data) {
+            if (data[google.picker.Response.ACTION] ===
+                google.picker.Action.PICKED) {
+              var folder = data[google.picker.Response.DOCUMENTS][0];
+              console.info('Selected folder: %o', folder);
+              var boundary =
+                '--------436875616e204a69203c6a6940636875346e2e636f6d3e';
+              var delimiter = '\r\n--' + boundary + '\r\n';
+              var closing_delimiter = '\r\n--' + boundary + '--';
+              gapi.client.request({
+                path: '/upload/drive/v2/files',
+                method: 'POST',
+                params: {
+                  uploadType: 'multipart'
+                },
+                headers: {
+                  'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+                },
+                body: (
+                  delimiter +
+                  'Content-Type: application/json\r\n' +
+                  '\r\n' +
+                  JSON.stringify({
+                    title: (
+                      (doc.get('title').toString() || '').indexOf('.') > -1 ?
+                        doc.get('title') :
+                        doc.get('title') + '.adoc'),
+                    mimeType: 'text/plain',
+                    parents: [{id: folder.id}]
+                  }) +
+                  delimiter +
+                  'Content-Type: text/plain\r\n' + 
+                  'Content-Transfer-Encoding: base64\r\n' +
+                  '\r\n' +
+                  Base64.encode(doc.get('body').toString() || '') +
+                  closing_delimiter
+                )
+              }).execute(function(response) {
+                if (response && !response.error) {
+                  resolve(StorageSpec.create({
+                    storageType: this.get('storageType'),
+                    storagePath: response.id
+                  }));
+                } else {
+                  reject(response);
+                }
+              }.bind(this));
+            } else if (data[google.picker.Response.ACTION] ===
+                       google.picker.Action.CANCEL) {
+              reject();
+            }
+          }.bind(this))
+          .build();
+        picker.setVisible(true);
       }.bind(this));
     }.bind(this));
   }
