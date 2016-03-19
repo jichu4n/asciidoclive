@@ -4,11 +4,8 @@
 
 import Ember from 'ember';
 
-export default {
-  name: 'tooltip',
-  initialize: function() {
-    Ember.$(document.body).tooltip({
-      selector: '[data-toggle="tooltip"]'
-    });
-  }
-};
+export default Ember.Component.extend({
+  // TO be injected.
+  doc: null,
+  classNames: ['doc-title-editor']
+});
