@@ -1,0 +1,33 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                           Copyright 2016 Chuan Ji                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+.ember-view.doc-title-editor {
+  display: flex;
+  flex-direction: row;
+  padding: 0 15px;
+  border-bottom: 1px solid $gray-lighter;
+
+  .doc-title-icon,
+  input.doc-title {
+    height: ($doc-title-editor-height - 1px);
+    line-height: ($doc-title-editor-height - 1px);
+  }
+
+  .doc-title-icon {
+    color: $input-color-placeholder;
+  }
+
+  input.doc-title {
+    flex-grow: 1;
+    padding: 0 15px;
+    border: none;
+    font-family: $font-family-monospace;
+    font-weight: bold;
+    font-size: $font-size-h4;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
