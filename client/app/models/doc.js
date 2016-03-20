@@ -21,5 +21,11 @@ export default DS.Model.extend({
   },
   onBodyChanged: Ember.on('init', Ember.observer('body', function() {
     this.get('compiler').compile();
-  }))
+  })),
+
+  fileName: Ember.computed('title', function() {
+    return (this.get('title').toString() || '').indexOf('.') > -1 ?
+      this.get('title') :
+      this.get('title') + '.adoc'
+  })
 });

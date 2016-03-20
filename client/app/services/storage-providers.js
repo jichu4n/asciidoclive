@@ -73,5 +73,14 @@ export default Ember.Service.extend({
       return Ember.RSVP.reject();
     }
     return storageProvider.saveAs(doc);
+  },
+
+  rename(doc) {
+    console.info('Renaming doc: %o', doc);
+    var storageProvider = this.getStorageProvider(doc.get('storageSpec'));
+    if (Ember.isNone(storageProvider)) {
+      return Ember.RSVP.reject();
+    }
+    return storageProvider.rename(doc);
   }
 });

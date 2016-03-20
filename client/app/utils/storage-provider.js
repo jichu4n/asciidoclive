@@ -31,9 +31,14 @@ export default Ember.Object.extend({
   save(doc) {
     throw new Error('Unimplemented');
   },
-  // Prompts the user to save a document to this provider. Returns a promise
+  // Prompt the user to save a document to this provider. Returns a promise
   // that resolves when the document is saved.
   saveAs(doc) {
+    throw new Error('Unimplemented');
+  },
+  // Rename a file to the new title inside the doc. Returns a promise that
+  // resolves with the new StorageSpec when the file has been renamed.
+  rename(doc) {
     throw new Error('Unimplemented');
   }
 });

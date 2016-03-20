@@ -131,14 +131,49 @@ export default StorageProvider.extend({
         files: [{
           url: 'data:text/plain;base64,' +
             Base64.encode(doc.get('body').toString() || ''),
-          filename: (doc.get('title').toString() || '').indexOf('.') > -1 ?
-            doc.get('title') :
-            doc.get('title') + '.adoc'
+          filename: doc.get('fileName')
         }],
         success: resolve,
         cancel: reject,
         error: reject
       });
+    }.bind(this));
+  },
+
+  rename(doc) {
+    if (doc.get('storageSpec.storageType') !== this.get('storageType')) {
+      throw new Error(
+        'Unexpected storage type: %o', doc.get('storageSpec.storageType'));
+    }
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      this.authenticate().then(function() {
+        var newStoragePath =
+          this.splitPath(doc.get('storageSpec.storagePath'))[0] +
+          doc.get('fileName');
+        if (newStoragePath === doc.get('storageSpec.storagePath')) {
+          resolve();
+          return;
+        }
+        console.info(
+          'Renaming %s -> %s',
+          doc.get('storageSpec.storagePath'),
+          newStoragePath);
+        this.get('client').move(
+          doc.get('storageSpec.storagePath'),
+          this.splitPath(doc.get('storageSpec.storagePath'))[0] +
+            doc.get('fileName'),
+          function(error, fileStat) {
+            if (error) {
+              reject(error);
+            } else {
+              console.info('Rename success: %o', fileStat);
+              resolve(StorageSpec.create({
+                storageType: this.get('storageType'),
+                storagePath: newStoragePath
+              }));
+            }
+          }.bind(this));
+      }.bind(this));
     }.bind(this));
   },
 
@@ -150,5 +185,12 @@ export default StorageProvider.extend({
       return null;
     }
     return match[1];
+  },
+  splitPath(path) {
+    var match = path.match(/((?:[^\/]*\/)*)([^\/]*)$/);
+    if (Ember.isNone(match)) {
+      throw new Error('Failed to split path: %s', path);
+    }
+    return [match[1], match[2]];
   }
 });

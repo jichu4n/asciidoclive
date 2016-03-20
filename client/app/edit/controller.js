@@ -8,6 +8,8 @@ export default Ember.Controller.extend({
   i18n: Ember.inject.service(),
   storageProviders: Ember.inject.service(),
 
+  debounceTitleChangeMs: 2000,
+
   showSavingStatus: false,
   showSavedStatus: false,
   showSaveErrorStatus: false,
@@ -20,7 +22,9 @@ export default Ember.Controller.extend({
       this.get('storageProviders').open(storageType)
       .then(function(storageSpec) {
         this.transitionToRoute(
-          'edit', storageSpec.storageType, storageSpec.storagePath);
+          'edit',
+          storageSpec.get('storageType'),
+          storageSpec.get('storagePath'));
       }.bind(this), function(error) {
         console.error('Open error: %o', error);
       });
@@ -54,7 +58,9 @@ export default Ember.Controller.extend({
           Ember.$('#reopen-dialog').modal('show');
         } else {
           this.transitionToRoute(
-            'edit', storageSpec.storageType, storageSpec.storagePath);
+            'edit',
+            storageSpec.get('storageType'),
+            storageSpec.get('storagePath'));
         }
       }.bind(this), function(error) {
         console.error('Save error: %o', error);
@@ -65,6 +71,30 @@ export default Ember.Controller.extend({
     reopen(storageType) {
       Ember.$('#reopen-dialog').modal('hide');
       this.send('open', storageType.toString());
-    }
+    },
+  },
+  debounceTitleChange: Ember.observer('model.title', function() {
+    Ember.run.debounce(
+      this, this.onTitleChanged, this.get('debounceTitleChangeMs'));
+  }),
+  onTitleChanged() {
+    this.set('showSavedStatus', false);
+    this.set('showSaveErrorStatus', false);
+    this.set('showSavingStatus', true);
+    this.get('storageProviders').rename(this.get('model'))
+    .then(function(storageSpec) {
+      this.set('showSavingStatus', false);
+      if (!Ember.isNone(storageSpec)) {
+        this.set('showSavedStatus', true);
+        this.transitionToRoute(
+          'edit',
+          storageSpec.get('storageType'),
+          storageSpec.get('storagePath'));
+      }
+    }.bind(this), function(error) {
+      console.error('Rename error: %o', error);
+      this.set('showSavingStatus', false);
+      this.set('showSaveErrorStatus', true);
+    }.bind(this));
   }
 });
