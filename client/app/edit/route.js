@@ -50,9 +50,8 @@ export default Ember.Route.extend({
 
   titleToken(model) {
     var title = '';
-    if (model.get('storageSpec.storageType') !== StorageType.NONE) {
-      title += this.get('i18n').t(
-        'storageTypePrefix.' + model.get('storageSpec.storageType'));
+    if (model.get('hasDirtyAttributes')) {
+      title += '*';
     }
     title += model.get('title');
     return title;

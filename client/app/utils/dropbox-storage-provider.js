@@ -87,14 +87,16 @@ export default StorageProvider.extend({
               if (error) {
                 reject(error);
               } else {
-                resolve(this.get('store').createRecord('doc', {
+                var doc = this.get('store').createRecord('doc', {
                   title: storagePath.split('/').pop(),
                   body: fileContent,
                   storageSpec: StorageSpec.create({
                     storageType: this.get('storageType'),
                     storagePath: storagePath
                   })
-                }));
+                });
+                doc.markClean();
+                resolve(doc);
               }
             }.bind(this));
         }.bind(this));
@@ -118,6 +120,7 @@ export default StorageProvider.extend({
             if (error) {
               reject(error);
             } else {
+              doc.markClean();
               resolve();
             }
           });
