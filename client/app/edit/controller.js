@@ -105,5 +105,9 @@ export default Ember.Controller.extend({
       this.set('showRenamingStatus', false);
       this.set('showRenameErrorStatus', true);
     }.bind(this));
-  }
+  },
+  onHasDirtyAttributesChanged: Ember.observer(
+    'model.hasDirtyAttributes', function() {
+      this.get('target').send('collectTitleTokens', []);
+    })
 });

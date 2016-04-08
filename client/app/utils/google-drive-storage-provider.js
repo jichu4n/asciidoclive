@@ -181,14 +181,16 @@ export default StorageProvider.extend({
               },
               dataType: 'text'
             }).then(function(fileContent) {
-              resolve(this.get('store').createRecord('doc', {
+              var doc = this.get('store').createRecord('doc', {
                 title: fileMetadata.title,
                 body: fileContent,
                 storageSpec: StorageSpec.create({
                   storageType: this.get('storageType'),
                   storagePath: storagePath
                 })
-              }));
+              });
+              doc.markClean();
+              resolve(doc);
             }.bind(this));
           }.bind(this));
         }.bind(this));
@@ -215,6 +217,7 @@ export default StorageProvider.extend({
           body: doc.get('body').toString() || ''
         }).execute(function(response) {
           if (response && !response.error) {
+            doc.markClean();
             resolve(response);
           } else {
             reject(response);

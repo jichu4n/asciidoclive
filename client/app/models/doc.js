@@ -27,5 +27,14 @@ export default DS.Model.extend({
     return (this.get('title').toString() || '').indexOf('.') > -1 ?
       this.get('title') :
       this.get('title') + '.adoc'
-  })
+  }),
+
+  markClean() {
+    // See http://stackoverflow.com/a/32275254. This will likely break with
+    // newer Ember Data versions.
+    var internalModel = this.get('_internalModel');
+    internalModel.send('willCommit');
+    internalModel._attributes = {}
+    internalModel.send('didCommit');
+  }
 });
