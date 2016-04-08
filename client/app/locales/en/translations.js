@@ -13,7 +13,10 @@ export default {
     settings: 'Settings',
     saving: 'Saving...',
     saved: 'Saved',
-    saveError: 'Could not save document'
+    saveError: 'Could not save document',
+    renaming: 'Renaming...',
+    renamed: 'Renamed',
+    renameError: 'Could not rename document'
   },
   defaultTitle: 'Untitled Document',
   defaultBody: 'blah blah',

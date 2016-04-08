@@ -8,11 +8,15 @@ export default Ember.Controller.extend({
   i18n: Ember.inject.service(),
   storageProviders: Ember.inject.service(),
 
+  isFirstTitleChange: true,
   debounceTitleChangeMs: 2000,
 
   showSavingStatus: false,
   showSavedStatus: false,
   showSaveErrorStatus: false,
+  showRenamingStatus: false,
+  showRenamedStatus: false,
+  showRenameErrorStatus: false,
   reopenStorageType: null,
   reopenStorageTypeTranslation: null,
 
@@ -74,19 +78,23 @@ export default Ember.Controller.extend({
     },
   },
   debounceTitleChange: Ember.observer('model.title', function() {
+    if (this.get('isFirstTitleChange')) {
+      this.set('isFirstTitleChange', false);
+      return;
+    }
     this.get('target').send('collectTitleTokens', []);
     Ember.run.debounce(
       this, this.onTitleChanged, this.get('debounceTitleChangeMs'));
   }),
   onTitleChanged() {
-    this.set('showSavedStatus', false);
-    this.set('showSaveErrorStatus', false);
-    this.set('showSavingStatus', true);
+    this.set('showRenamedStatus', false);
+    this.set('showRenameErrorStatus', false);
+    this.set('showRenamingStatus', true);
     this.get('storageProviders').rename(this.get('model'))
     .then(function(storageSpec) {
-      this.set('showSavingStatus', false);
+      this.set('showRenamingStatus', false);
       if (!Ember.isNone(storageSpec)) {
-        this.set('showSavedStatus', true);
+        this.set('showRenamedStatus', true);
         this.transitionToRoute(
           'edit',
           storageSpec.get('storageType'),
@@ -94,8 +102,8 @@ export default Ember.Controller.extend({
       }
     }.bind(this), function(error) {
       console.error('Rename error: %o', error);
-      this.set('showSavingStatus', false);
-      this.set('showSaveErrorStatus', true);
+      this.set('showRenamingStatus', false);
+      this.set('showRenameErrorStatus', true);
     }.bind(this));
   }
 });
