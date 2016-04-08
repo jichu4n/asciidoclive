@@ -210,10 +210,9 @@ export default StorageProvider.extend({
             uploadType: 'media'
           },
           headers: {
-            'Content-Type': 'text/plain',
-            'Content-Transfer-Encoding': 'base64'
+            'Content-Type': 'text/plain'
           },
-          body: Base64.encode(doc.get('body').toString() || '')
+          body: doc.get('body').toString() || ''
         }).execute(function(response) {
           if (response && !response.error) {
             resolve(response);
@@ -292,6 +291,29 @@ export default StorageProvider.extend({
           }.bind(this))
           .build();
         picker.setVisible(true);
+      }.bind(this));
+    }.bind(this));
+  },
+  rename(doc) {
+    if (doc.get('storageSpec.storageType') !== this.get('storageType')) {
+      throw new Error(
+        'Unexpected storage type: %o', doc.get('storageSpec.storageType'));
+    }
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      this.authenticate(AuthMode.SILENT).then(function() {
+        gapi.client.request({
+          path: '/drive/v2/files/' + doc.get('storageSpec.storagePath'),
+          method: 'PATCH',
+          body: {
+            title: doc.get('title')
+          }
+        }).execute(function(response) {
+          if (response && !response.error) {
+            resolve(doc.get('storageSpec'));
+          } else {
+            reject(response);
+          }
+        });
       }.bind(this));
     }.bind(this));
   }
