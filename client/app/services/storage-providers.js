@@ -79,7 +79,7 @@ export default Ember.Service.extend({
     console.info('Renaming doc: %o', doc);
     var storageProvider = this.getStorageProvider(doc.get('storageSpec'));
     if (Ember.isNone(storageProvider)) {
-      return Ember.RSVP.reject();
+      return Ember.RSVP.resolve();
     }
     return storageProvider.rename(doc);
   }
