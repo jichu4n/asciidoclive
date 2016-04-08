@@ -15,7 +15,7 @@ export default Ember.Route.extend({
   model(params) {
     if (params.storage_type === StorageType.NONE) {
       return Ember.$.get('/assets/scratch.txt').then(function(fileContent) {
-        return this.get('store').createRecord('doc', {
+        var doc = this.get('store').createRecord('doc', {
           title: this.get('i18n').t('defaultTitle'),
           body: fileContent,
           storageSpec: StorageSpec.create({
@@ -23,6 +23,8 @@ export default Ember.Route.extend({
             storagePath: ''
           })
         });
+        doc.markClean();
+        return doc;
       }.bind(this));
     }
     Cookies.set('redirect', {
@@ -39,6 +41,8 @@ export default Ember.Route.extend({
     Cookies.remove('redirect');
     this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
     this.send('setHeaderSaveTitle', model.get('title'));
+
+    Ember.$(window).bind('beforeunload', this.confirmClose.bind(this, model));
   },
 
   serialize(doc) {
@@ -63,6 +67,14 @@ export default Ember.Route.extend({
   actions: {
     didTransition() {
       this.send('setHeaderActionHandler', this.get('controller'));
+    }
+  },
+
+  confirmClose(model) {
+    if (model.get('hasDirtyAttributes')) {
+      return this.get('i18n').t('confirmClose', {
+        title: model.get('title')
+      });
     }
   }
 });
