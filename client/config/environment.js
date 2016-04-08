@@ -61,6 +61,9 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
     ENV.APP.SERVER_URL = 'https://asciidoclive.com';
+    ENV.googleAnalytics = {
+      webPropertyId: 'UA-21264754-2'
+    };
   }
 
   return ENV;
