@@ -9,7 +9,11 @@ var Funnel = require('broccoli-funnel');
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
-    // Add options here
+    fingerprint: {
+      exclude: [
+        'assets/ace-editor'
+      ]
+    }
   });
 
   // Use `app.import` to add additional libraries to the generated
