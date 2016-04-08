@@ -38,6 +38,7 @@ export default Ember.Route.extend({
   afterModel(model) {
     Cookies.remove('redirect');
     this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
+    this.send('setHeaderSaveTitle', model.get('title'));
   },
 
   serialize(doc) {

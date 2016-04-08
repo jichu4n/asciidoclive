@@ -8,6 +8,7 @@ export default Ember.Controller.extend({
   // Injected by route.
   headerActionHandler: null,
   headerSaveStorageSpec: null,
+  headerSaveTitle: null,
 
   storageProviders: Ember.inject.service(),
   settings: Ember.inject.service(),

@@ -25,6 +25,9 @@ export default Ember.Route.extend({
         storageSpec = null;
       }
       this.get('controller').set('headerSaveStorageSpec', storageSpec);
+    },
+    setHeaderSaveTitle(title) {
+      this.get('controller').set('headerSaveTitle', title);
     }
   }
 });
