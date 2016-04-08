@@ -45,14 +45,18 @@ export default Ember.Route.extend({
     Ember.$(window).bind('beforeunload', this.confirmClose.bind(this, model));
   },
 
-  serialize(doc) {
+  serialize(model) {
     return {
-      storage_type: doc.get('storageSpec.storageType'),
-      storage_path: doc.get('storageSpec.storagePath')
+      storage_type: model.get('storageSpec.storageType'),
+      storage_path: model.get('storageSpec.storagePath')
     };
   },
 
   titleToken(model) {
+    if (model.get('storageSpec.storageType') === StorageType.NONE &&
+        !model.get('hasDirtyAttributes')) {
+      return '';
+    }
     var title = '';
     if (model.get('hasDirtyAttributes')) {
       title += '*';
@@ -61,6 +65,9 @@ export default Ember.Route.extend({
     return title;
   },
   title(tokens) {
+    if (Ember.isEmpty(tokens[0])) {
+      return this.get('i18n').t('title');
+    }
     return tokens[0] + this.get('i18n').t('titleSuffix');
   },
 

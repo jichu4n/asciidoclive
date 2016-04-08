@@ -3,6 +3,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 export default {
+  title: 'AsciiDocLIVE',
   titleSuffix: ' - AsciiDocLIVE',
   header: {
     open: 'Open',
@@ -19,7 +20,7 @@ export default {
     renameError: 'Could not rename document'
   },
   defaultTitle: 'Untitled Document',
-  defaultBody: 'blah blah',
+  defaultBody: '',
   storageTypePrefix: {
     dropbox: '[Dropbox] ',
     'google-drive': '[Google Drive] '
