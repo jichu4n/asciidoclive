@@ -74,6 +74,7 @@ export default Ember.Controller.extend({
     },
   },
   debounceTitleChange: Ember.observer('model.title', function() {
+    this.get('target').send('collectTitleTokens', []);
     Ember.run.debounce(
       this, this.onTitleChanged, this.get('debounceTitleChangeMs'));
   }),
