@@ -26,7 +26,7 @@ export default DS.Model.extend({
   fileName: Ember.computed('title', function() {
     return (this.get('title').toString() || '').indexOf('.') > -1 ?
       this.get('title') :
-      this.get('title') + '.adoc'
+      this.get('title') + '.adoc';
   }),
 
   markClean() {
@@ -34,7 +34,7 @@ export default DS.Model.extend({
     // newer Ember Data versions.
     var internalModel = this.get('_internalModel');
     internalModel.send('willCommit');
-    internalModel._attributes = {}
+    internalModel._attributes = {};
     internalModel.send('didCommit');
   }
 });

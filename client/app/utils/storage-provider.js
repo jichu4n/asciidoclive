@@ -2,6 +2,8 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*jshint unused:false */
+
 import Ember from 'ember';
 import StorageType from '../utils/storage-type';
 
