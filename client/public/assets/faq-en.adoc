@@ -1,0 +1,2 @@
+*Q: How does it work?*
+Foo bar
