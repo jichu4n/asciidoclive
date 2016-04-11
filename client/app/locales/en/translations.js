@@ -17,7 +17,10 @@ export default {
     saveError: 'Could not save document',
     renaming: 'Renaming...',
     renamed: 'Renamed',
-    renameError: 'Could not rename document'
+    renameError: 'Could not rename document',
+    help: 'Help',
+    cheatsheet: 'AsciiDoc Cheatsheet',
+    faq: 'FAQ'
   },
   defaultTitle: 'Untitled Document',
   defaultBody: '',

@@ -83,6 +83,25 @@
             </li>
           </ul>
         </li>
+        <li class="dropdown" title="{{t "header.help"}}">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            {{fa-icon "question-circle" size="lg" fixedWidth=true}}
+            <span class="icon-label">{{t "header.help"}}</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" {{action "showFaq"}}>{{t "header.faq"}}</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="http://powerman.name/doc/asciidoc" target="_blank">
+                {{t "header.cheatsheet"}}
+                &nbsp;
+                {{fa-icon "external-link"}}
+              </a>
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>
