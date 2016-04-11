@@ -45,5 +45,8 @@ export default {
     syncScroll: 'Sync Scrolling'
   },
   confirmClose: 'The document "{{title}}" has not been saved. ' +
-    'If you leave this page, all your changes will be lost. '
+    'If you leave this page, all your changes will be lost. ',
+  faq: {
+    title: 'Frequently Asked Questions'
+  }
 };

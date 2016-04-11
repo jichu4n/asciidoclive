@@ -90,7 +90,7 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="#" {{action "showFaq"}}>{{t "header.faq"}}</a>
+              <a href="#" {{action "showFaqModal"}}>{{t "header.faq"}}</a>
             </li>
             <li class="divider"></li>
             <li>
@@ -107,3 +107,4 @@
   </div>
 </nav>
 {{outlet}}
+{{faq-modal isVisible=isFaqModalVisible}}
