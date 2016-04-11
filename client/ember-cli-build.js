@@ -6,6 +6,7 @@
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var Funnel = require('broccoli-funnel');
+var asciidocToHtml = require('broccoli-asciidoc');
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
@@ -67,5 +68,14 @@ module.exports = function(defaults) {
     'bower_components/ace-builds/src-min-noconflict',
     { destDir: '/assets/ace-editor' });
 
-  return app.toTree([bootstrapFonts, asciidoctor, aceEditor, workers]);
+  var asciidocHtmlAssets = Funnel(
+    asciidocToHtml('public/assets'),
+    { destDir: '/assets' });
+
+  return app.toTree([
+    bootstrapFonts,
+    asciidoctor,
+    aceEditor,
+    workers,
+    asciidocHtmlAssets]);
 };
