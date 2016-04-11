@@ -16,7 +16,7 @@
     "font-awesome": "~4.5.0",
     "jquery-ui": "jqueryui#~1.11.4",
     "ace-builds": "~1.2.2",
-    "asciidoctor.js": "~1.5.2",
+    "asciidoctor.js": "^1.5.5-1",
     "dropbox": "dropbox-build#*",
     "js-cookie": "~2.1.0",
     "js-base64": "~2.1.9"

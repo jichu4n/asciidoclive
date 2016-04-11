@@ -77,5 +77,6 @@ module.exports = function(defaults) {
     asciidoctor,
     aceEditor,
     workers,
-    asciidocHtmlAssets]);
+    asciidocHtmlAssets
+  ]);
 };
