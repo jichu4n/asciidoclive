@@ -32,6 +32,9 @@ module.exports = function(defaults) {
   app.import(
     'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
     { type: 'vendor' });
+  var bootstrapFonts = new Funnel(
+    'bower_components/bootstrap-sass/assets/fonts/bootstrap',
+    { destDir: '/fonts' });
   app.import(
     'bower_components/jquery-ui/jquery-ui.js',
     { type: 'vendor' });
@@ -64,5 +67,5 @@ module.exports = function(defaults) {
     'bower_components/ace-builds/src-min-noconflict',
     { destDir: '/assets/ace-editor' });
 
-  return app.toTree([asciidoctor, aceEditor, workers]);
+  return app.toTree([bootstrapFonts, asciidoctor, aceEditor, workers]);
 };
