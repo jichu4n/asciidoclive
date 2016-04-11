@@ -3,7 +3,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 $navbar-border-radius: 0;
-$navbar-inverse-bg: #486ead;
+$navbar-inverse-bg: #444;
 $navbar-inverse-toggle-border-color: transparent;
 $navbar-inverse-toggle-hover-bg: transparent;
 $navbar-inverse-link-disabled-color: #fff;
@@ -12,3 +12,5 @@ $navbar-inverse-color: #fdfdfd;
 $navbar-inverse-link-color: #fdfdfd;
 
 $navbar-height-collapsed: 54px;
+
+$icon-font-path: '../fonts/';
