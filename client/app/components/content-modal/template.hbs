@@ -7,10 +7,17 @@
                 data-dismiss="modal">
           {{fa-icon "times"}}
         </button>
-        <h4 class="modal-title">{{t "faq.title"}}</h4>
+        <h4 class="modal-title">{{t title}}</h4>
       </div>
       <div class="modal-body">
-        {{{faqContent}}}
+        {{{content}}}
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-default"
+                data-dismiss="modal">
+          {{t "modal.close"}}
+        </button>
       </div>
     </div>
   </div>

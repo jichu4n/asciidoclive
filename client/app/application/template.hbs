@@ -90,15 +90,18 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="#" {{action "showFaqModal"}}>{{t "header.faq"}}</a>
-            </li>
-            <li class="divider"></li>
-            <li>
               <a href="http://powerman.name/doc/asciidoc" target="_blank">
                 {{t "header.cheatsheet"}}
                 &nbsp;
                 {{fa-icon "external-link"}}
               </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#" {{action "showModal" "faq"}}>{{t "header.faq"}}</a>
+            </li>
+            <li>
+              <a href="#" {{action "showModal" "about"}}>{{t "header.about"}}</a>
             </li>
           </ul>
         </li>
@@ -107,4 +110,4 @@
   </div>
 </nav>
 {{outlet}}
-{{faq-modal isVisible=isFaqModalVisible}}
+{{content-modal title=modalTitle contentKey=modalContentKey isVisible=isModalVisible}}

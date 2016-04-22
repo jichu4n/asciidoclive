@@ -6,6 +6,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   // To be injected.
+  contentKey: '',
   isVisible: false,
 
   i18n: Ember.inject.service(),
@@ -27,11 +28,21 @@ export default Ember.Component.extend({
     }
   }),
 
-  faqContent: '',
-  fetchFaqContent: Ember.on('init', Ember.observer('i18n.locale', function() {
-    Ember.$.get('/assets/faq-' + this.get('i18n.locale') + '.html')
-      .then(function(fileContent) {
-        this.set('faqContent', fileContent);
-      }.bind(this));
-  })),
+  title: Ember.computed('contentKey', function() {
+    return 'modal.' + this.get('contentKey') + '.title';
+  }),
+  content: '',
+  fetchContent: Ember.on('init', Ember.observer(
+    'i18n.locale', 'contentKey', function() {
+      if (Ember.isEmpty(this.get('contentKey'))) {
+        return;
+      }
+      this.set('content', '');
+      Ember.$.get(
+        '/assets/' + this.get('contentKey') + '-' +
+        this.get('i18n.locale') + '.html')
+        .then(function(fileContent) {
+          this.set('content', fileContent);
+        }.bind(this));
+    })),
 });

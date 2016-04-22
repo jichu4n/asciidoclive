@@ -1,2 +1,24 @@
-*Q: How does it work?*
-Foo bar
+*Q: How does AsciiDocLIVE work?*
+
+AsciiDocLIVE uses
+https://github.com/asciidoctor/asciidoctor.js[asciidoctor.js pass:[<i class="fa fa-external-link"></i>]^]
+to compile AsciiDoc to HTML right inside your browser.
+asciidoctor.js is cross-compiled from
+http://asciidoctor.org/[Asciidoctor pass:[<i class="fa fa-external-link"></i>]^],
+an implementation of AsciiDoc in Ruby.
+
+The text editor inside AsciiDocLIVE is https://ace.c9.io/[Ace editor pass:[<i class="fa fa-external-link"></i>]^].
+
+*Q: Is AsciiDocLIVE fully compatible with AsciiDoc?*
+
+No. Please refer to
+http://asciidoctor.org/docs/asciidoc-asciidoctor-diffs/[Differences between Asciidoctor and AsciiDoc pass:[<i class="fa fa-external-link"></i>]^]
+for a list of minor incompatibilities with the original AsciiDoc implementation.
+
+*Q: Does AsciiDocLIVE store or keep a copy of my documents?*
+
+No. No document data is ever sent to AsciiDocLIVE. Your documents are compiled
+to HTML right inside your browser on your local computer. If you save a document
+to Dropbox or Google Drive, that document goes straight from your computer to
+Dropbox / Google, without ever going through AsciiDocLIVE.
+
