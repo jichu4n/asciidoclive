@@ -42,7 +42,9 @@ export default Ember.Controller.extend({
       return 'storageTypePrefix.' + storageType;
     }),
 
-  isFaqModalVisible: false,
+  modalTitle: '',
+  modalContentKey: '',
+  isModalVisible: false,
 
   actions: {
     open() {
@@ -57,8 +59,9 @@ export default Ember.Controller.extend({
     toggleSetting(key) {
       this.get('settings').set(key, !this.get('settings.' + key));
     },
-    showFaqModal() {
-      this.set('isFaqModalVisible', true);
+    showModal(contentKey) {
+      this.set('modalContentKey', contentKey);
+      this.set('isModalVisible', true);
     }
   }
 });
