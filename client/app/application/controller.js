@@ -42,7 +42,6 @@ export default Ember.Controller.extend({
       return 'storageTypePrefix.' + storageType;
     }),
 
-  modalTitle: '',
   modalContentKey: '',
   isModalVisible: false,
 

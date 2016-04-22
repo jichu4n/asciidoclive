@@ -48,12 +48,12 @@ export default {
   confirmClose: 'The document "{{title}}" has not been saved. ' +
     'If you leave this page, all your changes will be lost. ',
   modal: {
-    close: 'Close'
+    close: 'Close',
     faq: {
-      title: 'Frequently Asked Questions',
+      title: 'Frequently Asked Questions'
     },
     about: {
-      title: 'About',
+      title: 'About'
     }
   }
 };
