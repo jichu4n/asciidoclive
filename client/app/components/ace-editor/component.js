@@ -15,6 +15,8 @@ export default Ember.Component.extend({
   classNames: ['ace-editor'],
   scrollState: null,
 
+  settings: Ember.inject.service(),
+
   editor: null,
   session: null,
   debounceState: {
@@ -94,5 +96,12 @@ export default Ember.Component.extend({
   onScrollTopChanged: Ember.observer('scrollState.scrollTop', function() {
     console.info('Updating editor scroll top: %s %o', JSON.stringify(this.get('scrollState')), this.get('scrollState'));
     this.get('session').setScrollTop(this.get('scrollState.scrollTop'));
+  }),
+
+  onThemeChanged: Ember.observer('settings.theme', function() {
+    if (Ember.isNone(this.get('editor'))) {
+      return;
+    }
+    this.get('editor').setTheme('ace/theme/' + this.get('settings.theme'));
   })
 });
