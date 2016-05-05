@@ -72,6 +72,13 @@ export default Ember.Route.extend({
   },
 
   actions: {
+    willTransition(transition) {
+      var message = this.confirmClose(this.get('controller.model'));
+      if (Ember.isNone(message) || window.confirm(message)) {
+        return true;
+      }
+      transition.abort();
+    },
     didTransition() {
       this.send('setHeaderActionHandler', this.get('controller'));
     }
