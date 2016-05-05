@@ -43,7 +43,8 @@ export default {
     }
   },
   settings: {
-    syncScroll: 'Sync Scrolling'
+    syncScroll: 'Sync Scrolling',
+    theme: 'Editor Theme...'
   },
   confirmClose: 'The document "{{title}}" has not been saved. ' +
     'If you leave this page, all your changes will be lost. ',
@@ -54,6 +55,9 @@ export default {
     },
     about: {
       title: 'About'
+    },
+    theme: {
+      title: 'Select Editor Theme'
     }
   }
 };

@@ -1,0 +1,33 @@
+<div class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close"
+                type="button"
+                data-dismiss="modal">
+          {{fa-icon "times"}}
+        </button>
+        <h4 class="modal-title">{{t 'modal.theme.title'}}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="theme-list list-group">
+          {{#each themes key="name" as |theme|}}
+            <button type="button"
+                    class="list-group-item {{if theme.isSelected 'active'}}"
+                    {{action "setTheme" theme.name}}>
+              {{theme.name}}
+            </button>
+          {{/each}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-default"
+                data-dismiss="modal">
+          {{t "modal.close"}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hidden">{{settings.theme}}</div>
