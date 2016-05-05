@@ -76,9 +76,12 @@
             <li>
               <a href="#" {{action "toggleSetting" "syncScroll"}}
                 class="{{if settings.syncScroll "on" "off"}}">
-                {{fa-icon "check" fixedWidth=true}}
-                &nbsp;
                 {{t "settings.syncScroll"}}
+                &nbsp;
+                {{fa-icon "check" fixedWidth=true}}
+              </a>
+              <a href="#" {{action "showThemeModal"}}>
+                {{t "settings.theme"}}
               </a>
             </li>
           </ul>
@@ -98,10 +101,10 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#" {{action "showModal" "faq"}}>{{t "header.faq"}}</a>
+              <a href="#" {{action "showContentModal" "faq"}}>{{t "header.faq"}}</a>
             </li>
             <li>
-              <a href="#" {{action "showModal" "about"}}>{{t "header.about"}}</a>
+              <a href="#" {{action "showContentModal" "about"}}>{{t "header.about"}}</a>
             </li>
           </ul>
         </li>
@@ -110,4 +113,5 @@
   </div>
 </nav>
 {{outlet}}
-{{content-modal contentKey=modalContentKey isVisible=isModalVisible}}
+{{content-modal contentKey=contentModalContentKey isVisible=isContentModalVisible}}
+{{theme-modal isVisible=isThemeModalVisible}}

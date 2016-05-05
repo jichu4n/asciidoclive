@@ -46,6 +46,6 @@ export default Ember.Service.extend({
     { name: 'Xcode', value: 'xcode' }
   ],
   theme: Ember.computed('themeName', function() {
-    return this.get('THEME')[this.get('themeName')];
+    return this.get('THEMES').findBy('name', this.get('themeName')).value;
   })
 });

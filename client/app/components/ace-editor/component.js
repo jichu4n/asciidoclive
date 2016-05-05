@@ -39,6 +39,7 @@ export default Ember.Component.extend({
       this.get('session').on('change', this.onScroll.bind(this));
       this.get('session').on('changeScrollTop', this.onScroll.bind(this));
       this.onScroll();
+      this.onThemeChanged();
     });
   },
   updateSize: Ember.observer('width', 'height', function() {
@@ -102,6 +103,10 @@ export default Ember.Component.extend({
     if (Ember.isNone(this.get('editor'))) {
       return;
     }
-    this.get('editor').setTheme('ace/theme/' + this.get('settings.theme'));
+    var theme = this.get('settings.theme');
+    this.get('editor').setTheme(
+      Ember.isNone(theme) ?
+        undefined :
+        ('ace/theme/' + theme));
   })
 });

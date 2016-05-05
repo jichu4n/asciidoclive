@@ -42,8 +42,8 @@ export default Ember.Controller.extend({
       return 'storageTypePrefix.' + storageType;
     }),
 
-  modalContentKey: '',
-  isModalVisible: false,
+  contentModalContentKey: '',
+  isContentModalVisible: false,
 
   actions: {
     open() {
@@ -58,9 +58,12 @@ export default Ember.Controller.extend({
     toggleSetting(key) {
       this.get('settings').set(key, !this.get('settings.' + key));
     },
-    showModal(contentKey) {
-      this.set('modalContentKey', contentKey);
-      this.set('isModalVisible', true);
+    showContentModal(contentKey) {
+      this.set('contentModalContentKey', contentKey);
+      this.set('isContentModalVisible', true);
+    },
+    showThemeModal() {
+      this.set('isThemeModalVisible', true);
     }
   }
 });

@@ -1,0 +1,10 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                           Copyright 2016 Chuan Ji                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+.ember-view.theme-modal {
+  .theme-list {
+    max-height: 20em;
+    overflow-y: auto;
+  }
+}
