@@ -14,6 +14,9 @@ module.exports = function(defaults) {
       exclude: [
         'assets/ace-editor'
       ]
+    },
+    babel: {
+      includePolyfill: false
     }
   });
 
@@ -68,7 +71,7 @@ module.exports = function(defaults) {
     'bower_components/ace-builds/src-min-noconflict',
     { destDir: '/assets/ace-editor' });
 
-  var asciidocHtmlAssets = Funnel(
+  var asciidocHtmlAssets = new Funnel(
     asciidocToHtml('public/assets'),
     { destDir: '/assets' });
 
