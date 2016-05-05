@@ -4,7 +4,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
-docker_tag="tutum.co/jichu4n/amoya"
+docker_tag="r.chu4n.com/amoya"
 
 set -ex
 

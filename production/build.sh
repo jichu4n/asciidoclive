@@ -5,7 +5,7 @@
 
 # Build NGINX server Docker image.
 
-docker_tag="tutum.co/jichu4n/amoya"
+docker_tag="r.chu4n.com/amoya"
 
 root_dir=$(realpath $(dirname $0)/..)
 client_dir=$root_dir/client
