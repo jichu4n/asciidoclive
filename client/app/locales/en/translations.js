@@ -44,7 +44,7 @@ export default {
   },
   settings: {
     syncScroll: 'Sync Scrolling',
-    theme: 'Editor Theme...'
+    theme: 'Choose Editor Theme...'
   },
   confirmClose: 'The document "{{title}}" has not been saved. ' +
     'If you leave this page, all your changes will be lost. ',
