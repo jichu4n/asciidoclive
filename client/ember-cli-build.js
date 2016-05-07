@@ -12,7 +12,8 @@ module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     fingerprint: {
       exclude: [
-        'assets/ace-editor'
+        'assets/ace-editor',
+        'assets/highlightjs'
       ]
     }
   });
@@ -55,6 +56,13 @@ module.exports = function(defaults) {
     'bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css',
     { type: 'vendor' });
 
+  app.import(
+    'bower_components/highlightjs/highlight.pack.min.js',
+    { type: 'vendor' });
+  var highlightjsStyles = new Funnel(
+    'bower_components/highlightjs/styles',
+    { destDir: '/assets/highlightjs' });
+
   // Keep asciidoctor.js and compile worker as separate files for use with Web
   // Worker, but also import them into the main app for older browsers.
   var asciidoctor = new Funnel(
@@ -82,6 +90,7 @@ module.exports = function(defaults) {
     bootstrapFonts,
     asciidoctor,
     aceEditor,
+    highlightjsStyles,
     workers,
     asciidocHtmlAssets
   ]);
