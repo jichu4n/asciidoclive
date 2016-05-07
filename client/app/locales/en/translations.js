@@ -44,7 +44,8 @@ export default {
   },
   settings: {
     syncScroll: 'Sync Scrolling',
-    theme: 'Choose Editor Theme...'
+    theme: 'Editor Theme...',
+    fontSize: 'Font Size...'
   },
   confirmClose: 'The document "{{title}}" has not been saved. ' +
     'If you leave this page, all your changes will be lost. ',
@@ -58,6 +59,10 @@ export default {
     },
     theme: {
       title: 'Select Editor Theme'
+    },
+    fontSize: {
+      title: 'Select Font Size',
+      editorFontSize: 'Editor Font Size'
     }
   }
 };

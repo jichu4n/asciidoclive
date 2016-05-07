@@ -26,7 +26,7 @@ export default Ember.Component.extend({
   },
 
   didInsertElement() {
-    Ember.run.next(this, function() {
+    Ember.run.scheduleOnce('afterRender', this, function() {
       this.$().css('width', this.get('width') + 'px');
 
       this.set('editor', ace.edit(this.$()[0]));
@@ -40,6 +40,7 @@ export default Ember.Component.extend({
       this.get('session').on('changeScrollTop', this.onScroll.bind(this));
       this.onScroll();
       this.onThemeChanged();
+      this.onEditorFontSizeChanged();
     });
   },
   updateSize: Ember.observer('width', 'height', function() {
@@ -95,7 +96,6 @@ export default Ember.Component.extend({
     scrollState.set('scrollTop', this.get('session').getScrollTop() || 0);
   },
   onScrollTopChanged: Ember.observer('scrollState.scrollTop', function() {
-    console.info('Updating editor scroll top: %s %o', JSON.stringify(this.get('scrollState')), this.get('scrollState'));
     this.get('session').setScrollTop(this.get('scrollState.scrollTop'));
   }),
 
@@ -108,5 +108,13 @@ export default Ember.Component.extend({
       Ember.isNone(theme) ?
         undefined :
         ('ace/theme/' + theme));
-  })
+  }),
+
+  onEditorFontSizeChanged: Ember.observer(
+    'settings.editorFontSize', function() {
+      if (Ember.isNone(this.get('editor'))) {
+        return;
+      }
+      this.get('editor').setFontSize(this.get('settings.editorFontSize'));
+    })
 });

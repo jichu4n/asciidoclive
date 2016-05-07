@@ -44,6 +44,8 @@ export default Ember.Controller.extend({
 
   contentModalContentKey: '',
   isContentModalVisible: false,
+  isThemeModalVisible: false,
+  isFontSizeModalVisible: false,
 
   actions: {
     open() {
@@ -64,6 +66,9 @@ export default Ember.Controller.extend({
     },
     showThemeModal() {
       this.set('isThemeModalVisible', true);
+    },
+    showFontSizeModal() {
+      this.set('isFontSizeModalVisible', true);
     }
   }
 });
