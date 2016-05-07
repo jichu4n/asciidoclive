@@ -2,6 +2,8 @@
  *                           Copyright 2016 Chuan Ji                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/* global hljs */
+
 import Ember from 'ember';
 import ResizeAware from 'ember-resize/mixins/resize-aware';
 import ScrollState from '../../utils/scroll-state';
@@ -101,6 +103,9 @@ export default Ember.Component.extend(ResizeAware, {
     this.set('isSyncedScroll', true);
     this.updatePreviewScrollState();
     this.set('isSyncedScroll', false);
+    this.getPreviewPane().find('pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
   },
   updatePreviewScrollState() {
     var scrollState = this.get('previewScrollState');
