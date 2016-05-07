@@ -46,7 +46,7 @@ export default {
     syncScroll: 'Sync Scrolling',
     editorTheme: 'Editor Theme...',
     highlightjsTheme: 'Preview Code Listing Theme...',
-    fontSize: 'Font Sizes...'
+    font: 'Fonts & Sizes...'
   },
   confirmClose: 'The document "{{title}}" has not been saved. ' +
     'If you leave this page, all your changes will be lost. ',
@@ -64,9 +64,13 @@ export default {
     highlightjsTheme: {
       title: 'Preview Code Listing Theme'
     },
-    fontSize: {
-      title: 'Font Sizes',
+    font: {
+      title: 'Fonts & Sizes',
+      editorFont: 'Editor Font',
+      editorFontPlaceholder: 'Leave blank to use default',
       editorFontSize: 'Editor Font Size',
+      previewFont: 'Preview Font',
+      previewFontPlaceholder: 'Leave blank to use default',
       previewFontSize: 'Preview Font Size'
     }
   }

@@ -40,6 +40,7 @@ export default Ember.Component.extend({
       this.get('session').on('changeScrollTop', this.onScroll.bind(this));
       this.onScroll();
       this.onThemeChanged();
+      this.onEditorFontChanged();
       this.onEditorFontSizeChanged();
     });
   },
@@ -109,6 +110,16 @@ export default Ember.Component.extend({
         undefined :
         ('ace/theme/' + theme));
   }),
+
+  onEditorFontChanged: Ember.observer(
+    'settings.editorFont', function() {
+      if (Ember.isNone(this.get('editor'))) {
+        return;
+      }
+      this.get('editor').setOptions({
+        fontFamily: this.get('settings.editorFont')
+      });
+    }),
 
   onEditorFontSizeChanged: Ember.observer(
     'settings.editorFontSize', function() {

@@ -46,7 +46,7 @@ export default Ember.Controller.extend({
   isAboutModalVisible: false,
   isEditorThemeModalVisible: false,
   isHighlightjsThemeModalVisible: false,
-  isFontSizeModalVisible: false,
+  isFontModalVisible: false,
 
   actions: {
     open() {
@@ -73,8 +73,8 @@ export default Ember.Controller.extend({
     showHighlightjsThemeModal() {
       this.set('isHighlightjsThemeModalVisible', true);
     },
-    showFontSizeModal() {
-      this.set('isFontSizeModalVisible', true);
+    showFontModal() {
+      this.set('isFontModalVisible', true);
     }
   }
 });

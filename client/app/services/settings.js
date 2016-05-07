@@ -11,7 +11,9 @@ export default Ember.Service.extend({
     'v1/editorThemeName', 'Default')),
   highlightjsThemeName: Ember.computed(localStorageProxy(
     'v1/highlightjsThemeName', 'Default')),
+  editorFont: Ember.computed(localStorageProxy('v1/editorFont', '')),
   editorFontSize: Ember.computed(localStorageProxy('v1/editorFontSize', 14)),
+  previewFont: Ember.computed(localStorageProxy('v1/previewFont', '')),
   previewFontSize: Ember.computed(localStorageProxy('v1/previewFontSize', 14)),
 
   EDITOR_THEMES: [

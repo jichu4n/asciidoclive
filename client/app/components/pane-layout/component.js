@@ -64,6 +64,7 @@ export default Ember.Component.extend(ResizeAware, {
         Ember.run.once(this, this.updatePreviewScrollState);
       }.bind(this));
       this.updatePreviewScrollState();
+      this.onPreviewFontChanged();
       this.onPreviewFontSizeChanged();
       this.initialized = true;
     });
@@ -127,6 +128,13 @@ export default Ember.Component.extend(ResizeAware, {
       this.set(
         'previewLastScrollRatio', this.get('previewScrollState.scrollRatio'));
     }),
+
+  onPreviewFontChanged: Ember.observer(
+    'settings.previewFont', function() {
+      this.getPreviewPane()
+        .css('font-family', this.get('settings.previewFont'));
+    }),
+
   onPreviewFontSizeChanged: Ember.observer(
     'settings.previewFontSize', function() {
       var fontSizePercentage =
