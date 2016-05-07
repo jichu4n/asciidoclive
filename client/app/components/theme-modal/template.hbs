@@ -7,11 +7,11 @@
                 data-dismiss="modal">
           {{fa-icon "times"}}
         </button>
-        <h4 class="modal-title">{{t "modal.theme.title"}}</h4>
+        <h4 class="modal-title">{{t titleTranslation}}</h4>
       </div>
       <div class="modal-body">
         <div class="theme-list list-group">
-          {{#each themes key="name" as |theme|}}
+          {{#each displayedThemes key="name" as |theme|}}
             <button type="button"
                     class="list-group-item {{if theme.isSelected 'active'}}"
                     {{action "setTheme" theme.name}}>

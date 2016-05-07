@@ -83,10 +83,15 @@
                 {{t "settings.syncScroll"}}
               </a>
               <li class="divider"></li>
-              <a href="#" {{action "showThemeModal"}}>
+              <a href="#" {{action "showEditorThemeModal"}}>
                 {{fa-icon "adjust" fixedWidth=true}}
-                {{t "settings.theme"}}
+                {{t "settings.editorTheme"}}
               </a>
+              <a href="#" {{action "showHighlightjsThemeModal"}}>
+                {{fa-icon "adjust" fixedWidth=true}}
+                {{t "settings.highlightjsTheme"}}
+              </a>
+              <li class="divider"></li>
               <a href="#" {{action "showFontSizeModal"}}>
                 {{fa-icon "font" fixedWidth=true}}
                 {{t "settings.fontSize"}}
@@ -109,10 +114,10 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#" {{action "showContentModal" "faq"}}>{{t "header.faq"}}</a>
+              <a href="#" {{action "showFaqModal"}}>{{t "header.faq"}}</a>
             </li>
             <li>
-              <a href="#" {{action "showContentModal" "about"}}>{{t "header.about"}}</a>
+              <a href="#" {{action "showAboutModal"}}>{{t "header.about"}}</a>
             </li>
           </ul>
         </li>
@@ -121,7 +126,19 @@
   </div>
 </nav>
 {{outlet}}
-{{content-modal contentKey=contentModalContentKey isVisible=isContentModalVisible}}
-{{theme-modal isVisible=isThemeModalVisible}}
+{{content-modal contentKey="faq"
+                titleTranslation="modal.faq.title"
+                isVisible=isFaqModalVisible}}
+{{content-modal contentKey="about"
+                titleTranslation="modal.about.title"
+                isVisible=isAboutModalVisible}}
+{{theme-modal themes=settings.EDITOR_THEMES
+              themeName=settings.editorThemeName
+              titleTranslation="modal.editorTheme.title"
+              isVisible=isEditorThemeModalVisible}}
+{{theme-modal themes=settings.HIGHLIGHTJS_THEMES
+              themeName=settings.highlightjsThemeName
+              titleTranslation="modal.highlightjsTheme.title"
+              isVisible=isHighlightjsThemeModalVisible}}
 {{font-size-modal isVisible=isFontSizeModalVisible}}
 

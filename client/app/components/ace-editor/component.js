@@ -99,11 +99,11 @@ export default Ember.Component.extend({
     this.get('session').setScrollTop(this.get('scrollState.scrollTop'));
   }),
 
-  onThemeChanged: Ember.observer('settings.theme', function() {
+  onThemeChanged: Ember.observer('settings.editorTheme', function() {
     if (Ember.isNone(this.get('editor'))) {
       return;
     }
-    var theme = this.get('settings.theme');
+    var theme = this.get('settings.editorTheme');
     this.get('editor').setTheme(
       Ember.isNone(theme) ?
         undefined :

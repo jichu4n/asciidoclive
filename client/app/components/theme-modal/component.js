@@ -6,13 +6,16 @@ import Ember from 'ember';
 import ModalMixin from '../../utils/modal-mixin';
 
 export default Ember.Component.extend(ModalMixin, {
+  // To be injected.
+  themes: [],
+  themeName: null,
+  titleTranslation: null,
+
   classNames: ['theme-modal'],
 
-  settings: Ember.inject.service(),
-
-  themes: Ember.computed('settings.THEMES', 'settings.themeName', function() {
-    var themeName = this.get('settings.themeName');
-    return this.get('settings.THEMES').map(function(theme) {
+  displayedThemes: Ember.computed('themes', 'themeName', function() {
+    var themeName = this.get('themeName');
+    return this.get('themes').map(function(theme) {
       return {
         name: theme.name,
         value: theme.value,
@@ -23,8 +26,8 @@ export default Ember.Component.extend(ModalMixin, {
 
   actions: {
     setTheme(themeName) {
-      this.get('settings').set('themeName', themeName);
-      console.log('Set theme to: %s', this.get('settings.theme'));
+      this.set('themeName', themeName);
+      console.log('Set theme to: %s', this.get('themeName'));
     }
   }
 });
