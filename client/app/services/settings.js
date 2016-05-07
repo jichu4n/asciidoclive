@@ -9,6 +9,7 @@ export default Ember.Service.extend({
   syncScroll: Ember.computed(localStorageProxy('v1/syncScroll', false)),
   themeName: Ember.computed(localStorageProxy('v1/themeName', 'Default')),
   editorFontSize: Ember.computed(localStorageProxy('v1/editorFontSize', 14)),
+  previewFontSize: Ember.computed(localStorageProxy('v1/previewFontSize', 14)),
 
   THEMES: [
     { name: 'Default', value: undefined },
@@ -50,6 +51,7 @@ export default Ember.Service.extend({
   theme: Ember.computed('themeName', function() {
     return this.get('THEMES').findBy('name', this.get('themeName')).value;
   }),
-  minEditorFontSize: 8,
-  maxEditorFontSize: 24
+  minFontSize: 8,
+  maxFontSize: 24,
+  previewFontSizeBase: 14
 });

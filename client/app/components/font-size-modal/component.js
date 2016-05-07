@@ -20,13 +20,28 @@ export default Ember.Component.extend(ModalMixin, {
       return value;
     }
   }),
+  previewFontSize: Ember.computed('settings.previewFontSize', {
+    get() {
+      return this.get('settings.previewFontSize');
+    },
+    set(key, value) {
+      value = parseInt(value);
+      this.set('settings.previewFontSize', value);
+      return value;
+    }
+  }),
 
   setupSlider: Ember.on('didInsertElement', function() {
     Ember.run.scheduleOnce('afterRender', this, function() {
-      window.slider = this.$('#editor-font-size-slider').bootstrapSlider({
-        min: this.get('settings.minEditorFontSize'),
-        max: this.get('settings.maxEditorFontSize'),
+      this.$('#editor-font-size-slider').bootstrapSlider({
+        min: this.get('settings.minFontSize'),
+        max: this.get('settings.maxFontSize'),
         value: this.get('editorFontSize')
+      });
+      this.$('#preview-font-size-slider').bootstrapSlider({
+        min: this.get('settings.minFontSize'),
+        max: this.get('settings.maxFontSize'),
+        value: this.get('previewFontSize')
       });
     });
   })
