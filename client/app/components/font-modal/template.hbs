@@ -7,12 +7,20 @@
                 data-dismiss="modal">
           {{fa-icon "times"}}
         </button>
-        <h4 class="modal-title">{{t "modal.fontSize.title"}}</h4>
+        <h4 class="modal-title">{{t "modal.font.title"}}</h4>
       </div>
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label>{{t "modal.fontSize.editorFontSize" value=editorFontSize}}</label>
+            <label>{{t "modal.font.editorFont" value=settings.editorFont}}</label>
+            {{input id="editor-font"
+                    type="text"
+                    value=settings.editorFont
+                    placeholder=(t "modal.font.editorFontPlaceholder")
+                    classNames="form-control"}}
+          </div>
+          <div class="form-group">
+            <label>{{t "modal.font.editorFontSize" value=editorFontSize}}</label>
             <div class="slider-container">
               {{input id="editor-font-size-slider"
                       type="text"
@@ -20,7 +28,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label>{{t "modal.fontSize.previewFontSize" value=previewFontSize}}</label>
+            <label>{{t "modal.font.previewFont" value=settings.previewFont}}</label>
+            {{input id="preview-font"
+                    type="text"
+                    value=settings.previewFont
+                    placeholder=(t "modal.font.previewFontPlaceholder")
+                    classNames="form-control"}}
+          </div>
+          <div class="form-group">
+            <label>{{t "modal.font.previewFontSize" value=previewFontSize}}</label>
             <div class="slider-container">
               {{input id="preview-font-size-slider"
                       type="text"
