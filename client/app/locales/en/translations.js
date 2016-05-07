@@ -58,10 +58,10 @@ export default {
       title: 'About'
     },
     theme: {
-      title: 'Select Editor Theme'
+      title: 'Editor Theme'
     },
     fontSize: {
-      title: 'Change Font Sizes',
+      title: 'Font Sizes',
       editorFontSize: 'Editor Font Size',
       previewFontSize: 'Preview Font Size'
     }
