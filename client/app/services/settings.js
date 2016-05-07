@@ -8,6 +8,8 @@ import { localStorageProxy } from 'ember-local-storage-proxy';
 export default Ember.Service.extend({
   syncScroll: Ember.computed(localStorageProxy('v1/syncScroll', false)),
   themeName: Ember.computed(localStorageProxy('v1/themeName', 'Default')),
+  editorFontSize: Ember.computed(localStorageProxy('v1/editorFontSize', 14)),
+
   THEMES: [
     { name: 'Default', value: undefined },
     { name: 'Ambiance', value: 'ambiance' },
@@ -47,5 +49,7 @@ export default Ember.Service.extend({
   ],
   theme: Ember.computed('themeName', function() {
     return this.get('THEMES').findBy('name', this.get('themeName')).value;
-  })
+  }),
+  minEditorFontSize: 8,
+  maxEditorFontSize: 24
 });

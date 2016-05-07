@@ -7,18 +7,19 @@
                 data-dismiss="modal">
           {{fa-icon "times"}}
         </button>
-        <h4 class="modal-title">{{t "modal.theme.title"}}</h4>
+        <h4 class="modal-title">{{t "modal.fontSize.title"}}</h4>
       </div>
       <div class="modal-body">
-        <div class="theme-list list-group">
-          {{#each themes key="name" as |theme|}}
-            <button type="button"
-                    class="list-group-item {{if theme.isSelected 'active'}}"
-                    {{action "setTheme" theme.name}}>
-              {{theme.name}}
-            </button>
-          {{/each}}
-        </div>
+        <form>
+          <div class="form-group">
+            <label>{{t "modal.fontSize.editorFontSize" value=editorFontSize}}</label>
+            <div class="slider-container">
+              {{input id="editor-font-size-slider"
+                      type="text"
+                      value=editorFontSize}}
+            </div>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button"

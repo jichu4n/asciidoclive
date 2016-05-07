@@ -83,6 +83,9 @@
               <a href="#" {{action "showThemeModal"}}>
                 {{t "settings.theme"}}
               </a>
+              <a href="#" {{action "showFontSizeModal"}}>
+                {{t "settings.fontSize"}}
+              </a>
             </li>
           </ul>
         </li>
@@ -115,3 +118,5 @@
 {{outlet}}
 {{content-modal contentKey=contentModalContentKey isVisible=isContentModalVisible}}
 {{theme-modal isVisible=isThemeModalVisible}}
+{{font-size-modal isVisible=isFontSizeModalVisible}}
+

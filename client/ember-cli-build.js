@@ -14,9 +14,6 @@ module.exports = function(defaults) {
       exclude: [
         'assets/ace-editor'
       ]
-    },
-    babel: {
-      includePolyfill: false
     }
   });
 
@@ -50,6 +47,12 @@ module.exports = function(defaults) {
     { type: 'vendor' });
   app.import(
     'bower_components/js-base64/base64.js',
+    { type: 'vendor' });
+  app.import(
+    'bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js',
+    { type: 'vendor' });
+  app.import(
+    'bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css',
     { type: 'vendor' });
 
   // Keep asciidoctor.js and compile worker as separate files for use with Web

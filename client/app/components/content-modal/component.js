@@ -3,30 +3,13 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import Ember from 'ember';
+import ModalMixin from '../../utils/modal-mixin';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(ModalMixin, {
   // To be injected.
   contentKey: '',
-  isVisible: false,
 
   i18n: Ember.inject.service(),
-
-  getModal() {
-    return this.$('.modal');
-  },
-  setupModal: Ember.on('didInsertElement', function() {
-    this.getModal().on('hidden.bs.modal', function() {
-      this.set('isVisible', false);
-    }.bind(this));
-  }),
-  isVisibleChanged: Ember.observer('isVisible', function() {
-    var modal = this.getModal();
-    if (this.get('isVisible')) {
-      modal.modal('show');
-    } else {
-      modal.modal('hide');
-    }
-  }),
 
   title: Ember.computed('contentKey', function() {
     return 'modal.' + this.get('contentKey') + '.title';
