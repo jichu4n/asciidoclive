@@ -47,9 +47,8 @@ export default Ember.Component.extend(ResizeAware, {
   },
 
   initialized: false,
-  didInsertElement() {
-    this._super();
-    Ember.run.next(this, function() {
+  setupUi: Ember.on('didInsertElement', function() {
+    Ember.run.scheduleOnce('afterRender', this, function() {
       this.getEditorPane().resizable({
         handles: {
           e: this.getResizeHandle()
@@ -63,9 +62,10 @@ export default Ember.Component.extend(ResizeAware, {
         Ember.run.once(this, this.updatePreviewScrollState);
       }.bind(this));
       this.updatePreviewScrollState();
+      this.onPreviewFontSizeChanged();
       this.initialized = true;
     });
-  },
+  }),
   debouncedDidResize() {
     if (!this.get('initialized')) {
       return;
@@ -88,7 +88,6 @@ export default Ember.Component.extend(ResizeAware, {
       this.get('previewScrollState').set(
         'scrollRatio',
         this.get('previewScrollState.scrollRatio') + editorScrollRatioDelta);
-      console.info('Updating preview scroll top: %s %o', JSON.stringify(this.get('previewScrollState')), this.get('previewScrollState'));
       this.getPreviewPane().scrollTop(this.get('previewScrollState.scrollTop'));
       this.set('isSyncedScroll', false);
     }
@@ -122,5 +121,12 @@ export default Ember.Component.extend(ResizeAware, {
       }
       this.set(
         'previewLastScrollRatio', this.get('previewScrollState.scrollRatio'));
+    }),
+  onPreviewFontSizeChanged: Ember.observer(
+    'settings.previewFontSize', function() {
+      var fontSizePercentage =
+        this.get('settings.previewFontSize') /
+        this.get('settings.previewFontSizeBase') * 100;
+      this.getPreviewPane().css('font-size', fontSizePercentage + '%');
     })
 });
