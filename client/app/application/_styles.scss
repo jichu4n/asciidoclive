@@ -44,11 +44,8 @@ $navbar-brand-img-height: 14px;
     }
   }
 
-  li > a.on > .fa {
-    color: $brand-success;
-  }
-  li > a.off > .fa {
-    opacity: 0;
+  ul.dropdown-menu .fa {
+    color: $gray;
   }
 }
 
