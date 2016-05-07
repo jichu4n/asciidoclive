@@ -74,16 +74,21 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="#" {{action "toggleSetting" "syncScroll"}}
-                class="{{if settings.syncScroll "on" "off"}}">
+              <a href="#" {{action "toggleSetting" "syncScroll"}}>
+                {{#if settings.syncScroll}}
+                  {{fa-icon "lock" fixedWidth=true}}
+                {{else}}
+                    {{fa-icon "unlock" fixedWidth=true}}
+                {{/if}}
                 {{t "settings.syncScroll"}}
-                &nbsp;
-                {{fa-icon "check" fixedWidth=true}}
               </a>
+              <li class="divider"></li>
               <a href="#" {{action "showThemeModal"}}>
+                {{fa-icon "adjust" fixedWidth=true}}
                 {{t "settings.theme"}}
               </a>
               <a href="#" {{action "showFontSizeModal"}}>
+                {{fa-icon "font" fixedWidth=true}}
                 {{t "settings.fontSize"}}
               </a>
             </li>
