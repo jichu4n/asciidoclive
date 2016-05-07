@@ -44,7 +44,8 @@ export default {
   },
   settings: {
     syncScroll: 'Sync Scrolling',
-    theme: 'Editor Theme...',
+    editorTheme: 'Editor Theme...',
+    highlightjsTheme: 'Preview Code Listing Theme...',
     fontSize: 'Font Sizes...'
   },
   confirmClose: 'The document "{{title}}" has not been saved. ' +
@@ -57,8 +58,11 @@ export default {
     about: {
       title: 'About'
     },
-    theme: {
+    editorTheme: {
       title: 'Editor Theme'
+    },
+    highlightjsTheme: {
+      title: 'Preview Code Listing Theme'
     },
     fontSize: {
       title: 'Font Sizes',

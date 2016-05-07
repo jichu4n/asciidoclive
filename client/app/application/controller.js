@@ -42,9 +42,10 @@ export default Ember.Controller.extend({
       return 'storageTypePrefix.' + storageType;
     }),
 
-  contentModalContentKey: '',
-  isContentModalVisible: false,
-  isThemeModalVisible: false,
+  isFaqModalVisible: false,
+  isAboutModalVisible: false,
+  isEditorThemeModalVisible: false,
+  isHighlightjsThemeModalVisible: false,
   isFontSizeModalVisible: false,
 
   actions: {
@@ -60,12 +61,17 @@ export default Ember.Controller.extend({
     toggleSetting(key) {
       this.get('settings').set(key, !this.get('settings.' + key));
     },
-    showContentModal(contentKey) {
-      this.set('contentModalContentKey', contentKey);
-      this.set('isContentModalVisible', true);
+    showFaqModal() {
+      this.set('isFaqModalVisible', true);
     },
-    showThemeModal() {
-      this.set('isThemeModalVisible', true);
+    showAboutModal() {
+      this.set('isAboutModalVisible', true);
+    },
+    showEditorThemeModal() {
+      this.set('isEditorThemeModalVisible', true);
+    },
+    showHighlightjsThemeModal() {
+      this.set('isHighlightjsThemeModalVisible', true);
     },
     showFontSizeModal() {
       this.set('isFontSizeModalVisible', true);

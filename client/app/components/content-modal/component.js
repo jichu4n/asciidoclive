@@ -8,14 +8,12 @@ import ModalMixin from '../../utils/modal-mixin';
 export default Ember.Component.extend(ModalMixin, {
   // To be injected.
   contentKey: '',
+  titleTranslation: null,
 
   i18n: Ember.inject.service(),
 
-  title: Ember.computed('contentKey', function() {
-    return 'modal.' + this.get('contentKey') + '.title';
-  }),
   content: '',
-  fetchContent: Ember.on('init', Ember.observer(
+  fetchContent: Ember.on('didInsertElement', Ember.observer(
     'i18n.locale', 'contentKey', function() {
       if (Ember.isEmpty(this.get('contentKey'))) {
         return;
