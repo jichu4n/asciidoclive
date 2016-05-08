@@ -43,6 +43,7 @@ export default {
   },
   settings: {
     syncScroll: 'Sync Scrolling',
+    autoSave: 'Auto Save',
     editorTheme: 'Editor Theme...',
     highlightjsTheme: 'Preview Code Listing Theme...',
     font: 'Fonts & Sizes...',
