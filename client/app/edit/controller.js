@@ -70,10 +70,15 @@ export default Ember.Controller.extend({
                 prevStorageSpec.get('storagePath');
             }));
         this.get('target').send('updateRecentFiles', this.get('model'));
-        this.transitionToRoute(
-          'edit',
-          storageSpec.get('storageType'),
-          storageSpec.get('storagePath'));
+        if (prevStorageSpec.get('storageType') !==
+            storageSpec.get('storageType') ||
+            prevStorageSpec.get('storagePath') !==
+            storageSpec.get('storagePath')) {
+          this.transitionToRoute(
+            'edit',
+            storageSpec.get('storageType'),
+            storageSpec.get('storagePath'));
+        }
       }.bind(this), function(error) {
         console.error('Save error: %o', error);
         this.set('showSavingStatus', false);
