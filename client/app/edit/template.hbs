@@ -14,19 +14,6 @@
   {{t "header.saveError"}}
 {{/header-status}}
 
-{{#header-status show=showRenamingStatus}}
-  {{fa-icon "spinner" spin=true}}
-  {{t "header.renaming"}}
-{{/header-status}}
-{{#header-status show=showRenamedStatus durationMs=5000}}
-  {{fa-icon "check"}}
-  {{t "header.renamed"}}
-{{/header-status}}
-{{#header-status show=showRenameErrorStatus durationMs=10000}}
-  {{fa-icon "exclamation-circle"}}
-  {{t "header.renameError"}}
-{{/header-status}}
-
 <div id="reopen-dialog" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">

@@ -10,14 +10,10 @@ export default Ember.Controller.extend({
   storageProviders: Ember.inject.service(),
 
   isFirstTitleChange: true,
-  debounceTitleChangeMs: 2000,
 
   showSavingStatus: false,
   showSavedStatus: false,
   showSaveErrorStatus: false,
-  showRenamingStatus: false,
-  showRenamedStatus: false,
-  showRenameErrorStatus: false,
   reopenStorageType: null,
   reopenStorageTypeTranslation: null,
 
@@ -48,9 +44,14 @@ export default Ember.Controller.extend({
       this.set('showSavedStatus', false);
       this.set('showSaveErrorStatus', false);
       this.set('showSavingStatus', true);
-      this.get('storageProviders').save(this.get('model')).then(function() {
+      this.get('storageProviders').save(this.get('model'))
+      .then(function(storageSpec) {
         this.set('showSavingStatus', false);
         this.set('showSavedStatus', true);
+        this.transitionToRoute(
+          'edit',
+          storageSpec.get('storageType'),
+          storageSpec.get('storagePath'));
       }.bind(this), function(error) {
         console.error('Save error: %o', error);
         this.set('showSavingStatus', false);
@@ -88,35 +89,10 @@ export default Ember.Controller.extend({
       this.send('open', storageType.toString());
     },
   },
-  debounceTitleChange: Ember.observer('model.title', function() {
-    if (this.get('isFirstTitleChange')) {
-      this.set('isFirstTitleChange', false);
-      return;
-    }
+  onTitleChanged: Ember.observer('model.title', function() {
     this.get('target').send('collectTitleTokens', []);
-    Ember.run.debounce(
-      this, this.onTitleChanged, this.get('debounceTitleChangeMs'));
+    this.get('target').send('setHeaderSaveTitle', this.get('model.title'));
   }),
-  onTitleChanged() {
-    this.set('showRenamedStatus', false);
-    this.set('showRenameErrorStatus', false);
-    this.set('showRenamingStatus', true);
-    this.get('storageProviders').rename(this.get('model'))
-    .then(function(storageSpec) {
-      this.set('showRenamingStatus', false);
-      if (!Ember.isNone(storageSpec)) {
-        this.set('showRenamedStatus', true);
-        this.transitionToRoute(
-          'edit',
-          storageSpec.get('storageType'),
-          storageSpec.get('storagePath'));
-      }
-    }.bind(this), function(error) {
-      console.error('Rename error: %o', error);
-      this.set('showRenamingStatus', false);
-      this.set('showRenameErrorStatus', true);
-    }.bind(this));
-  },
   onHasDirtyAttributesChanged: Ember.observer(
     'model.hasDirtyAttributes', function() {
       this.get('target').send('collectTitleTokens', []);
