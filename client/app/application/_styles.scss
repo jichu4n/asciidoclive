@@ -45,13 +45,17 @@ $navbar-brand-img-height: 14px;
   }
 
   ul.dropdown-menu .fa {
-    color: $gray;
+    @media (min-width: $grid-float-breakpoint) {
+      color: $gray;
+    }
 
     &.fa-toggle-on {
       color: $brand-success;
     }
     &.fa-toggle-off {
-      color: $gray-light;
+      @media (min-width: $grid-float-breakpoint) {
+        color: $gray;
+      }
     }
   }
 }

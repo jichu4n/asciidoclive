@@ -157,10 +157,16 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#" {{action "showFaqModal"}}>{{t "header.faq"}}</a>
+              <a href="#" {{action "showFaqModal"}}>
+                {{fa-icon "question-circle" fixedWidth=true}}
+                {{t "header.faq"}}
+              </a>
             </li>
             <li>
-              <a href="#" {{action "showAboutModal"}}>{{t "header.about"}}</a>
+              <a href="#" {{action "showAboutModal"}}>
+                {{fa-icon "info-circle" fixedWidth=true}}
+                {{t "header.about"}}
+              </a>
             </li>
           </ul>
         </li>
