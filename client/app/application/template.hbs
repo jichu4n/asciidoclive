@@ -22,7 +22,7 @@
           <ul class="dropdown-menu">
             {{#if recentFiles}}
             <li class="dropdown-header">{{t "header.openRecentHeader"}}</li>
-            {{#each recentFiles key="@guid" as |recentFile|}}
+            {{#each recentFiles as |recentFile|}}
             <li>
               <a href="#" {{action "openRecent" recentFile}}>
                 {{fa-icon recentFile.storageTypeIcon}}

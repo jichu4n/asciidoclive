@@ -8,6 +8,7 @@ import StorageType from '../utils/storage-type';
 export default Ember.Controller.extend({
   i18n: Ember.inject.service(),
   storageProviders: Ember.inject.service(),
+  settings: Ember.inject.service(),
 
   isFirstTitleChange: true,
 
@@ -44,10 +45,21 @@ export default Ember.Controller.extend({
       this.set('showSavedStatus', false);
       this.set('showSaveErrorStatus', false);
       this.set('showSavingStatus', true);
+      var prevStorageSpec = this.get('model.storageSpec');
       this.get('storageProviders').save(this.get('model'))
       .then(function(storageSpec) {
         this.set('showSavingStatus', false);
         this.set('showSavedStatus', true);
+        this.get('settings').set(
+          'recentFiles',
+          this.get('settings.recentFiles')
+            .reject(function(recentFile) {
+              return recentFile.storage_type ===
+                prevStorageSpec.get('storageType') &&
+                recentFile.storage_path ===
+                prevStorageSpec.get('storagePath');
+            }));
+        this.get('target').send('updateRecentFiles', this.get('model'));
         this.transitionToRoute(
           'edit',
           storageSpec.get('storageType'),

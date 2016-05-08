@@ -49,20 +49,8 @@ export default Ember.Route.extend({
       this.set('isConfirmCloseBound', true);
     }
 
-    if (model.get('storageSpec.storageType') !== StorageType.NONE) {
-      var recentFile = this.serialize(model);
-      recentFile.title = model.get('title');
-      var recentFiles = this.get('settings.recentFiles')
-        .reject(function(existingRecentFile) {
-          return existingRecentFile.storage_type === recentFile.storage_type &&
-            existingRecentFile.storage_path === recentFile.storage_path;
-        });
-      recentFiles.unshift(recentFile);
-      while (recentFiles.length > this.get('settings.maxRecentFiles')) {
-        recentFiles.pop();
-      }
-      this.get('settings').set('recentFiles', recentFiles);
-    }
+    // Sending actions is not possible inside afterModel :-/
+    Ember.run.next(this, this.send, 'updateRecentFiles', model);
   },
 
   serialize(model) {
@@ -102,6 +90,24 @@ export default Ember.Route.extend({
     },
     didTransition() {
       this.send('setHeaderActionHandler', this.get('controller'));
+    },
+    updateRecentFiles(model) {
+      if (model.get('storageSpec.storageType') === StorageType.NONE) {
+        return;
+      }
+      var recentFile = this.serialize(model);
+      recentFile.title = model.get('title');
+      var recentFiles = this.get('settings.recentFiles')
+        .reject(function(existingRecentFile) {
+          return existingRecentFile.storage_type === recentFile.storage_type &&
+            existingRecentFile.storage_path === recentFile.storage_path;
+        });
+      console.info('Adding to recent files: %o', recentFile);
+      recentFiles.unshift(recentFile);
+      while (recentFiles.length > this.get('settings.maxRecentFiles')) {
+        recentFiles.pop();
+      }
+      this.get('settings').set('recentFiles', recentFiles);
     }
   },
 
