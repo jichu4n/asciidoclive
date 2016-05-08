@@ -189,7 +189,6 @@ export default StorageProvider.extend({
                   storagePath: storagePath
                 })
               });
-              doc.markClean();
               resolve(doc);
             }.bind(this));
           }.bind(this));
@@ -217,7 +216,6 @@ export default StorageProvider.extend({
           body: doc.get('body').toString() || ''
         }).execute(function(response) {
           if (response && !response.error) {
-            doc.markClean();
             resolve(doc.get('storageSpec'));
           } else {
             reject(response);

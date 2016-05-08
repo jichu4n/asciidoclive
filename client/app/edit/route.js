@@ -41,6 +41,9 @@ export default Ember.Route.extend({
   isConfirmCloseBound: false,
   afterModel(model) {
     Cookies.remove('redirect');
+
+    model.markClean();
+
     this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
     this.send('setHeaderSaveTitle', model.get('title'));
 

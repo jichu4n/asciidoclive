@@ -36,5 +36,12 @@ export default DS.Model.extend({
     internalModel.send('willCommit');
     internalModel._attributes = {};
     internalModel.send('didCommit');
-  }
+  },
+
+  json: Ember.computed('title', 'body', function() {
+    return {
+      title: this.get('title'),
+      body: this.get('body')
+    };
+  })
 });

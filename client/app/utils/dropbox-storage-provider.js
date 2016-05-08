@@ -95,7 +95,6 @@ export default StorageProvider.extend({
                     storagePath: storagePath
                   })
                 });
-                doc.markClean();
                 resolve(doc);
               }
             }.bind(this));
@@ -125,7 +124,6 @@ export default StorageProvider.extend({
             if (error) {
               reject(error);
             } else {
-              doc.markClean();
               resolve(doc.get('storageSpec'));
             }
           });
