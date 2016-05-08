@@ -38,12 +38,16 @@ export default Ember.Route.extend({
     }));
   },
 
+  isConfirmCloseBound: false,
   afterModel(model) {
     Cookies.remove('redirect');
     this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
     this.send('setHeaderSaveTitle', model.get('title'));
 
-    Ember.$(window).bind('beforeunload', this.confirmClose.bind(this, model));
+    if (!this.get('isConfirmCloseBound')) {
+      Ember.$(window).bind('beforeunload', this.confirmClose.bind(this));
+      this.set('isConfirmCloseBound', true);
+    }
 
     if (model.get('storageSpec.storageType') !== StorageType.NONE) {
       var recentFile = this.serialize(model);
@@ -89,8 +93,9 @@ export default Ember.Route.extend({
 
   actions: {
     willTransition(transition) {
-      var message = this.confirmClose(this.get('controller.model'));
+      var message = this.confirmClose();
       if (Ember.isNone(message) || window.confirm(message)) {
+        this.get('controller.model').markClean();
         return true;
       }
       transition.abort();
@@ -100,7 +105,8 @@ export default Ember.Route.extend({
     }
   },
 
-  confirmClose(model) {
+  confirmClose() {
+    var model = this.get('controller.model');
     if (model.get('hasDirtyAttributes')) {
       return this.get('i18n').t('confirmClose', {
         title: model.get('title')
