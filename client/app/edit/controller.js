@@ -21,10 +21,13 @@ export default Ember.Controller.extend({
   reopenStorageTypeTranslation: null,
 
   actions: {
-    open(storageType) {
+    open(storageType, markClean) {
       console.log('Opening from %o', storageType);
       this.get('storageProviders').open(storageType)
       .then(function(storageSpec) {
+        if (markClean) {
+          this.get('model').markClean();
+        }
         this.transitionToRoute(
           'edit',
           storageSpec.get('storageType'),
@@ -48,10 +51,15 @@ export default Ember.Controller.extend({
       this.set('showSaveErrorStatus', false);
       this.set('showSavingStatus', true);
       var prevStorageSpec = this.get('model.storageSpec');
+      var docJsonBeforeSave = this.get('model.json');
       this.get('storageProviders').save(this.get('model'))
       .then(function(storageSpec) {
         this.set('showSavingStatus', false);
         this.set('showSavedStatus', true);
+        if (JSON.stringify(this.get('model.json')) ===
+            JSON.stringify(docJsonBeforeSave)) {
+          this.get('model').markClean();
+        }
         this.get('settings').set(
           'recentFiles',
           this.get('settings.recentFiles')
@@ -100,30 +108,33 @@ export default Ember.Controller.extend({
     },
     reopen(storageType) {
       Ember.$('#reopen-dialog').modal('hide');
-      this.send('open', storageType.toString());
+      this.send('open', storageType.toString(), true);
     }
   },
+
   onTitleChanged: Ember.observer('model.title', function() {
     this.get('target').send('collectTitleTokens', []);
     this.get('target').send('setHeaderSaveTitle', this.get('model.title'));
   }),
+  onHasDirtyAttributesChanged: Ember.observer(
+    'model.hasDirtyAttributes', function() {
+      this.get('target').send('collectTitleTokens', []);
+    }),
 
   autoSave() {
     if (!this.get('settings.autoSave') ||
         this.get('model.storageSpec.storageType') === StorageType.NONE ||
-        !this.get('model.hasDirtyAttributes') ||
-        this.get('showSavingStatus')) {
+        !this.get('model.hasDirtyAttributes')) {
+      return;
+    }
+    if (this.get('showSavingStatus')) {
+      Ember.run.debounce(this, this.autoSave, this.get('autoSaveDelayMs'));
       return;
     }
     console.info('Starting autosave');
     this.send('save');
   },
-  onHasDirtyAttributesChanged: Ember.observer(
-    'model.hasDirtyAttributes', function() {
-      this.get('target').send('collectTitleTokens', []);
-      if (this.get('model.hasDirtyAttributes')) {
-        Ember.run.later(
-          this, this.autoSave, this.get('autoSaveDelayMs'));
-      }
-    })
+  onModelChanged: Ember.observer('model.title', 'model.body', function() {
+    Ember.run.debounce(this, this.autoSave, this.get('autoSaveDelayMs'));
+  })
 });
