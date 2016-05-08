@@ -204,7 +204,7 @@ export default StorageProvider.extend({
         'Unexpected storage type: %o', doc.get('storageSpec.storageType'));
     }
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      this.authenticate(AuthMode.SILENT).then(function() {
+      this.rename(doc).then(function() {
         gapi.client.request({
           path: '/upload/drive/v2/files/' + doc.get('storageSpec.storagePath'),
           method: 'PUT',
@@ -218,7 +218,7 @@ export default StorageProvider.extend({
         }).execute(function(response) {
           if (response && !response.error) {
             doc.markClean();
-            resolve(response);
+            resolve(doc.get('storageSpec'));
           } else {
             reject(response);
           }

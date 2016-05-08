@@ -112,7 +112,12 @@ export default StorageProvider.extend({
         'Unexpected storage type: %o', doc.get('storageSpec.storageType'));
     }
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      this.authenticate().then(function() {
+      this.rename(doc).then(function(storageSpec) {
+        if (storageSpec.get('storageType') !== this.get('storageType')) {
+          throw new Error(
+            'Unexpected storage type: %o', storageSpec.get('storageType'));
+        }
+        doc.set('storageSpec', storageSpec);
         this.get('client').writeFile(
           doc.get('storageSpec.storagePath'),
           doc.get('body').toString() || '',
@@ -121,10 +126,12 @@ export default StorageProvider.extend({
               reject(error);
             } else {
               doc.markClean();
-              resolve();
+              resolve(doc.get('storageSpec'));
             }
           });
-      }.bind(this));
+      }.bind(this), function(error) {
+        reject(error);
+      });
     }.bind(this));
   },
 
@@ -154,7 +161,7 @@ export default StorageProvider.extend({
           this.splitPath(doc.get('storageSpec.storagePath'))[0] +
           doc.get('fileName');
         if (newStoragePath === doc.get('storageSpec.storagePath')) {
-          resolve();
+          resolve(doc.get('storageSpec'));
           return;
         }
         console.info(
