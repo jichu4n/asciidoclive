@@ -33,6 +33,13 @@ export default Ember.Controller.extend({
         console.error('Open error: %o', error);
       });
     },
+    openRecent(recentFile) {
+      console.log('Opening recent file: %o', recentFile);
+      this.transitionToRoute(
+        'edit',
+        recentFile.storage_type,
+        recentFile.storage_path);
+    },
     save() {
       this.set('showSavedStatus', false);
       this.set('showSaveErrorStatus', false);

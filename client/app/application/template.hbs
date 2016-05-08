@@ -20,6 +20,19 @@
             <span class="icon-label">{{t "header.open"}}</span>
           </a>
           <ul class="dropdown-menu">
+            {{#if recentFiles}}
+            <li class="dropdown-header">{{t "header.openRecentHeader"}}</li>
+            {{#each recentFiles key="@guid" as |recentFile|}}
+            <li>
+              <a href="#" {{action "openRecent" recentFile}}>
+                {{fa-icon recentFile.storageTypeIcon}}
+                {{t recentFile.storageTypeTranslation}}
+                {{recentFile.title}}
+              </a>
+            </li>
+            {{/each}}
+            <li class="divider"></li>
+            {{/if}}
             <li class="dropdown-header">{{t "header.openHeader"}}</li>
             <li>
               <a href="#" {{action "open" "dropbox"}}>
@@ -82,19 +95,32 @@
                 {{/if}}
                 {{t "settings.syncScroll"}}
               </a>
-              <li class="divider"></li>
+            </li>
+            <li class="divider"></li>
+            <li>
               <a href="#" {{action "showEditorThemeModal"}}>
                 {{fa-icon "adjust" fixedWidth=true}}
                 {{t "settings.editorTheme"}}
               </a>
+            </li>
+            <li>
               <a href="#" {{action "showHighlightjsThemeModal"}}>
                 {{fa-icon "adjust" fixedWidth=true}}
                 {{t "settings.highlightjsTheme"}}
               </a>
-              <li class="divider"></li>
+            </li>
+            <li class="divider"></li>
+            <li>
               <a href="#" {{action "showFontModal"}}>
                 {{fa-icon "font" fixedWidth=true}}
                 {{t "settings.font"}}
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#" {{action "showEditorModeModal"}}>
+                {{fa-icon "keyboard-o" fixedWidth=true}}
+                {{t "settings.editorMode"}}
               </a>
             </li>
           </ul>
@@ -140,5 +166,9 @@
               themeName=settings.highlightjsThemeName
               titleTranslation="modal.highlightjsTheme.title"
               isVisible=isHighlightjsThemeModalVisible}}
+{{theme-modal themes=settings.EDITOR_MODES
+              themeName=settings.editorModeName
+              titleTranslation="modal.editorMode.title"
+              isVisible=isEditorModeModalVisible}}
 {{font-modal isVisible=isFontModalVisible}}
 
