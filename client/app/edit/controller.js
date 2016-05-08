@@ -3,6 +3,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import Ember from 'ember';
+import StorageType from '../utils/storage-type';
 
 export default Ember.Controller.extend({
   i18n: Ember.inject.service(),
@@ -39,6 +40,9 @@ export default Ember.Controller.extend({
         'edit',
         recentFile.storage_type,
         recentFile.storage_path);
+    },
+    openScratch() {
+      this.transitionToRoute('edit', StorageType.NONE, '1');
     },
     save() {
       this.set('showSavedStatus', false);
