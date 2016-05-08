@@ -81,8 +81,11 @@ export default Ember.Controller.extend({
     open() {
       this.sendToHeaderActionHandler('open', arguments);
     },
-    openRecent(recentFile) {
+    openRecent() {
       this.sendToHeaderActionHandler('openRecent', arguments);
+    },
+    openScratch() {
+      this.sendToHeaderActionHandler('openScratch', arguments);
     },
     save() {
       this.sendToHeaderActionHandler('save', arguments);

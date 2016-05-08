@@ -8,6 +8,7 @@ export default {
   header: {
     open: 'Open',
     openRecentHeader: 'Open recent',
+    openScratch: 'New Document',
     openHeader: 'Open from',
     save: 'Save',
     saveHeader: 'Save',
