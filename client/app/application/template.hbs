@@ -96,23 +96,33 @@
             <li>
               <a href="#" {{action "toggleSetting" "syncScroll"}}>
                 {{#if settings.syncScroll}}
-                  {{fa-icon "lock" fixedWidth=true}}
+                  {{fa-icon "toggle-on"}}
                 {{else}}
-                    {{fa-icon "unlock" fixedWidth=true}}
+                  {{fa-icon "toggle-off"}}
                 {{/if}}
                 {{t "settings.syncScroll"}}
+              </a>
+            </li>
+            <li>
+              <a href="#" {{action "toggleSetting" "autoSave"}}>
+                {{#if settings.autoSave}}
+                  {{fa-icon "toggle-on"}}
+                {{else}}
+                  {{fa-icon "toggle-off"}}
+                {{/if}}
+                {{t "settings.autoSave"}}
               </a>
             </li>
             <li class="divider"></li>
             <li>
               <a href="#" {{action "showEditorThemeModal"}}>
-                {{fa-icon "adjust" fixedWidth=true}}
+                {{fa-icon "paint-brush" fixedWidth=true}}
                 {{t "settings.editorTheme"}}
               </a>
             </li>
             <li>
               <a href="#" {{action "showHighlightjsThemeModal"}}>
-                {{fa-icon "adjust" fixedWidth=true}}
+                {{fa-icon "file-code-o" fixedWidth=true}}
                 {{t "settings.highlightjsTheme"}}
               </a>
             </li>

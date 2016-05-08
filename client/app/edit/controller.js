@@ -12,6 +12,8 @@ export default Ember.Controller.extend({
 
   isFirstTitleChange: true,
 
+  autoSaveDelayMs: 5 * 1000,
+
   showSavingStatus: false,
   showSavedStatus: false,
   showSaveErrorStatus: false,
@@ -99,14 +101,29 @@ export default Ember.Controller.extend({
     reopen(storageType) {
       Ember.$('#reopen-dialog').modal('hide');
       this.send('open', storageType.toString());
-    },
+    }
   },
   onTitleChanged: Ember.observer('model.title', function() {
     this.get('target').send('collectTitleTokens', []);
     this.get('target').send('setHeaderSaveTitle', this.get('model.title'));
   }),
+
+  autoSave() {
+    if (!this.get('settings.autoSave') ||
+        this.get('model.storageSpec.storageType') === StorageType.NONE ||
+        !this.get('model.hasDirtyAttributes') ||
+        this.get('showSavingStatus')) {
+      return;
+    }
+    console.info('Starting autosave');
+    this.send('save');
+  },
   onHasDirtyAttributesChanged: Ember.observer(
     'model.hasDirtyAttributes', function() {
       this.get('target').send('collectTitleTokens', []);
+      if (this.get('model.hasDirtyAttributes')) {
+        Ember.run.later(
+          this, this.autoSave, this.get('autoSaveDelayMs'));
+      }
     })
 });

@@ -46,6 +46,13 @@ $navbar-brand-img-height: 14px;
 
   ul.dropdown-menu .fa {
     color: $gray;
+
+    &.fa-toggle-on {
+      color: $brand-success;
+    }
+    &.fa-toggle-off {
+      color: $gray-light;
+    }
   }
 }
 
