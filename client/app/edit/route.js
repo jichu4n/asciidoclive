@@ -11,6 +11,7 @@ import StorageType from '../utils/storage-type';
 export default Ember.Route.extend({
   i18n: Ember.inject.service(),
   storageProviders: Ember.inject.service(),
+  settings: Ember.inject.service(),
 
   model(params) {
     if (params.storage_type === StorageType.NONE) {
@@ -43,6 +44,21 @@ export default Ember.Route.extend({
     this.send('setHeaderSaveTitle', model.get('title'));
 
     Ember.$(window).bind('beforeunload', this.confirmClose.bind(this, model));
+
+    if (model.get('storageSpec.storageType') !== StorageType.NONE) {
+      var recentFile = this.serialize(model);
+      recentFile.title = model.get('title');
+      var recentFiles = this.get('settings.recentFiles')
+        .reject(function(existingRecentFile) {
+          return existingRecentFile.storage_type === recentFile.storage_type &&
+            existingRecentFile.storage_path === recentFile.storage_path;
+        });
+      recentFiles.unshift(recentFile);
+      while (recentFiles.length > this.get('settings.maxRecentFiles')) {
+        recentFiles.pop();
+      }
+      this.get('settings').set('recentFiles', recentFiles);
+    }
   },
 
   serialize(model) {

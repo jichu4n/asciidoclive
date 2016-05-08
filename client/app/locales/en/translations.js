@@ -7,6 +7,7 @@ export default {
   titleSuffix: ' - AsciiDocLIVE',
   header: {
     open: 'Open',
+    openRecentHeader: 'Open recent',
     openHeader: 'Open from',
     save: 'Save',
     saveHeader: 'Save',
@@ -46,7 +47,8 @@ export default {
     syncScroll: 'Sync Scrolling',
     editorTheme: 'Editor Theme...',
     highlightjsTheme: 'Preview Code Listing Theme...',
-    font: 'Fonts & Sizes...'
+    font: 'Fonts & Sizes...',
+    editorMode: 'Key Bindings...'
   },
   confirmClose: 'The document "{{title}}" has not been saved. ' +
     'If you leave this page, all your changes will be lost. ',
@@ -72,6 +74,9 @@ export default {
       previewFont: 'Preview Font',
       previewFontPlaceholder: 'Leave blank to use default',
       previewFontSize: 'Preview Font Size'
+    },
+    editorMode: {
+      title: 'Editor Key Bindings'
     }
   }
 };

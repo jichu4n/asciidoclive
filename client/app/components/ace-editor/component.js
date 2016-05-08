@@ -31,6 +31,8 @@ export default Ember.Component.extend({
 
       this.set('editor', ace.edit(this.$()[0]));
       this.set('session', this.get('editor').getSession());
+      window.aceEditor = this.get('editor');
+      window.aceEditorSession = this.get('session');
       this.get('session').setValue(this.get('doc.body').toString() || '');
       this.get('session').on('change', this.debouncedUpdate.bind(this));
       this.get('session').setMode('ace/mode/asciidoc');
@@ -42,6 +44,7 @@ export default Ember.Component.extend({
       this.onThemeChanged();
       this.onEditorFontChanged();
       this.onEditorFontSizeChanged();
+      this.onEditorModeChanged();
     });
   },
   updateSize: Ember.observer('width', 'height', function() {
@@ -127,5 +130,13 @@ export default Ember.Component.extend({
         return;
       }
       this.get('editor').setFontSize(this.get('settings.editorFontSize'));
+    }),
+
+  onEditorModeChanged: Ember.observer(
+    'settings.editorMode', function() {
+      if (Ember.isNone(this.get('editor'))) {
+        return;
+      }
+      this.get('editor').setKeyboardHandler(this.get('settings.editorMode'));
     })
 });

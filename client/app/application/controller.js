@@ -42,15 +42,47 @@ export default Ember.Controller.extend({
       return 'storageTypePrefix.' + storageType;
     }),
 
+  recentFiles: Ember.computed(
+    'settings.recentFiles.[]',
+    'headerSaveStorageSpec.storageType',
+    'headerSaveStorageSpec.storagePath',
+    function() {
+      var storageProviders = this.get('storageProviders');
+      var headerSaveStorageType = this.get('headerSaveStorageSpec.storageType');
+      var headerSaveStoragePath = this.get('headerSaveStorageSpec.storagePath');
+      return this.get('settings.recentFiles')
+        .reject(function(recentFile) {
+          return recentFile.storage_type === headerSaveStorageType &&
+            recentFile.storage_path === headerSaveStoragePath;
+        }, this)
+        .map(function(recentFile) {
+          var storageType = recentFile.storage_type;
+          return {
+            storage_type: storageType,
+            storage_path: recentFile.storage_path,
+            title: recentFile.title,
+
+            storageTypeIcon:
+              storageProviders.getStorageProvider(storageType)
+                .get('storageTypeIcon'),
+            storageTypeTranslation: 'storageTypePrefix.' + storageType
+          };
+        }, this);
+    }),
+
   isFaqModalVisible: false,
   isAboutModalVisible: false,
   isEditorThemeModalVisible: false,
   isHighlightjsThemeModalVisible: false,
   isFontModalVisible: false,
+  isEditorModeModalVisible: false,
 
   actions: {
     open() {
       this.sendToHeaderActionHandler('open', arguments);
+    },
+    openRecent(recentFile) {
+      this.sendToHeaderActionHandler('openRecent', arguments);
     },
     save() {
       this.sendToHeaderActionHandler('save', arguments);
@@ -75,6 +107,9 @@ export default Ember.Controller.extend({
     },
     showFontModal() {
       this.set('isFontModalVisible', true);
+    },
+    showEditorModeModal() {
+      this.set('isEditorModeModalVisible', true);
     }
   }
 });

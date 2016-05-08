@@ -15,6 +15,9 @@ export default Ember.Service.extend({
   editorFontSize: Ember.computed(localStorageProxy('v1/editorFontSize', 14)),
   previewFont: Ember.computed(localStorageProxy('v1/previewFont', '')),
   previewFontSize: Ember.computed(localStorageProxy('v1/previewFontSize', 14)),
+  editorModeName: Ember.computed(localStorageProxy(
+    'v1/editorModeName', 'Default')),
+  recentFiles: Ember.computed(localStorageProxy('v1/recentFiles', [])),
 
   EDITOR_THEMES: [
     { name: 'Default', value: undefined },
@@ -132,8 +135,19 @@ export default Ember.Service.extend({
       .findBy('name', this.get('highlightjsThemeName')).value;
   }),
 
+  EDITOR_MODES: [
+    { name: 'Default', value: '' },
+    { name: 'Vim', value: 'ace/keyboard/vim' },
+    { name: 'Emacs', value: 'ace/keyboard/emacs' }
+  ],
+  editorMode: Ember.computed('editorModeName', function() {
+    return this.get('EDITOR_MODES')
+      .findBy('name', this.get('editorModeName')).value;
+  }),
 
   minFontSize: 8,
   maxFontSize: 24,
-  previewFontSizeBase: 14
+  previewFontSizeBase: 14,
+
+  maxRecentFiles: 5
 });
