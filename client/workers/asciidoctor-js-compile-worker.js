@@ -10,8 +10,13 @@ function asciidoctorJsCompile(ev) {
   var body = ev.data.body;
   ev.data.body = null;
   var response = JSON.parse(JSON.stringify(ev.data));
-  response.compiledBody = Opal.Asciidoctor.$convert(body, Opal.hash({
-  }));
+  response.compiledBody = Opal.Asciidoctor.$convert(body, Opal.hash2(
+    [
+      'attributes'
+    ],
+    {
+      attributes: ['showtitle']
+    }));
   if (isInWebWorker) {
     self.postMessage(response);
   }
