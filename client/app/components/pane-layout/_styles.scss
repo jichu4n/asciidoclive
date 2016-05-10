@@ -23,6 +23,8 @@
     padding: 10px;
     overflow-y: auto;
     word-break: break-word;
+
+    @import 'app/styles/asciidoctor';
   }
 }
 
