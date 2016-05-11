@@ -16,8 +16,11 @@
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "Chuan Ji",
+  "licenses": [{
+    "type": "Apache-2.0",
+    "url": "http://www.apache.org/licenses/LICENSE-2.0"
+  }],
   "devDependencies": {
     "broccoli-asciidoc": "^0.2.1",
     "broccoli-asset-rev": "^2.2.0",
