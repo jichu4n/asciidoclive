@@ -18,7 +18,9 @@ Try it out at https://asciidoclive.com[asciidoclive.com]!
 Demo
 ~~~~
 
-video::th_H1gixMEE[youtube]
+Click for demo:
+
+https://youtu.be/th_H1gixMEE[image:http://img.youtube.com/vi/th_H1gixMEE/0.jpg["AsciiDocLIVE Demo"]]
 
 Building
 ~~~~~~~~
