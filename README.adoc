@@ -1,0 +1,48 @@
+AsciiDocLIVE
+------------
+
+AsciiDocLIVE (https://asciidoclive.com[asciidoclive.com]) is a full-featured
+online http://www.methods.co.nz/asciidoc/[AsciiDoc] editor.
+
+Main features:
+
+- Instant live preview (based on
+  https://github.com/asciidoctor/asciidoctor.js[asciidoctor.js]);
+- Sync with Dropbox and Google Drive;
+- Customizable editor (based on https://ace.c9.io/[ACE]), with themes and Vim /
+  Emacs keybindings;
+- Runs in any modern browser; no installation required.
+
+Try it out at https://asciidoclive.com[asciidoclive.com]!
+
+Demo
+~~~~
+
+video::th_H1gixMEE[youtube]
+
+Building
+~~~~~~~~
+
+AsciiDocLIVE is based on the http://emberjs.com[Ember.js] framework, and uses
+the http://ember-cli.com/[Ember CLI] build system.
+
+To build:
+[source,bash]
+----
+git clone git@github.com:jichu4n/asciidoclive.git
+cd asciidoclive/client
+npm install
+bower install
+
+# To run local development server:
+ember serve
+
+# To build for production:
+ember build --environment=production
+----
+
+License
+~~~~~~~
+
+The source code is distributed under the Apache License 2.0.
+
