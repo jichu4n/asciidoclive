@@ -20,7 +20,8 @@ export default {
     help: 'Help',
     cheatsheet: 'AsciiDoc Cheatsheet',
     faq: 'FAQ',
-    about: 'About'
+    about: 'About',
+    feedback: 'Submit Feedback'
   },
   defaultTitle: 'Untitled Document',
   defaultBody: '',
