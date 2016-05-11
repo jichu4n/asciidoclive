@@ -1,12 +1,11 @@
 Welcome to AsciiDocLIVE!
 ------------------------
 
-AsciiDocLIVE is a *free online http://www.methods.co.nz/asciidoc/[AsciiDoc]
+AsciiDocLIVE is a *free online http://www.methods.co.nz/asciidoc/[AsciiDoc^]
 editor*.
 
 * Just type AsciiDoc source text into the *left* pane,
 * ...and the live preview appears in the *right* pane!
-
 
 What's AsciiDoc?
 ~~~~~~~~~~~~~~~~~
@@ -17,15 +16,17 @@ blogs, and more. AsciiDoc files can be translated to many formats including
 HTML, PDF, EPUB, and man page.
 
 To learn more, visit the AsciiDoc home page at
-http://www.methods.co.nz/asciidoc/.
+http://www.methods.co.nz/asciidoc/[^].
 
 About AsciiDocLIVE
 ~~~~~~~~~~~~~~~~~~
-AsciiDocLIVE is currently in *alpha* stage. This means there are likely a _lot_
+AsciiDocLIVE is currently in *beta* stage. This means there are likely a _lot_
 of bugs, and even more ways to make it better.
 
-If you have any questions, suggestions or other feedback, we'd greatly 
-appreciate it if you could drop us an e-amil at feedback@asciidoclive.com. Hope
+If you have any questions, suggestions or other feedback, please
+feel free to
+https://github.com/jichu4n/asciidoclive/issues/new[create an issue on pass:[<i class="fa fa-github"></i>] GitHub^].
+Hope
 to hear from you soon!
 
 
@@ -34,7 +35,7 @@ AsciiDoc Mini Cheat Sheet
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To help you get started, here're some snippets from the
-http://powerman.name/doc/asciidoc[AsciiDoc Cheet Sheet]. Feel free to poke
+http://powerman.name/doc/asciidoc[AsciiDoc Cheet Sheet^]. Feel free to poke
 around :)
 
 Text Styles
@@ -92,12 +93,15 @@ It was the best of times, it was the worst of times, it was the age of wisdom,
 it was the age of foolishness...
 
 * Links:
-** http://asciidoclive.com/[AsciiDocLIVE] is awesome!
-** Go to <<cheat-sheet, top of cheat sheet>>
+** http://asciidoclive.com/[AsciiDocLIVE^] is awesome!
 
 * Images:
 +
 image:https://i.imgur.com/AEkqoRn.jpg[alt="not bad.",width=128,height=128]
+
+* Videos:
++
+video::th_H1gixMEE[youtube]
 
 * Pass-through: pass:[<div align="center"><b>pass through content</b></div>]
 
