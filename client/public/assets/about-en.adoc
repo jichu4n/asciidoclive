@@ -2,6 +2,10 @@ AsciiDocLIVE is a free online
 http://www.methods.co.nz/asciidoc/[AsciiDoc pass:[<i class="fa fa-external-link"></i>]^]
 editor.
 
+AsciiDocLIVE is open-source software distributed under the Apache 2.0 License.
+You're welcome to fork & contribute at
+https://github.com/jichu4n/asciidoclive[github.com/jichu4n/asciidoclive].
+
 AsciiDocLIVE is developed by Chuan Ji (ji@chu4n.com). Find me on:
 
   * My blog: https://seasonofcode.com/[seasonofcode.com pass:[<i class="fa fa-external-link"></i>]^]
