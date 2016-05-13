@@ -30,11 +30,10 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-      DROPBOX_APP_KEY: '***REMOVED***',
-      GOOGLE_CLIENT_ID: '***REMOVED***' +
-        '.apps.googleusercontent.com',
-      GOOGLE_APP_ID: '***REMOVED***',
-      GOOGLE_API_KEY: '***REMOVED***'
+      DROPBOX_APP_KEY: '<Dropbox App Key>',
+      GOOGLE_CLIENT_ID: '<Google Client ID>',
+      GOOGLE_APP_ID: '<Google App ID>',
+      GOOGLE_API_KEY: '<Google API Key>'
     }
   };
 
@@ -62,7 +61,7 @@ module.exports = function(environment) {
   if (environment === 'production') {
     ENV.APP.SERVER_URL = 'https://asciidoclive.com';
     ENV.googleAnalytics = {
-      webPropertyId: 'UA-21264754-2'
+      webPropertyId: '<Google Analytics ID>'
     };
   }
 
