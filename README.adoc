@@ -15,6 +15,7 @@ Main features:
 
 Try it out at https://asciidoclive.com[asciidoclive.com]!
 
+
 Demo
 ~~~~
 
@@ -22,13 +23,12 @@ Click for demo:
 
 https://youtu.be/th_H1gixMEE[image:http://img.youtube.com/vi/th_H1gixMEE/0.jpg["AsciiDocLIVE Demo"]]
 
-Building
-~~~~~~~~
 
-AsciiDocLIVE is based on the http://emberjs.com[Ember.js] framework, and uses
-the http://ember-cli.com/[Ember CLI] build system.
+Running Locally
+~~~~~~~~~~~~~~~
 
-To build:
+AsciiDocLIVE uses the http://ember-cli.com/[Ember CLI] build system. To build:
+
 [source,bash]
 ----
 git clone git@github.com:jichu4n/asciidoclive.git
@@ -36,15 +36,48 @@ cd asciidoclive/client
 npm install
 bower install
 
-# To run local development server:
+npm install -g ember-cli
+# To run local development server on port 8001:
 ember serve
+----
 
-# To build for production:
+For Dropbox integration, https://www.dropbox.com/developers/apps/create[create an app]
+on Dropbox and copy the generated App Key into the `DROPBOX_APP_KEY` field in
+https://github.com/jichu4n/asciidoclive/blob/master/client/config/environment.js[`/client/config/environment.js`].
+
+For Google Drive integration,
+https://developers.google.com/identity/sign-in/web/devconsole-project[create a new project]
+in the Google Developers Console and
+https://support.google.com/cloud/answer/6158862?hl=en&ref_topic=6262490[create a Browser API Key and OAuth Client ID].
+Then populate the following fields in
+https://github.com/jichu4n/asciidoclive/blob/master/client/config/environment.js[`/client/config/environment.js`]
+accordingly:
+
+* `GOOGLE_CLIENT_ID`: The OAuth Client ID (e.g., `12345678-abcdefg.apps.googleusercontent.com`);
+* `GOOGLE_APP_ID`: The leading digits of the OAuth Client ID preceding the hyphen (e.g., `12345678`);
+* `GOOGLE_API_KEY`: The Browser API Key (e.g., `AbCdEfGh_1IjK`)
+
+
+Deployment
+~~~~~~~~~~
+
+To build for production:
+
+[source,bash]
+----
+cd asciidoclive/client
 ember build --environment=production
 ----
+
+The
+https://github.com/jichu4n/asciidoclive/tree/master/production[`/production/`]
+directory contains an example Dockerized NGINX server setup for the app. You
+can use it as a template to build a Docker container for deployment.
+
 
 License
 ~~~~~~~
 
 The source code is distributed under the Apache License 2.0.
+
 
