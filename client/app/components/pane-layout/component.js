@@ -104,9 +104,11 @@ export default Ember.Component.extend(ResizeAware, {
     this.set('isSyncedScroll', true);
     this.updatePreviewScrollState();
     this.set('isSyncedScroll', false);
-    this.getPreviewPane().find('pre code').each(function(i, block) {
-      hljs.highlightBlock(block);
-    });
+    if (!this.get('settings.showHtml')) {
+      this.getPreviewPane().find('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    }
   },
   updatePreviewScrollState() {
     var scrollState = this.get('previewScrollState');

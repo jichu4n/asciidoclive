@@ -113,6 +113,16 @@
                 {{t "settings.autoSave"}}
               </a>
             </li>
+            <li>
+              <a href="#" {{action "toggleSetting" "showHtml"}}>
+                {{#if settings.showHtml}}
+                  {{fa-icon "toggle-on"}}
+                {{else}}
+                  {{fa-icon "toggle-off"}}
+                {{/if}}
+                {{t "settings.showHtml"}}
+              </a>
+            </li>
             <li class="divider"></li>
             <li>
               <a href="#" {{action "showEditorThemeModal"}}>

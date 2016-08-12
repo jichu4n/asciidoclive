@@ -63,6 +63,10 @@ module.exports = function(defaults) {
     'bower_components/highlightjs/styles',
     { destDir: '/assets/highlightjs' });
 
+  app.import(
+    'bower_components/js-beautify/js/lib/beautify-html.js',
+    { type: 'vendor' });
+
   // Keep asciidoctor.js and compile worker as separate files for use with Web
   // Worker, but also import them into the main app for older browsers.
   var asciidoctor = new Funnel(

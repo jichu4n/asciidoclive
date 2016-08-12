@@ -21,6 +21,7 @@
     "js-cookie": "~2.1.0",
     "js-base64": "~2.1.9",
     "seiyria-bootstrap-slider": "^7.0.3",
-    "highlightjs": "^9.2.0"
+    "highlightjs": "^9.2.0",
+    "js-beautify": "^1.6.4"
   }
 }

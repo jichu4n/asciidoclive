@@ -19,6 +19,7 @@ export default Ember.Service.extend({
     'v1/editorModeName', 'Default')),
   recentFiles: Ember.computed(localStorageProxy('v1/recentFiles', [])),
   autoSave: Ember.computed(localStorageProxy('v1/autoSave', false)),
+  showHtml: Ember.computed(localStorageProxy('v1/showHtml', false)),
 
   EDITOR_THEMES: [
     { name: 'Default', value: undefined },
