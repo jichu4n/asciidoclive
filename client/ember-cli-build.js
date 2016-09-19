@@ -13,7 +13,8 @@ module.exports = function(defaults) {
     fingerprint: {
       exclude: [
         'assets/ace-editor',
-        'assets/highlightjs'
+        'assets/highlightjs',
+        'assets/asciidoctor.js/css'
       ]
     }
   });
