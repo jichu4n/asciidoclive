@@ -19,10 +19,13 @@ function asciidoctorJsCompile(ev) {
         'attributes': ['showtitle']
       }));
   } else {
+    var cssPath =
+      response.serverUrl + '/assets/asciidoctor.js/css/asciidoctor.css';
     compiledBody = Opal.Asciidoctor.$convert(body, Opal.hash2(
-      ['header_footer'],
+      ['header_footer', 'attributes'],
       {
         'header_footer': true,
+        'attributes': ['nofooter', 'linkcss', 'stylesheet=' + cssPath]
       }));
   }
   if (response.beautify) {

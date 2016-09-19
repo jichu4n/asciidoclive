@@ -63,7 +63,7 @@ module.exports = function(defaults) {
     'bower_components/asciidoctor.js/dist',
     {
       destDir: '/assets/asciidoctor.js',
-      files: ['asciidoctor-all.min.js']
+      files: ['asciidoctor-all.min.js', 'css/asciidoctor.css']
     });
   app.import(
     'bower_components/asciidoctor.js/dist/asciidoctor-all.js',

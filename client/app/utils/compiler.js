@@ -5,6 +5,7 @@
 /* global asciidoctorJsCompile */
 
 import Ember from 'ember';
+import config from '../config/environment';
 
 export default Ember.Object.extend({
   // To be injected.
@@ -46,6 +47,7 @@ export default Ember.Object.extend({
       beautify: this.get('settings.showHtml'),
       beautifyOptions: this.get('beautifyOptions'),
       highlight: this.get('settings.showHtml'),
+      serverUrl: config.APP.SERVER_URL,
       startTs: new Date()
     };
     if (Ember.isNone(this.get('compileWorker'))) {
@@ -103,7 +105,8 @@ export default Ember.Object.extend({
       inline: false,
       beautify: true,
       beautifyOptions: this.get('beautifyOptions'),
-      highlight: false
+      highlight: false,
+      serverUrl: config.APP.SERVER_URL
     };
     return asciidoctorJsCompile({ data: request }).compiledBody;
   }
