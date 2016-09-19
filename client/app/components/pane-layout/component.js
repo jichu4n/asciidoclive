@@ -32,7 +32,11 @@ export default Ember.Component.extend(ResizeAware, {
     return this.$('.editor-pane');
   },
   getPreviewPane() {
-    return this.$('.preview-pane');
+    if (this.get('settings.showHtml')) {
+      return this.$('.html-preview-pane');
+    } else {
+      return this.$('.preview-pane');
+    }
   },
   getResizeHandle() {
     return this.$('.resize-handle');
