@@ -86,9 +86,16 @@
               </a>
             </li>
             <li class="divider"></li>
+            <li class="dropdown-header">{{t "header.downloadHeader"}}</li>
+            <li>
+              <a href="#" {{action "download"}}>
+                {{fa-icon "download" fixedWidth=true}}
+                {{t "header.download"}}
+              </a>
+            </li>
             <li>
               <a href="#" {{action "downloadHtml"}}>
-                {{fa-icon "code" fixedWidth=true}}
+                {{fa-icon "download" fixedWidth=true}}
                 {{t "header.downloadHtml"}}
               </a>
             </li>

@@ -13,6 +13,9 @@ export default {
     save: 'Save',
     saveHeader: 'Save',
     saveAsHeader: 'Save as new file',
+    downloadHeader: 'Download',
+    download: 'Download Source',
+    downloadHtml: 'Download Output HTML',
     settings: 'Settings',
     saving: 'Saving...',
     saved: 'Saved',
@@ -21,8 +24,7 @@ export default {
     cheatsheet: 'AsciiDoc Cheatsheet',
     faq: 'FAQ',
     about: 'About',
-    feedback: 'Submit Feedback',
-    downloadHtml: 'Download Output HTML'
+    feedback: 'Submit Feedback'
   },
   defaultTitle: 'Untitled Document',
   defaultBody: '',

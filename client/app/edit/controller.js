@@ -115,20 +115,29 @@ export default Ember.Controller.extend({
       Ember.$('#reopen-dialog').modal('hide');
       this.send('open', storageType.toString(), true);
     },
+    download() {
+      var fileName = this.get('model.fileName');
+      var blob = new Blob([this.get('model.body')], { type: 'text/plain' });
+      this.downloadBlob(fileName, blob);
+    },
     downloadHtml() {
       var fileName = this.get('model.compiledBodyFileName');
       var compiledBodyForDownload = this.get('model.compiledBodyForDownload');
       var blob = new Blob([compiledBodyForDownload], { type: 'text/html' });
-      if (navigator.msSaveOrOpenBlob) {
-        navigator.msSaveBlob(blob, fileName);
-      } else {
-        var e = document.createElement('a');
-        e.href = URL.createObjectURL(blob);
-        e.download = fileName;
-        document.body.appendChild(e);
-        e.click();
-        document.body.removeChild(e);
-      }
+      this.downloadBlob(fileName, blob);
+    }
+  },
+
+  downloadBlob(fileName, blob) {
+    if (navigator.msSaveOrOpenBlob) {
+      navigator.msSaveBlob(blob, fileName);
+    } else {
+      var e = document.createElement('a');
+      e.href = URL.createObjectURL(blob);
+      e.download = fileName;
+      document.body.appendChild(e);
+      e.click();
+      document.body.removeChild(e);
     }
   },
 
