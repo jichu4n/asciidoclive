@@ -10,15 +10,25 @@ function asciidoctorJsCompile(ev) {
   var body = ev.data.body;
   ev.data.body = null;
   var response = JSON.parse(JSON.stringify(ev.data));
-  var compiledBody = Opal.Asciidoctor.$convert(body, Opal.hash2(
-    [
-      'attributes'
-    ],
-    {
-      attributes: ['showtitle']
-    }));
-  if (response.showHtml) {
-    compiledBody = html_beautify(compiledBody, response.htmlBeautifyOptions);
+
+  var compiledBody;
+  if (response.inline) {
+    compiledBody = Opal.Asciidoctor.$convert(body, Opal.hash2(
+      ['attributes'],
+      {
+        'attributes': ['showtitle']
+      }));
+  } else {
+    compiledBody = Opal.Asciidoctor.$convert(body, Opal.hash2(
+      ['header_footer'],
+      {
+        'header_footer': true,
+      }));
+  }
+  if (response.beautify) {
+    compiledBody = html_beautify(compiledBody, response.beautifyOptions);
+  }
+  if (response.highlight) {
     compiledBody = hljs.highlight(
       'html',
       compiledBody,

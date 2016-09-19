@@ -21,7 +21,8 @@ export default {
     cheatsheet: 'AsciiDoc Cheatsheet',
     faq: 'FAQ',
     about: 'About',
-    feedback: 'Submit Feedback'
+    feedback: 'Submit Feedback',
+    downloadHtml: 'Download Output HTML'
   },
   defaultTitle: 'Untitled Document',
   defaultBody: '',
@@ -45,7 +46,7 @@ export default {
   settings: {
     syncScroll: 'Sync Scrolling',
     autoSave: 'Auto Save',
-    showHtml: 'Show HTML Output',
+    showHtml: 'Show Output HTML',
     editorTheme: 'Editor Theme...',
     previewCodeListingTheme: 'Preview Code Listing Theme...',
     previewTheme: 'Preview Theme...',

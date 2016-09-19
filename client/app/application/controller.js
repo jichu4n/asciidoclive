@@ -113,6 +113,9 @@ export default Ember.Controller.extend({
     },
     showEditorModeModal() {
       this.set('isEditorModeModalVisible', true);
+    },
+    downloadHtml() {
+      this.sendToHeaderActionHandler('downloadHtml', arguments);
     }
   }
 });

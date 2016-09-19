@@ -16,6 +16,11 @@ export default Ember.Object.extend({
   runningCompileRequest: null,
   pendingCompileRequest: null,
 
+  beautifyOptions: {
+    'indent_size': 2,
+    'wrap_line_length': 80
+  },
+
   init() {
     if (window.Worker) {
       this.set('compileWorker', new Worker(
@@ -36,12 +41,11 @@ export default Ember.Object.extend({
     var body = this.get('doc.body').toString() || '';
     var request = {
       body: body,
+      inline: true,
       compileCount: this.get('compileCount'),
-      showHtml: this.get('settings.showHtml'),
-      htmlBeautifyOptions: {
-        'indent_size': 2,
-        'wrap_line_length': 80
-      },
+      beautify: this.get('settings.showHtml'),
+      beautifyOptions: this.get('beautifyOptions'),
+      highlight: this.get('settings.showHtml'),
       startTs: new Date()
     };
     if (Ember.isNone(this.get('compileWorker'))) {
@@ -87,5 +91,20 @@ export default Ember.Object.extend({
       }
     }
     this.get('doc').set('compiledBody', ev.data.compiledBody);
+  },
+
+  compileForDownload: function() {
+    if (Ember.isNone(this.get('doc')) || Ember.isNone(this.get('doc.body'))) {
+      return '';
+    }
+    var body = this.get('doc.body').toString() || '';
+    var request = {
+      body: body,
+      inline: false,
+      beautify: true,
+      beautifyOptions: this.get('beautifyOptions'),
+      highlight: false
+    };
+    return asciidoctorJsCompile({ data: request }).compiledBody;
   }
 });

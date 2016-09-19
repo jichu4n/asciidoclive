@@ -30,13 +30,18 @@ export default DS.Model.extend({
     Ember.observer('body', 'settings.showHtml', function() {
       this.get('compiler').compile();
     })),
-
   fileName: Ember.computed('title', function() {
-    return (this.get('title').toString() || '').indexOf('.') > -1 ?
-      this.get('title') :
-      this.get('title') + '.adoc';
+    var title = this.get('title').toString() || '';
+    return title.indexOf('.') > -1 ?
+      title :
+      title + '.adoc';
   }),
-
+  compiledBodyFileName: Ember.computed('title', function() {
+    var title = this.get('title').toString() || '';
+    return title.indexOf('.') > -1 ?
+      title.substr(0, title.lastIndexOf('.')) + '.html' :
+      title + '.html';
+  }),
   markClean() {
     // See http://stackoverflow.com/a/32275254. This will likely break with
     // newer Ember Data versions.
@@ -45,11 +50,13 @@ export default DS.Model.extend({
     internalModel._attributes = {};
     internalModel.send('didCommit');
   },
-
   json: Ember.computed('title', 'body', function() {
     return {
       title: this.get('title'),
       body: this.get('body')
     };
+  }),
+  compiledBodyForDownload: Ember.computed('body', function() {
+    return this.get('compiler').compileForDownload();
   })
 });
