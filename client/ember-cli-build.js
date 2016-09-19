@@ -56,6 +56,25 @@ module.exports = function(defaults) {
     'bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css',
     { type: 'vendor' });
 
+  // asciidoctor.js, js-beautify and highlight.js are both used by the Web
+  // Worker compiler thread, so they must be exported separately. We also need
+  // to import them into the main app in case web workers aren't supported.
+  var asciidoctor = new Funnel(
+    'bower_components/asciidoctor.js/dist',
+    {
+      destDir: '/assets/asciidoctor.js',
+      files: ['asciidoctor-all.min.js']
+    });
+  app.import(
+    'bower_components/asciidoctor.js/dist/asciidoctor-all.js',
+    { type: 'vendor' });
+
+  var highlightjs = new Funnel(
+    'bower_components/highlightjs',
+    {
+      destDir: '/assets/highlightjs',
+      files: ['highlight.pack.min.js']
+    });
   app.import(
     'bower_components/highlightjs/highlight.pack.min.js',
     { type: 'vendor' });
@@ -63,24 +82,19 @@ module.exports = function(defaults) {
     'bower_components/highlightjs/styles',
     { destDir: '/assets/highlightjs' });
 
+  var jsBeautify = new Funnel(
+    'bower_components/js-beautify/js/lib',
+    {
+      destDir: '/assets/js-beautify',
+      files: ['beautify-html.js']
+    });
   app.import(
     'bower_components/js-beautify/js/lib/beautify-html.js',
     { type: 'vendor' });
 
-  // Keep asciidoctor.js and compile worker as separate files for use with Web
-  // Worker, but also import them into the main app for older browsers.
-  var asciidoctor = new Funnel(
-    'bower_components/asciidoctor.js/dist',
-    {
-      destDir: '/assets/asciidoctor.js',
-      files: ['asciidoctor-all.min.js']
-    });
   var workers = new Funnel(
     'workers',
     { destDir: '/assets/workers' });
-  app.import(
-    'bower_components/asciidoctor.js/dist/asciidoctor-all.js',
-    { type: 'vendor' });
 
   var aceEditor = new Funnel(
     'bower_components/ace-builds/src-min-noconflict',
@@ -94,7 +108,9 @@ module.exports = function(defaults) {
     bootstrapFonts,
     asciidoctor,
     aceEditor,
+    highlightjs,
     highlightjsStyles,
+    jsBeautify,
     workers,
     asciidocHtmlAssets
   ]);

@@ -14,14 +14,22 @@ export default DS.Model.extend({
 
   compiledBody: '',
 
+  settings: Ember.inject.service(),
+
   compiler: null,
   init() {
     this._super.apply(this, arguments);
-    this.set('compiler', Compiler.create({ doc: this }));
+    console.info('Creating compiler');
+    this.set('compiler', Compiler.create({
+      doc: this,
+      settings: this.get('settings')
+    }));
   },
-  onBodyChanged: Ember.on('init', Ember.observer('body', function() {
-    this.get('compiler').compile();
-  })),
+  onBodyOrShowHtmlChanged: Ember.on(
+    'init',
+    Ember.observer('body', 'settings.showHtml', function() {
+      this.get('compiler').compile();
+    })),
 
   fileName: Ember.computed('title', function() {
     return (this.get('title').toString() || '').indexOf('.') > -1 ?

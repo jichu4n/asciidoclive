@@ -9,6 +9,7 @@ import Ember from 'ember';
 export default Ember.Object.extend({
   // To be injected.
   doc: null,
+  settings: null,
 
   compileWorker: null,
   compileCount: 0,
@@ -36,6 +37,11 @@ export default Ember.Object.extend({
     var request = {
       body: body,
       compileCount: this.get('compileCount'),
+      showHtml: this.get('settings.showHtml'),
+      htmlBeautifyOptions: {
+        'indent_size': 2,
+        'wrap_line_length': 80
+      },
       startTs: new Date()
     };
     if (Ember.isNone(this.get('compileWorker'))) {

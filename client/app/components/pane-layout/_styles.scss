@@ -17,14 +17,27 @@
     background: $gray-lighter;
     cursor: col-resize;
   }
-  .preview-pane {
+
+  .preview-pane,
+  .html-preview-pane {
     flex: 1 1 auto;
     width: 50%;
     padding: 10px;
+  }
+
+  .preview-pane {
     overflow-y: auto;
     word-break: break-word;
 
     @import 'app/styles/asciidoctor';
+  }
+
+  .html-preview-pane {
+    border: none;
+    border-radius: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    margin: 0;
   }
 }
 

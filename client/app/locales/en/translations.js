@@ -45,9 +45,10 @@ export default {
   settings: {
     syncScroll: 'Sync Scrolling',
     autoSave: 'Auto Save',
-    showHtml: 'Show Generated HTML',
+    showHtml: 'Show HTML Output',
     editorTheme: 'Editor Theme...',
-    highlightjsTheme: 'Preview Code Listing Theme...',
+    previewCodeListingTheme: 'Preview Code Listing Theme...',
+    previewTheme: 'Preview Theme...',
     font: 'Fonts & Sizes...',
     editorMode: 'Key Bindings...'
   },

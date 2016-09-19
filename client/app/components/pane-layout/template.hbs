@@ -6,10 +6,8 @@
       scrollState=editorScrollState}}
 </div>
 <div class="resize-handle ui-resizable-handle ui-resizable-e"></div>
-  <div class="preview-pane pane">
-    {{#if settings.showHtml}}
-      {{html-preview doc=doc}}
-    {{else}}
-      {{{doc.compiledBody}}}
-    {{/if}}
-  </div>
+{{#if settings.showHtml}}
+  <pre class="html-preview-pane pane hljs">{{{doc.compiledBody}}}</pre>
+{{else}}
+  <div class="preview-pane pane">{{{doc.compiledBody}}}</div>
+{{/if}}

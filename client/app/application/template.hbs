@@ -133,7 +133,11 @@
             <li>
               <a href="#" {{action "showHighlightjsThemeModal"}}>
                 {{fa-icon "file-code-o" fixedWidth=true}}
-                {{t "settings.highlightjsTheme"}}
+                {{#if settings.showHtml}}
+                  {{t "settings.previewTheme"}}
+                {{else}}
+                  {{t "settings.previewCodeListingTheme"}}
+                {{/if}}
               </a>
             </li>
             <li class="divider"></li>
