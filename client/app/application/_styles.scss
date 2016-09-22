@@ -24,6 +24,20 @@ $navbar-brand-img-height: 14px;
 }
 
 .navbar #header-menu {
+
+  .save-icon {
+    width: 1em;
+    height: auto;
+    vertical-align: -35%;
+
+    @media (min-width: $grid-float-breakpoint) {
+      margin-left: 0.2em;
+    }
+    @media (max-width: $grid-float-breakpoint) {
+      margin-right: 0.3em;
+    }
+  }
+
   li.dropdown > a {
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -56,6 +70,24 @@ $navbar-brand-img-height: 14px;
       @media (min-width: $grid-float-breakpoint) {
         color: $gray;
       }
+    }
+  }
+
+  ul.dropdown-menu .open-local {
+    position: relative;
+    padding: 0;
+
+    & > label {
+      font-weight: normal;
+      margin: 0;
+      padding: 3px 20px;  // Same as regular li > a padding
+      width: 100%;
+      cursor: pointer;
+    }
+    & > input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      z-index: -1;
     }
   }
 }

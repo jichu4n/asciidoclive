@@ -151,5 +151,8 @@ export default Ember.Service.extend({
   maxFontSize: 24,
   previewFontSizeBase: 14,
 
-  maxRecentFiles: 5
+  maxRecentFiles: 5,
+
+  scratchId: 0,
+  localFile: null
 });

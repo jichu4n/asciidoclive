@@ -15,37 +15,53 @@ export default Ember.Route.extend({
 
   model(params) {
     if (params.storage_type === StorageType.NONE) {
-      return Ember.$.get('/assets/scratch.txt').then(function(fileContent) {
+      this.get('settings').set('scratchId', parseInt(params.storage_path));
+      var docTitle;
+      var docContentPromise;
+      var shouldMarkAsClean;
+      if (!Ember.isNone(this.get('settings.localFile.name')) &&
+          !Ember.isNone(this.get('settings.localFile.content'))) {
+        docTitle = this.get('settings.localFile.name');
+        console.info('Loading local file "%s"', docTitle);
+        docContentPromise = Ember.RSVP.Promise.resolve(
+          this.get('settings.localFile.content'));
+        this.get('settings').set('localFile', null);
+        shouldMarkAsClean = false;
+      } else {
+        console.info('Loading scratch content');
+        docTitle = this.get('i18n').t('defaultTitle');
+        docContentPromise = Ember.$.get('/assets/scratch.txt');
+        shouldMarkAsClean = true;
+      }
+      return docContentPromise.then(function(docContent) {
         var doc = this.get('store').createRecord('doc', {
-          title: this.get('i18n').t('defaultTitle'),
-          body: fileContent,
+          title: docTitle,
+          body: docContent,
           storageSpec: StorageSpec.create({
             storageType: StorageType.NONE,
             storagePath: ''
           })
         });
-        doc.markClean();
+        if (shouldMarkAsClean) {
+          doc.markClean();
+        }
         return doc;
       }.bind(this));
+    } else {
+      Cookies.set('redirect', {
+        route: this.get('routeName'),
+        args: [params.storage_type, params.storage_path]
+      });
+      return this.get('storageProviders').load(StorageSpec.create({
+        storageType: params.storage_type,
+        storagePath: decodeURIComponent(params.storage_path)
+      }));
     }
-    Cookies.set('redirect', {
-      route: this.get('routeName'),
-      args: [params.storage_type, params.storage_path]
-    });
-    return this.get('storageProviders').load(StorageSpec.create({
-      storageType: params.storage_type,
-      storagePath: decodeURIComponent(params.storage_path)
-    }));
   },
 
   isConfirmCloseBound: false,
   afterModel(model) {
     Cookies.remove('redirect');
-
-    model.markClean();
-
-    this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
-    this.send('setHeaderSaveTitle', model.get('title'));
 
     if (!this.get('isConfirmCloseBound')) {
       Ember.$(window).bind('beforeunload', this.confirmClose.bind(this));
@@ -53,7 +69,11 @@ export default Ember.Route.extend({
     }
 
     // Sending actions is not possible inside afterModel :-/
-    Ember.run.next(this, this.send, 'updateRecentFiles', model);
+    Ember.run.next(this, function() {
+      this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
+      this.send('setHeaderSaveTitle', model.get('title'));
+      this.send('updateRecentFiles', model);
+    });
   },
 
   serialize(model) {

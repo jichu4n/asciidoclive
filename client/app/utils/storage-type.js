@@ -5,5 +5,6 @@
 export default {
   NONE: 'scratch',
   DROPBOX: 'dropbox',
-  GOOGLE_DRIVE: 'google-drive'
+  GOOGLE_DRIVE: 'google-drive',
+  LOCAL: 'local'
 };

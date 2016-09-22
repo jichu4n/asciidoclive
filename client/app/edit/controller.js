@@ -44,7 +44,8 @@ export default Ember.Controller.extend({
         recentFile.storage_path);
     },
     openScratch() {
-      this.transitionToRoute('edit', StorageType.NONE, '1');
+      this.transitionToRoute(
+        'edit', StorageType.NONE, this.get('settings.scratchId') + 1);
     },
     save() {
       this.set('showSavedStatus', false);
@@ -115,7 +116,7 @@ export default Ember.Controller.extend({
       Ember.$('#reopen-dialog').modal('hide');
       this.send('open', storageType.toString(), true);
     },
-    download() {
+    saveLocal() {
       var fileName = this.get('model.fileName');
       var blob = new Blob([this.get('model.body')], { type: 'text/plain' });
       this.downloadBlob(fileName, blob);
@@ -125,6 +126,24 @@ export default Ember.Controller.extend({
       var compiledBodyForDownload = this.get('model.compiledBodyForDownload');
       var blob = new Blob([compiledBodyForDownload], { type: 'text/html' });
       this.downloadBlob(fileName, blob);
+    },
+    openLocal(ev) {
+      var fileInput = ev.target;
+      var file = fileInput.files[0];
+      console.info('Opening local file: %o', file);
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        this.get('settings').set(
+          'localFile',
+          {
+            'name': file.name,
+            'content': ev.target.result
+          });
+        Ember.$(fileInput).wrap('<form>').closest('form').get(0).reset();
+        Ember.$(fileInput).unwrap();
+        this.send('openScratch');
+      }.bind(this);
+      reader.readAsText(file);
     }
   },
 

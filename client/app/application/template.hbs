@@ -33,6 +33,13 @@
             {{/each}}
             <li class="divider"></li>
             {{/if}}
+            <li>
+              <a href="#" {{action "openScratch"}}>
+                {{fa-icon "file-text" fixedWidth=true}}
+                {{t "header.openScratch"}}
+              </a>
+            </li>
+            <li class="divider"></li>
             <li class="dropdown-header">{{t "header.openHeader"}}</li>
             <li>
               <a href="#" {{action "open" "dropbox"}}>
@@ -46,18 +53,20 @@
                 {{t "storageType.google-drive"}}
               </a>
             </li>
-            <li class="divider"></li>
             <li>
-              <a href="#" {{action "openScratch"}}>
-                {{fa-icon "file-text" fixedWidth=true}}
-                {{t "header.openScratch"}}
+              <a href="#" class="open-local">
+                <label for="open-local-file-input">
+                  {{fa-icon "laptop" fixedWidth=true}}
+                  {{t "header.local"}}
+                </label>
+                <input type="file" accept=".adoc,.asciidoc,text/*" id="open-local-file-input">
               </a>
             </li>
           </ul>
         </li>
         <li class="dropdown" title="{{t "header.save"}}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            {{fa-icon "cloud-download" size="lg" fixedWidth=true}}
+            <img class="save-icon fa fa-lg fa-fw" src="/assets/save-white.png">
             <span class="icon-label">{{t "header.save"}}</span>
           </a>
           <ul class="dropdown-menu">
@@ -85,18 +94,18 @@
                 {{t "storageType.google-drive"}}
               </a>
             </li>
-            <li class="divider"></li>
-            <li class="dropdown-header">{{t "header.downloadHeader"}}</li>
             <li>
-              <a href="#" {{action "download"}}>
-                {{fa-icon "download" fixedWidth=true}}
-                {{t "header.download"}}
+              <a href="#" {{action "saveLocal"}}>
+                {{fa-icon "laptop" fixedWidth=true}}
+                {{t "header.local"}}
               </a>
             </li>
+            <li class="divider"></li>
+            <li class="dropdown-header">{{t "header.exportHeader"}}</li>
             <li>
               <a href="#" {{action "downloadHtml"}}>
-                {{fa-icon "download" fixedWidth=true}}
-                {{t "header.downloadHtml"}}
+                {{fa-icon "code" fixedWidth=true}}
+                {{t "header.exportHtml"}}
               </a>
             </li>
           </ul>
