@@ -4,7 +4,6 @@ module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'amoya',
     environment: environment,
-    baseURL: '/',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
