@@ -41,18 +41,22 @@
             </li>
             <li class="divider"></li>
             <li class="dropdown-header">{{t "header.openHeader"}}</li>
+            {{#if ENV.APP.ENABLE_DROPBOX}}
             <li>
               <a href="#" {{action "open" "dropbox"}}>
                 {{fa-icon "dropbox" fixedWidth=true}}
                 {{t "storageType.dropbox"}}
               </a>
             </li>
+            {{/if}}
+            {{#if ENV.APP.ENABLE_GOOGLE_DRIVE}}
             <li>
               <a href="#" {{action "open" "google-drive"}}>
                 {{fa-icon "google" fixedWidth=true}}
                 {{t "storageType.google-drive"}}
               </a>
             </li>
+            {{/if}}
             <li>
               <a href="#" class="open-local">
                 <label for="open-local-file-input">
@@ -82,18 +86,22 @@
             <li class="divider"></li>
             {{/if}}
             <li class="dropdown-header">{{t "header.saveAsHeader"}}</li>
+            {{#if ENV.APP.ENABLE_DROPBOX}}
             <li>
               <a href="#" {{action "saveAs" "dropbox"}}>
                 {{fa-icon "dropbox" fixedWidth=true}}
                 {{t "storageType.dropbox"}}
               </a>
             </li>
+            {{/if}}
+            {{#if ENV.APP.ENABLE_GOOGLE_DRIVE}}
             <li>
               <a href="#" {{action "saveAs" "google-drive"}}>
                 {{fa-icon "google" fixedWidth=true}}
                 {{t "storageType.google-drive"}}
               </a>
             </li>
+            {{/if}}
             <li>
               <a href="#" {{action "saveLocal"}}>
                 {{fa-icon "laptop" fixedWidth=true}}

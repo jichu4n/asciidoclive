@@ -43,7 +43,8 @@ ember serve
 
 For Dropbox integration, https://www.dropbox.com/developers/apps/create[create an app]
 on Dropbox and copy the generated App Key into the `DROPBOX_APP_KEY` field in
-https://github.com/jichu4n/asciidoclive/blob/master/client/config/environment.js[`/client/config/environment.js`].
+https://github.com/jichu4n/asciidoclive/blob/master/client/config/environment.js[`/client/config/environment.js`],
+and set `ENABLE_DROPBOX` to `true`.
 
 For Google Drive integration,
 https://developers.google.com/identity/sign-in/web/devconsole-project[create a new project]
@@ -53,6 +54,7 @@ Then populate the following fields in
 https://github.com/jichu4n/asciidoclive/blob/master/client/config/environment.js[`/client/config/environment.js`]
 accordingly:
 
+* `ENABLE_GOOGLE_DRIVE`: `true`
 * `GOOGLE_CLIENT_ID`: The OAuth Client ID (e.g., `12345678-abcdefg.apps.googleusercontent.com`);
 * `GOOGLE_APP_ID`: The leading digits of the OAuth Client ID preceding the hyphen (e.g., `12345678`);
 * `GOOGLE_API_KEY`: The Browser API Key (e.g., `AbCdEfGh_1IjK`)

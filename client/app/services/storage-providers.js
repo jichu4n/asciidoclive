@@ -20,10 +20,14 @@ export default Ember.Service.extend({
       if (ENV.APP.ENABLE_DROPBOX) {
         storageProviders.push(
           DropboxStorageProvider.create({ store: this.get('store') }));
+      } else {
+        console.info('Dropbox integration is disabled');
       }
       if (ENV.APP.ENABLE_GOOGLE_DRIVE) {
         storageProviders.push(
           GoogleDriveStorageProvider.create({ store: this.get('store') }));
+      } else {
+        console.info('Google Drive integration is disabled');
       }
       storageProviders.forEach(function(storageProvider) {
         console.info(

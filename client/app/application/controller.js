@@ -3,6 +3,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import Ember from 'ember';
+import ENV from '../config/environment';
 
 export default Ember.Controller.extend({
   // Injected by route.
@@ -84,6 +85,8 @@ export default Ember.Controller.extend({
       }.bind(this));
     });
   }),
+
+  ENV: ENV,
 
   actions: {
     open() {
