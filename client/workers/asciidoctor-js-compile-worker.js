@@ -45,7 +45,9 @@ function asciidoctorJsCompile(ev) {
 }
 
 if (isInWebWorker) {
-  console.info('Starting Asciidoctor compile worker');
+  if (typeof console !== 'undefined') {
+    console.info('Starting Asciidoctor compile worker');
+  }
   // For js-beautify.
   global = {};
   self.importScripts(
