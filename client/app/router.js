@@ -17,6 +17,11 @@ Router.map(function() {
   this.route('authSuccess', {
     path: '/auth_success'
   });
+
+  // For testing base application.
+  this.route('test', {
+    path: '/_test'
+  });
 });
 
 export default Router;

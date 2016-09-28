@@ -29,7 +29,9 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+      ENABLE_DROPBOX: false,
       DROPBOX_APP_KEY: '<Dropbox App Key>',
+      ENABLE_GOOGLE_DRIVE: false,
       GOOGLE_CLIENT_ID: '<Google Client ID>',
       GOOGLE_APP_ID: '<Google App ID>',
       GOOGLE_API_KEY: '<Google API Key>'
@@ -54,6 +56,9 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+
+    ENV.APP.ENABLE_DROPBOX = false;
+    ENV.APP.ENABLE_GOOGLE_DRIVE = false;
   }
 
   if (environment === 'production') {

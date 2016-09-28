@@ -4,6 +4,7 @@
 
 import Ember from 'ember';
 import DS from 'ember-data';
+import ENV from '../config/environment';
 import DropboxStorageProvider from '../utils/dropbox-storage-provider';
 import GoogleDriveStorageProvider from '../utils/google-drive-storage-provider';
 
@@ -14,16 +15,24 @@ export default Ember.Service.extend({
 
   init() {
     this._super.apply(this, arguments);
-    [
-      DropboxStorageProvider.create({ store: this.get('store') }),
-      GoogleDriveStorageProvider.create({ store: this.get('store') })
-    ].forEach(function(storageProvider) {
-      console.info(
-        'Registering storage provider "%s"',
-        storageProvider.get('storageType'));
-      this.get('storageProviders')[storageProvider.get('storageType')] =
-        storageProvider;
-    }, this);
+    Ember.run(this, function() {
+      var storageProviders = [];
+      if (ENV.APP.ENABLE_DROPBOX) {
+        storageProviders.push(
+          DropboxStorageProvider.create({ store: this.get('store') }));
+      }
+      if (ENV.APP.ENABLE_GOOGLE_DRIVE) {
+        storageProviders.push(
+          GoogleDriveStorageProvider.create({ store: this.get('store') }));
+      }
+      storageProviders.forEach(function(storageProvider) {
+        console.info(
+          'Registering storage provider "%s"',
+          storageProvider.get('storageType'));
+        this.get('storageProviders')[storageProvider.get('storageType')] =
+          storageProvider;
+      }, this);
+    });
   },
 
   getStorageProvider(storageTypeOrStorageSpec) {
