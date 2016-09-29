@@ -8,7 +8,6 @@ import moduleForAcceptance from 'amoya/tests/helpers/module-for-acceptance';
 moduleForAcceptance('Acceptance | index');
 
 test('visiting /', function(assert) {
-  var done = assert.async();
   visit('/');
 
   andThen(function() {

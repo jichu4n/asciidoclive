@@ -13,7 +13,9 @@ export default Ember.Controller.extend({
     $('#main-layout').css('top', $('.navbar').outerHeight() + 'px');
   },
   init() {
-    this.get('resize').on('didResize', this.resizeMainLayout.bind(this));
-    Ember.run.next(this, this.resizeMainLayout);
+    Ember.run(function() {
+      this.get('resize').on('didResize', this.resizeMainLayout.bind(this));
+      Ember.run.next(this, this.resizeMainLayout);
+    });
   }
 });

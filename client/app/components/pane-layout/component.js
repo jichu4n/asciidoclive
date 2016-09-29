@@ -54,23 +54,25 @@ export default Ember.Component.extend(ResizeAware, {
 
   initialized: false,
   setupUi: Ember.on('didInsertElement', function() {
-    Ember.run.scheduleOnce('afterRender', this, function() {
-      this.getEditorPane().resizable({
-        handles: {
-          e: this.getResizeHandle()
-        },
-        minWidth: this.get('minPaneWidth'),
-        maxWidth: this.getMaxPaneWidth(),
-        resize: this.updateEditorPaneSize.bind(this)
+    Ember.run(this, function() {
+      Ember.run.scheduleOnce('afterRender', this, function() {
+        this.getEditorPane().resizable({
+          handles: {
+            e: this.getResizeHandle()
+          },
+          minWidth: this.get('minPaneWidth'),
+          maxWidth: this.getMaxPaneWidth(),
+          resize: this.updateEditorPaneSize.bind(this)
+        });
+        this.updateEditorPaneSize();
+        this.getPreviewPane().scroll(function() {
+          Ember.run.once(this, this.updatePreviewScrollState);
+        }.bind(this));
+        this.updatePreviewScrollState();
+        this.onPreviewFontChanged();
+        this.onPreviewFontSizeChanged();
+        this.initialized = true;
       });
-      this.updateEditorPaneSize();
-      this.getPreviewPane().scroll(function() {
-        Ember.run.once(this, this.updatePreviewScrollState);
-      }.bind(this));
-      this.updatePreviewScrollState();
-      this.onPreviewFontChanged();
-      this.onPreviewFontSizeChanged();
-      this.initialized = true;
     });
   }),
   debouncedDidResize() {
@@ -102,7 +104,9 @@ export default Ember.Component.extend(ResizeAware, {
       'editorLastScrollRatio', this.get('editorScrollState.scrollRatio'));
   }),
   onDocCompiledBodyChanged: Ember.observer('doc.compiledBody', function() {
-    Ember.run.scheduleOnce('afterRender', this, this.onPreviewChanged);
+    Ember.run(this, function() {
+      Ember.run.scheduleOnce('afterRender', this, this.onPreviewChanged);
+    });
   }),
   onPreviewChanged() {
     this.set('isSyncedScroll', true);
