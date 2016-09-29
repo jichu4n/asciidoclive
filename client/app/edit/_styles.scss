@@ -23,3 +23,8 @@ $doc-title-editor-height: 50px;
     top: $navbar-height-collapsed;
   }
 }
+
+/* For tests. */
+#ember-testing #edit-layout {
+  height: 300px;
+}
