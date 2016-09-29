@@ -29,6 +29,8 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+      ENABLE_WEB_WORKER : true,
+
       ENABLE_DROPBOX: false,
       DROPBOX_APP_KEY: '<Dropbox App Key>',
       ENABLE_GOOGLE_DRIVE: false,
@@ -57,6 +59,7 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
 
+    ENV.APP.ENABLE_WEB_WORKER = false;
     ENV.APP.ENABLE_DROPBOX = false;
     ENV.APP.ENABLE_GOOGLE_DRIVE = false;
   }

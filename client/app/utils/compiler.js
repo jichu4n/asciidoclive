@@ -5,7 +5,7 @@
 /* global asciidoctorJsCompile */
 
 import Ember from 'ember';
-import config from '../config/environment';
+import ENV from '../config/environment';
 
 export default Ember.Object.extend({
   // To be injected.
@@ -23,16 +23,22 @@ export default Ember.Object.extend({
   },
 
   init() {
-    if (window.Worker) {
-      this.set('compileWorker', new Worker(
-        '/assets/workers/asciidoctor-js-compile-worker.js'));
-      this.get('compileWorker').addEventListener(
-        'message', this.onCompileDone.bind(this));
-    } else {
-      console.log(
-        'Browser does not support Web Workers, will compile in main thread.');
-    }
+    Ember.run(this, function() {
+      if (ENV.APP.ENABLE_WEB_WORKER && window.Worker) {
+        this.set('compileWorker', new Worker(
+          '/assets/workers/asciidoctor-js-compile-worker.js'));
+        this.get('compileWorker').addEventListener(
+          'message', this.onCompileDone.bind(this));
+      } else {
+        console.log(
+          'Web Workers are unsupported or disabled, ' +
+          'will compile in main thread.');
+      }
+    });
   },
+  useWebWorker: Ember.computed('compileWorker', function() {
+    return !Ember.isNone(this.get('compileWorker'));
+  }),
 
   compile: function() {
     if (Ember.isNone(this.get('doc')) || Ember.isNone(this.get('doc.body'))) {
@@ -47,12 +53,10 @@ export default Ember.Object.extend({
       beautify: this.get('settings.showHtml'),
       beautifyOptions: this.get('beautifyOptions'),
       highlight: this.get('settings.showHtml'),
-      serverUrl: config.APP.SERVER_URL,
+      serverUrl: ENV.APP.SERVER_URL,
       startTs: new Date()
     };
-    if (Ember.isNone(this.get('compileWorker'))) {
-      Ember.run.next(this, this.compileInMainThread, request);
-    } else {
+    if (this.get('useWebWorker')) {
       if (Ember.isNone(this.get('runningCompileRequest'))) {
         console.info('[%d] Compiling immediately', this.get('compileCount'));
         this.set('runningCompileRequest', request);
@@ -66,6 +70,8 @@ export default Ember.Object.extend({
         console.info('[%d] Scheduling compile run', this.get('compileCount'));
         this.set('pendingCompileRequest', request);
       }
+    } else {
+      Ember.run.next(this, this.compileInMainThread, request);
     }
   },
   compileInMainThread(request) {
@@ -79,7 +85,7 @@ export default Ember.Object.extend({
       ev.data.compileCount,
       endTs.valueOf(),
       endTs - (new Date(ev.data.startTs)));
-    if (!Ember.isNone(this.get('compileWorker'))) {
+    if (this.get('useWebWorker')) {
       var pendingRequest = this.get('pendingCompileRequest');
       if (Ember.isNone(pendingRequest)) {
         this.set('runningCompileRequest', null);
@@ -92,7 +98,9 @@ export default Ember.Object.extend({
         this.get('compileWorker').postMessage(pendingRequest);
       }
     }
-    this.get('doc').set('compiledBody', ev.data.compiledBody);
+    Ember.run(this, function() {
+      this.get('doc').set('compiledBody', ev.data.compiledBody);
+    });
   },
 
   compileForDownload: function() {
@@ -106,7 +114,7 @@ export default Ember.Object.extend({
       beautify: true,
       beautifyOptions: this.get('beautifyOptions'),
       highlight: false,
-      serverUrl: config.APP.SERVER_URL
+      serverUrl: ENV.APP.SERVER_URL
     };
     return asciidoctorJsCompile({ data: request }).compiledBody;
   }

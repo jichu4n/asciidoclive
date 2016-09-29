@@ -18,12 +18,14 @@ export default DS.Model.extend({
 
   compiler: null,
   init() {
-    this._super.apply(this, arguments);
-    console.info('Creating compiler');
-    this.set('compiler', Compiler.create({
-      doc: this,
-      settings: this.get('settings')
-    }));
+    Ember.run(this, function() {
+      this._super.apply(this, arguments);
+      console.info('Creating compiler');
+      this.set('compiler', Compiler.create({
+        doc: this,
+        settings: this.get('settings')
+      }));
+    });
   },
   onBodyOrShowHtmlChanged: Ember.on(
     'init',
