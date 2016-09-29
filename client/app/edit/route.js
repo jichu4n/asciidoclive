@@ -15,6 +15,7 @@ export default Ember.Route.extend({
 
   model(params) {
     if (params.storage_type === StorageType.NONE) {
+      /*
       this.get('settings').set('scratchId', parseInt(params.storage_path));
       var docTitle;
       var docContentPromise;
@@ -47,6 +48,17 @@ export default Ember.Route.extend({
         }
         return doc;
       }.bind(this));
+     */
+      return Ember.run(this, function() {
+        return this.get('store').createRecord('doc', {
+          title: 'Foo',
+          body: 'bar',
+          storageSpec: StorageSpec.create({
+            storageType: StorageType.NONE,
+            storagePath: ''
+          })
+        });
+      });
     } else {
       Cookies.set('redirect', {
         route: this.get('routeName'),
@@ -61,18 +73,20 @@ export default Ember.Route.extend({
 
   isConfirmCloseBound: false,
   afterModel(model) {
-    Cookies.remove('redirect');
+    Ember.run(this, function() {
+      Cookies.remove('redirect');
 
-    if (!this.get('isConfirmCloseBound')) {
-      Ember.$(window).bind('beforeunload', this.confirmClose.bind(this));
-      this.set('isConfirmCloseBound', true);
-    }
+      if (!this.get('isConfirmCloseBound')) {
+        Ember.$(window).bind('beforeunload', this.confirmClose.bind(this));
+        this.set('isConfirmCloseBound', true);
+      }
 
-    // Sending actions is not possible inside afterModel :-/
-    Ember.run.next(this, function() {
-      this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
-      this.send('setHeaderSaveTitle', model.get('title'));
-      this.send('updateRecentFiles', model);
+      // Sending actions is not possible inside afterModel :-/
+      Ember.run.next(this, function() {
+        this.send('setHeaderSaveStorageSpec', model.get('storageSpec'));
+        this.send('setHeaderSaveTitle', model.get('title'));
+        this.send('updateRecentFiles', model);
+      });
     });
   },
 

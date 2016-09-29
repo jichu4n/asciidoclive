@@ -5,12 +5,13 @@
 import { test } from 'qunit';
 import moduleForAcceptance from 'amoya/tests/helpers/module-for-acceptance';
 
-moduleForAcceptance('Acceptance | application');
+moduleForAcceptance('Acceptance | index');
 
-test('visiting /_test', function(assert) {
-  visit('/_test');
+test('visiting /', function(assert) {
+  var done = assert.async();
+  visit('/');
 
   andThen(function() {
-    assert.equal(currentURL(), '/_test');
+    assert.equal(currentURL(), '/edit/scratch/1');
   });
 });
