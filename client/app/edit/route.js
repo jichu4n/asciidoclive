@@ -15,7 +15,6 @@ export default Ember.Route.extend({
 
   model(params) {
     if (params.storage_type === StorageType.NONE) {
-      /*
       this.get('settings').set('scratchId', parseInt(params.storage_path));
       var docTitle;
       var docContentPromise;
@@ -48,17 +47,6 @@ export default Ember.Route.extend({
         }
         return doc;
       }.bind(this));
-     */
-      return Ember.run(this, function() {
-        return this.get('store').createRecord('doc', {
-          title: 'Foo',
-          body: 'bar',
-          storageSpec: StorageSpec.create({
-            storageType: StorageType.NONE,
-            storagePath: ''
-          })
-        });
-      });
     } else {
       Cookies.set('redirect', {
         route: this.get('routeName'),
