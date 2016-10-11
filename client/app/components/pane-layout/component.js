@@ -108,17 +108,17 @@ export default Ember.Component.extend(ResizeAware, {
     var shouldScrollToBottom =
       scrollState.get('isAtBottom') && !scrollState.get('isAtTop');
     this.set('isSyncedScroll', true);
+    if (!this.get('settings.showHtml')) {
+      this.getPreviewPane().find('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    }
     this.updatePreviewScrollState();
     if (shouldScrollToBottom) {
       scrollState.set('scrollTop', scrollState.get('maxScrollTop'));
       this.getPreviewPane().scrollTop(scrollState.get('scrollTop'));
     }
     this.set('isSyncedScroll', false);
-    if (!this.get('settings.showHtml')) {
-      this.getPreviewPane().find('pre code').each(function(i, block) {
-        hljs.highlightBlock(block);
-      });
-    }
   }),
   updatePreviewScrollState() {
     var scrollState = this.get('previewScrollState');
@@ -128,18 +128,18 @@ export default Ember.Component.extend(ResizeAware, {
     scrollState.set('scrollTop', previewPane.scrollTop() || 0);
   },
   onPreviewScroll: Ember.observer('previewScrollState.scrollTop', function() {
-      if (this.get('settings.syncScroll') && !this.get('isSyncedScroll')) {
-        this.set('isSyncedScroll', true);
-        var previewScrollRatioDelta = this.get('previewScrollState.scrollRatio') -
-          this.get('previewLastScrollRatio');
-        this.get('editorScrollState').set(
-          'scrollRatio',
-          this.get('editorScrollState.scrollRatio') + previewScrollRatioDelta);
-        this.set('isSyncedScroll', false);
-      }
-      this.set(
-        'previewLastScrollRatio', this.get('previewScrollState.scrollRatio'));
-    }),
+    if (this.get('settings.syncScroll') && !this.get('isSyncedScroll')) {
+      this.set('isSyncedScroll', true);
+      var previewScrollRatioDelta = this.get('previewScrollState.scrollRatio') -
+        this.get('previewLastScrollRatio');
+      this.get('editorScrollState').set(
+        'scrollRatio',
+        this.get('editorScrollState.scrollRatio') + previewScrollRatioDelta);
+      this.set('isSyncedScroll', false);
+    }
+    this.set(
+      'previewLastScrollRatio', this.get('previewScrollState.scrollRatio'));
+  }),
 
   onPreviewFontChanged: Ember.observer(
     'settings.previewFont', function() {

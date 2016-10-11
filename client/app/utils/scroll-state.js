@@ -35,7 +35,7 @@ export default Ember.Object.extend({
   isAtTop: Ember.computed('scrollTop', function() {
     return this.get('scrollTop') <= 0;
   }),
-  AT_BOTTOM_THRESHOLD: 50,
+  AT_BOTTOM_THRESHOLD: 30,
   isAtBottom: Ember.computed('scrollTop', 'maxScrollTop', function() {
     return this.get('scrollTop') + this.AT_BOTTOM_THRESHOLD >=
       this.get('maxScrollTop');
