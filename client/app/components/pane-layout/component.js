@@ -103,21 +103,23 @@ export default Ember.Component.extend(ResizeAware, {
     this.set(
       'editorLastScrollRatio', this.get('editorScrollState.scrollRatio'));
   }),
-  onDocCompiledBodyChanged: Ember.observer('doc.compiledBody', function() {
-    Ember.run(this, function() {
-      Ember.run.scheduleOnce('afterRender', this, this.onPreviewChanged);
-    });
-  }),
-  onPreviewChanged() {
+  onPreviewChanged: Ember.on('didRender', function() {
+    var scrollState = this.get('previewScrollState');
+    var shouldScrollToBottom =
+      scrollState.get('isAtBottom') && !scrollState.get('isAtTop');
     this.set('isSyncedScroll', true);
     this.updatePreviewScrollState();
+    if (shouldScrollToBottom) {
+      scrollState.set('scrollTop', scrollState.get('maxScrollTop'));
+      this.getPreviewPane().scrollTop(scrollState.get('scrollTop'));
+    }
     this.set('isSyncedScroll', false);
     if (!this.get('settings.showHtml')) {
       this.getPreviewPane().find('pre code').each(function(i, block) {
         hljs.highlightBlock(block);
       });
     }
-  },
+  }),
   updatePreviewScrollState() {
     var scrollState = this.get('previewScrollState');
     var previewPane = this.getPreviewPane();
