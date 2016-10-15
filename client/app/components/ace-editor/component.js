@@ -85,7 +85,11 @@ export default Ember.Component.extend({
     var debounceState = this.get('debounceState');
     debounceState.lastUpdateTs = new Date();
     debounceState.nextUpdate = null;
-    this.get('doc').set('body', this.get('session').getValue());
+    var docBody = this.get('doc.body');
+    var newDocBody = this.get('session').getValue();
+    if (docBody !== newDocBody) {
+      this.get('doc').set('body', newDocBody);
+    }
   },
   onScroll() {
     var scrollState = this.get('scrollState');
