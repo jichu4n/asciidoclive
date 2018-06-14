@@ -3,45 +3,23 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description"
-      content="Full-featured online AsciiDoc editor. Instant live preview, sync with Dropbox & Google Drive, and more!">
+    <title>Amoya</title>
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <title>AsciiDocLIVE</title>
 
-    {{content-for 'head'}}
+    {{content-for "head"}}
 
-    <link rel="stylesheet" href="/assets/vendor.css">
-    <link rel="stylesheet" href="/assets/amoya.css">
+    <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+    <link rel="stylesheet" href="{{rootURL}}assets/amoya.css">
 
-    <!-- Piwik -->
-    <script type="text/javascript">
-      var _paq = _paq || [];
-      _paq.push(["setDomains", ["*.asciidoclive.com"]]);
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//a.chu4n.com/";
-        _paq.push(['setTrackerUrl', u+'js/']);
-        _paq.push(['setSiteId', 3]);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'js/'; s.parentNode.insertBefore(g,s);
-      })();
-    </script>
-    <noscript><p><img src="//a.chu4n.com/js/?idsite=3" style="border:0;" alt="" /></p></noscript>
-    <!-- End Piwik Code -->
-
-    {{content-for 'head-footer'}}
-
+    {{content-for "head-footer"}}
   </head>
   <body>
-    {{content-for 'body'}}
+    {{content-for "body"}}
 
-    <script src="/assets/vendor.js"></script>
-    <script src="/assets/ace-editor/ace.js"></script>
-    <script src="/assets/workers/asciidoctor-js-compile-worker.js"></script>
-    <script src="/assets/amoya.js"></script>
+    <script src="{{rootURL}}assets/vendor.js"></script>
+    <script src="{{rootURL}}assets/amoya.js"></script>
 
-    {{content-for 'body-footer'}}
+    {{content-for "body-footer"}}
   </body>
 </html>
