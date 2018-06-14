@@ -6,7 +6,7 @@
     {
       "type": "npm",
       "script": "start",
-      "problemMatcher": ["$eslint-compact"]
+      "problemMatcher": []
     }
   ]
 }
