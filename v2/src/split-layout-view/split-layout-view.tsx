@@ -13,12 +13,7 @@ export interface Props {
 
 const DEFAULT_MIN_PANE_WIDTH = 200;
 
-class EditView extends React.Component<Props, object> {
-  private containerEl: React.RefObject<HTMLDivElement> = React.createRef();
-  private leftEl: React.RefObject<HTMLDivElement> = React.createRef();
-  private rightEl: React.RefObject<HTMLDivElement> = React.createRef();
-  private resizeHandleEl: React.RefObject<HTMLDivElement> = React.createRef();
-
+class SplitLayoutView extends React.Component<Props> {
   public render() {
     return (
       <div
@@ -46,15 +41,28 @@ class EditView extends React.Component<Props, object> {
       maxWidth: this.maxPaneWidth,
       resize: this.props.onResize,
     });
-    this.props.onResize && $(window).resize(this.props.onResize);
+    $(window).resize(this.onWindowResizeFn);
   }
 
   public componentWillUnmount() {
-    this.props.onResize && $(window).off('resize', this.props.onResize);
+    $(window).off('resize', this.onWindowResizeFn);
     ($(this.leftEl.current!) as any).resizable('destroy');
   }
 
-  get maxPaneWidth() {
+  private onWindowResize() {
+    var maxPaneWidth = this.maxPaneWidth;
+    ($(this.leftEl.current!) as any).resizable(
+      'option',
+      'maxWidth',
+      maxPaneWidth
+    );
+    if ($(this.leftEl.current!).width()! > maxPaneWidth) {
+      $(this.leftEl.current!).width(maxPaneWidth);
+    }
+    this.props.onResize && this.props.onResize();
+  }
+
+  private get maxPaneWidth() {
     return (
       $(this.containerEl.current!).width()! -
       this.minPaneWidth -
@@ -62,9 +70,15 @@ class EditView extends React.Component<Props, object> {
     );
   }
 
-  get minPaneWidth() {
+  private get minPaneWidth() {
     return _.defaultTo(this.props.minPaneWidth, DEFAULT_MIN_PANE_WIDTH);
   }
+
+  private containerEl: React.RefObject<HTMLDivElement> = React.createRef();
+  private leftEl: React.RefObject<HTMLDivElement> = React.createRef();
+  private rightEl: React.RefObject<HTMLDivElement> = React.createRef();
+  private resizeHandleEl: React.RefObject<HTMLDivElement> = React.createRef();
+  private onWindowResizeFn = this.onWindowResize.bind(this);
 }
 
-export default EditView;
+export default SplitLayoutView;
