@@ -1,15 +1,19 @@
 import {observable} from 'mobx';
 
 export default class Doc {
-  @observable title: string;
-  @observable body: string;
-  @observable compiledBody: string;
-  @observable isDirty: boolean;
+  @observable
+  public title: string;
+  @observable
+  public body: string;
+  @observable
+  public compiledBody: string;
+  @observable
+  public isDirty: boolean;
 
   // TODO
-  private compiler: any;
+  // private compiler: any;
 
   constructor(compiler: any) {
-    this.compiler = compiler;
+    // this.compiler = compiler;
   }
 }
