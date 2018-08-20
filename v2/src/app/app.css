@@ -5882,3 +5882,53 @@ body {
 #loading-banner {
   padding-top: 150px;
   text-align: center; }
+
+#doc-title-editor {
+  position: absolute;
+  top: 50px;
+  height: 50px;
+  left: 0;
+  right: 0; }
+
+.edit-split-layout {
+  position: absolute;
+  top: 100px;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+  @media (max-width: 768px) {
+    .edit-split-layout {
+      top: 54px; } }
+
+.split-layout {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  /*
+  .preview-pane {
+    overflow-y: auto;
+    word-break: break-word;
+
+    @import 'app/styles/asciidoctor';
+  }
+
+  .html-preview-pane {
+    border: none;
+    border-radius: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    margin: 0;
+  }
+  */ }
+  .split-layout .split-layout-left {
+    flex: 0 0 auto;
+    width: 50%; }
+  .split-layout .split-layout-resize-handle {
+    flex: 0 0 auto;
+    width: 7px;
+    background: #eeeeee;
+    cursor: col-resize; }
+  .split-layout .split-layout-right {
+    flex: 1 1 auto;
+    width: 50%;
+    padding: 10px; }
