@@ -3,11 +3,17 @@ import 'jquery-ui-dist/jquery-ui';
 import * as _ from 'lodash';
 import * as React from 'react';
 
+export interface Dimensions {
+  leftPaneWidth: number;
+  rightPaneWidth: number;
+  height: number;
+}
+
 export interface Props {
   left: React.ReactNode;
   right: React.ReactNode;
   className?: string;
-  onResize?: () => any;
+  onResize?: (d: Dimensions) => any;
   minPaneWidth?: number;
 }
 
@@ -42,6 +48,7 @@ class SplitLayoutView extends React.Component<Props> {
       resize: this.props.onResize,
     });
     $(window).resize(this.onWindowResizeFn);
+    this.onWindowResize();
   }
 
   public componentWillUnmount() {
@@ -59,7 +66,12 @@ class SplitLayoutView extends React.Component<Props> {
     if ($(this.leftEl.current!).width()! > maxPaneWidth) {
       $(this.leftEl.current!).width(maxPaneWidth);
     }
-    this.props.onResize && this.props.onResize();
+    this.props.onResize &&
+      this.props.onResize({
+        leftPaneWidth: $(this.leftEl.current!).width()!,
+        rightPaneWidth: $(this.rightEl.current!).width()!,
+        height: $(this.containerEl.current!).height()!,
+      });
   }
 
   private get maxPaneWidth() {

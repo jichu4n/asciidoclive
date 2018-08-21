@@ -1,4 +1,6 @@
+import {observable} from 'mobx';
 import * as React from 'react';
+import AceEditorView, {Size} from '../ace-editor-view/ace-editor-view';
 import SplitLayoutView from '../split-layout-view/split-layout-view';
 
 class EditView extends React.Component {
@@ -6,17 +8,22 @@ class EditView extends React.Component {
     // TODO
     return (
       <SplitLayoutView
-        left={<div />}
+        left={<AceEditorView size={this.aceEditorSize} />}
         right={<div />}
         className="edit-split-layout"
-        onResize={() => this.onResize()}
+        onResize={(d) => {
+          this.aceEditorSize.width = d.leftPaneWidth;
+          this.aceEditorSize.height = d.height;
+        }}
       />
     );
   }
 
-  private onResize() {
-    console.log('onResize');
-  }
+  @observable
+  private aceEditorSize: Size = {
+    width: 0,
+    height: 0,
+  };
 }
 
 export default EditView;

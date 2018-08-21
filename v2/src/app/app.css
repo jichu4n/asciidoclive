@@ -5932,3 +5932,7 @@ body {
     flex: 1 1 auto;
     width: 50%;
     padding: 10px; }
+
+.ace-editor {
+  position: relative;
+  font-size: 14px; }
