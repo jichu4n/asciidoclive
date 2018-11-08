@@ -11,7 +11,9 @@
   .split-layout-resize-handle {
     flex: 0 0 auto;
     width: 7px;
+    /*
     background: $gray-lighter;
+    */
     cursor: col-resize;
   }
 

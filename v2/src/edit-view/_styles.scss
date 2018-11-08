@@ -2,7 +2,7 @@ $doc-title-editor-height: 50px;
 
 #doc-title-editor {
   position: absolute;
-  top: $navbar-height;
+  top: 0 /*$navbar-height*/;
   height: $doc-title-editor-height;
   left: 0;
   right: 0;
@@ -10,12 +10,14 @@ $doc-title-editor-height: 50px;
 
 .edit-split-layout {
   position: absolute;
-  top: ($navbar-height + $doc-title-editor-height);
+  top: (0 /*$navbar-height*/ + $doc-title-editor-height);
   bottom: 0;
   left: 0;
   right: 0;
 
+  /*
   @media (max-width: $grid-float-breakpoint) {
     top: $navbar-height-collapsed;
   }
+  */
 }
