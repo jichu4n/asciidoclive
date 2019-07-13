@@ -8,14 +8,21 @@ export enum OutputType {
   EXPORT_HTML,
 }
 
-export interface CompileRequest {
+export interface ClientCompileRequest {
   /** Document body. */
   body: string;
   /** The type of output desired. */
   outputType: OutputType;
 }
 
+export interface CompileRequest extends ClientCompileRequest {
+  /** Opaque unique ID. */
+  requestId: number;
+}
+
 export interface CompileResult {
+  /** Opaque ID specified in the request.. */
+  requestId: number;
   /** Output HTML. */
   compiledBody: string;
   /** Elapsed time. */
@@ -38,6 +45,7 @@ export class DummyCompiler extends Compiler {
       setTimeout(
         () =>
           resolve({
+            requestId: request.requestId,
             compiledBody: request.body,
             elapsedTimeMs: this.compileDelayMs,
           }),
@@ -45,11 +53,6 @@ export class DummyCompiler extends Compiler {
       );
     });
   }
-}
-
-interface ClientCompileRequest extends CompileRequest {
-  /** Sequence ID. */
-  seq: number;
 }
 
 /** Client interface to document compilers.
@@ -69,27 +72,27 @@ export class CompilerClient {
       result: CompileResult,
       request: CompileRequest
     ) => any
-  ) {}
+  ) { }
 
   /** Request a new compilation.
    *
    * This request will not be executed if a previous request is currently being
    * executed and another request comes in before it finishes. */
-  addRequest(request: CompileRequest) {
+  addRequest(request: ClientCompileRequest) {
     const seq = this.seq++;
     if (this.activeRequest == null) {
-      this.activeRequest = {...request, seq};
+      this.activeRequest = { ...request, requestId: seq };
       this.compile(this.activeRequest);
     } else {
       if (this.nextRequest != null) {
         this.log(this.nextRequest, 'Discarded');
       }
-      this.nextRequest = {...request, seq};
+      this.nextRequest = { ...request, requestId: seq };
       this.log(this.nextRequest, 'Queued');
     }
   }
 
-  private onCompileDone(request: ClientCompileRequest, result: CompileResult) {
+  private onCompileDone(request: CompileRequest, result: CompileResult) {
     this.log(request, 'Completed');
     setTimeout(() => this.compileResultCallback(result, request), 0);
     if (this.nextRequest != null) {
@@ -99,21 +102,21 @@ export class CompilerClient {
     }
   }
 
-  private compile(request: ClientCompileRequest) {
+  private compile(request: CompileRequest) {
     this.log(request, 'Running');
     this.compiler
       .compile(request)
       .then((result) => this.onCompileDone(request, result));
   }
 
-  private log(request: ClientCompileRequest, message: string) {
-    console.log(`[DebouncingCompilerClient] [${request.seq}] ${message}`);
+  private log(request: CompileRequest, message: string) {
+    console.log(`[DebouncingCompilerClient] [${request.requestId}] ${message}`);
   }
 
   /** Request sequence ID. */
   private seq = 0;
   /** The currently executing request. */
-  private activeRequest: ClientCompileRequest | null = null;
+  private activeRequest: CompileRequest | null = null;
   /** The next request to be executed. */
-  private nextRequest: ClientCompileRequest | null = null;
+  private nextRequest: CompileRequest | null = null;
 }

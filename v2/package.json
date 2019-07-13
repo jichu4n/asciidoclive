@@ -18,14 +18,17 @@
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-fontawesome": "^1.6.1",
-    "react-scripts-ts": "3.1.0"
+    "react-scripts-ts": "3.1.0",
+    "systemjs": "^4.1.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./node_modules --include-path ./src/ src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node_modules --include-path ./src src/ -o src/ --watch --recursive",
+    "build-worker": "tsc --module system --moduleResolution Node --outFile ./public/assets/worker/asciidoc-compiler-worker.js ./src/document/asciidoc-compiler-worker.ts",
+    "watch-worker": "npm run build-worker -- --watch",
     "start-js": "react-scripts-ts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts-ts build",
+    "start": "npm-run-all -p watch-css watch-worker start-js",
+    "build": "npm run build-css && npm run build-worker && react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
