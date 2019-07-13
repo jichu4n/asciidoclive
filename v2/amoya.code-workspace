@@ -1,11 +1,8 @@
 {
-  "folders": [
-    {
-      "path": "."
-    },
-    {
-      "path": "/media/D/Projects/amoya/v1"
-    }
-  ],
-  "settings": {}
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
 }
