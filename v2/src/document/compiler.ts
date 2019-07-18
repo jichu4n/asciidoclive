@@ -59,7 +59,7 @@ interface ClientCompileRequest extends CompileRequest {
  * compilation process is executing, all pending requests except the last would
  * be dropped.
  */
-export class DebouncingCompilerClient {
+export class CompilerClient {
   constructor(
     /** The compiler to use. */
     private readonly compiler: Compiler,
