@@ -11,20 +11,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 System.register("compiler", [], function (exports_1, context_1) {
     "use strict";
-    var OutputType, Compiler, DummyCompiler, CompilerClient;
+    var OutputType, Compiler, DummyCompiler;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -69,70 +58,6 @@ System.register("compiler", [], function (exports_1, context_1) {
                 return DummyCompiler;
             }(Compiler));
             exports_1("DummyCompiler", DummyCompiler);
-            /** Client interface to document compilers.
-             *
-             * An instance of CompilerClient manages the compilation of a single document
-             * and implements simple debouncing. If multiple changes occur while an earlier
-             * compilation process is executing, all pending requests except the last would
-             * be dropped.
-             */
-            CompilerClient = /** @class */ (function () {
-                function CompilerClient(
-                /** The compiler to use. */
-                compiler, 
-                /** A callback to be invoked every time there is a new compilation result
-                 * available. */
-                compileResultCallback) {
-                    this.compiler = compiler;
-                    this.compileResultCallback = compileResultCallback;
-                    /** Request sequence ID. */
-                    this.seq = 0;
-                    /** The currently executing request. */
-                    this.activeRequest = null;
-                    /** The next request to be executed. */
-                    this.nextRequest = null;
-                }
-                /** Request a new compilation.
-                 *
-                 * This request will not be executed if a previous request is currently being
-                 * executed and another request comes in before it finishes. */
-                CompilerClient.prototype.addRequest = function (request) {
-                    var seq = this.seq++;
-                    if (this.activeRequest == null) {
-                        this.activeRequest = __assign({}, request, { requestId: seq });
-                        this.compile(this.activeRequest);
-                    }
-                    else {
-                        if (this.nextRequest != null) {
-                            this.log(this.nextRequest, 'Discarded');
-                        }
-                        this.nextRequest = __assign({}, request, { requestId: seq });
-                        this.log(this.nextRequest, 'Queued');
-                    }
-                };
-                CompilerClient.prototype.onCompileDone = function (request, result) {
-                    var _this = this;
-                    this.log(request, 'Completed');
-                    setTimeout(function () { return _this.compileResultCallback(result, request); }, 0);
-                    if (this.nextRequest != null) {
-                        this.activeRequest = this.nextRequest;
-                        this.nextRequest = null;
-                        this.compile(this.activeRequest);
-                    }
-                };
-                CompilerClient.prototype.compile = function (request) {
-                    var _this = this;
-                    this.log(request, 'Running');
-                    this.compiler
-                        .compile(request)
-                        .then(function (result) { return _this.onCompileDone(request, result); });
-                };
-                CompilerClient.prototype.log = function (request, message) {
-                    console.log("[DebouncingCompilerClient] [" + request.requestId + "] " + message);
-                };
-                return CompilerClient;
-            }());
-            exports_1("CompilerClient", CompilerClient);
         }
     };
 });
@@ -187,7 +112,6 @@ System.register("asciidoc-compiler", ["compiler"], function (exports_2, context_
         ],
         execute: function () {
             asciidoctor = null;
-            ;
             BlockingAsciidocCompiler = /** @class */ (function (_super) {
                 __extends(BlockingAsciidocCompiler, _super);
                 function BlockingAsciidocCompiler() {

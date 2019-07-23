@@ -11,14 +11,12 @@ export interface Size {
 
 export interface Props {
   size: Size;
+  initialBody: string;
+  onBodyChange: (newBody: string) => any;
 }
 
 class AceEditorView extends React.Component<Props> {
-  public render() {
-    return <div className="ace-editor" ref={this.containerEl} />;
-  }
-
-  public componentDidMount() {
+  componentDidMount() {
     this.aceEditor = edit(this.containerEl.current!);
     this.aceEditorSession = this.aceEditor.getSession();
     // For debugging.
@@ -27,8 +25,12 @@ class AceEditorView extends React.Component<Props> {
       aceEditorSession: this.aceEditorSession,
     });
 
-    // this.aceEditorSession.setValue(this.get('doc.body').toString() || '');
-    // this.aceEditorSession.on('change', this.debouncedUpdate.bind(this));
+    this.body = this.props.initialBody;
+    this.aceEditorSession.setValue(this.body);
+
+    this.aceEditorSession
+      .getDocument()
+      .on('change', this.debouncedUpdate.bind(this));
     this.aceEditorSession.setMode('ace/mode/asciidoc');
     this.aceEditorSession.setUseWrapMode(true);
     this.aceEditor.setShowPrintMargin(false);
@@ -37,8 +39,12 @@ class AceEditorView extends React.Component<Props> {
     this.disposeOnSizeChangeFn = autorun(this.onSizeChange.bind(this));
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.disposeOnSizeChangeFn();
+  }
+
+  render() {
+    return <div className="ace-editor" ref={this.containerEl} />;
   }
 
   private onSizeChange() {
@@ -48,10 +54,42 @@ class AceEditorView extends React.Component<Props> {
     this.aceEditor && this.aceEditor.resize();
   }
 
+  private debouncedUpdate() {
+    if (this.debounceState.nextUpdate !== null) {
+      return;
+    }
+    let now = new Date().getTime();
+    let timeSinceLastUpdate = now - this.debounceState.lastUpdateTs;
+    if (timeSinceLastUpdate > this.debounceState.debounceMs) {
+      this.debounceState.nextUpdate = setTimeout(this.update.bind(this), 0);
+    } else {
+      this.debounceState.nextUpdate = setTimeout(
+        this.update.bind(this),
+        this.debounceState.debounceMs - timeSinceLastUpdate
+      );
+    }
+  }
+
+  private update() {
+    this.debounceState.lastUpdateTs = new Date().getTime();
+    this.debounceState.nextUpdate = null;
+    let newBody = this.aceEditorSession.getValue();
+    if (this.body !== newBody) {
+      this.body = newBody;
+      this.props.onBodyChange(newBody);
+    }
+  }
+
   private containerEl: React.RefObject<HTMLDivElement> = React.createRef();
   private aceEditor: Ace.Editor;
   private aceEditorSession: Ace.EditSession;
+  private body: string;
   private disposeOnSizeChangeFn: () => any;
+  private debounceState = {
+    debounceMs: 100,
+    lastUpdateTs: 0,
+    nextUpdate: null as any,
+  };
 }
 
 export default AceEditorView;

@@ -59,3 +59,7 @@ body {
 .ace-editor {
   position: relative;
   /* font-size: $font-size-base; */ }
+
+.preview-container {
+  height: 100%;
+  overflow-y: scroll; }

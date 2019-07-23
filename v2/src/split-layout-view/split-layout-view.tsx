@@ -57,7 +57,7 @@ class SplitLayoutView extends React.Component<Props> {
   }
 
   private onWindowResize() {
-    var maxPaneWidth = this.maxPaneWidth;
+    let maxPaneWidth = this.maxPaneWidth;
     ($(this.leftEl.current!) as any).resizable(
       'option',
       'maxWidth',
