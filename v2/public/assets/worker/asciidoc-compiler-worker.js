@@ -74,7 +74,7 @@ System.register("asciidoc-compiler", ["compiler"], function (exports_2, context_
             wrap_line_length: 80
         };
         var shouldHighlight = request.outputType == compiler_1.OutputType.DISPLAY_HTML;
-        if (asciidoctor == null) {
+        if (asciidoctor === undefined) {
             asciidoctor = Asciidoctor();
         }
         var startTs = new Date();
@@ -85,7 +85,7 @@ System.register("asciidoc-compiler", ["compiler"], function (exports_2, context_
             }));
         }
         else {
-            var cssPath = '/assets/asciidoctor.js/css/asciidoctor.css';
+            var cssPath = '/assets/asciidoctor/css/asciidoctor.css';
             compiledBody = asciidoctor.convert(request.body, Opal.hash2(['header_footer', 'attributes'], {
                 header_footer: true,
                 attributes: ['nofooter', 'copycss', 'stylesheet=' + cssPath]
@@ -111,7 +111,6 @@ System.register("asciidoc-compiler", ["compiler"], function (exports_2, context_
             }
         ],
         execute: function () {
-            asciidoctor = null;
             BlockingAsciidocCompiler = /** @class */ (function (_super) {
                 __extends(BlockingAsciidocCompiler, _super);
                 function BlockingAsciidocCompiler() {

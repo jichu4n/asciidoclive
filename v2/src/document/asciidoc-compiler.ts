@@ -7,7 +7,7 @@ declare var hljs: any;
 
 let asciidoctor: {
   convert: (body: string, options?: any) => string;
-} | null = null;
+};
 
 export function asciidocCompile(request: CompileRequest): CompileResult {
   const isInline = request.outputType == OutputType.PREVIEW;
@@ -20,22 +20,22 @@ export function asciidocCompile(request: CompileRequest): CompileResult {
   };
   const shouldHighlight = request.outputType == OutputType.DISPLAY_HTML;
 
-  if (asciidoctor == null) {
+  if (asciidoctor === undefined) {
     asciidoctor = Asciidoctor();
   }
 
   const startTs = new Date();
   let compiledBody;
   if (isInline) {
-    compiledBody = asciidoctor!.convert(
+    compiledBody = asciidoctor.convert(
       request.body,
       Opal.hash2(['attributes'], {
         attributes: ['showtitle'],
       })
     );
   } else {
-    const cssPath = '/assets/asciidoctor.js/css/asciidoctor.css';
-    compiledBody = asciidoctor!.convert(
+    const cssPath = '/assets/asciidoctor/css/asciidoctor.css';
+    compiledBody = asciidoctor.convert(
       request.body,
       Opal.hash2(['header_footer', 'attributes'], {
         header_footer: true,
