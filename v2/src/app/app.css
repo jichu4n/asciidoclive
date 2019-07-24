@@ -1,6 +1,8 @@
 html,
 body {
-  height: 100%; }
+  height: 100%;
+  margin: 0;
+  padding: 0; }
 
 #doc-title-editor {
   position: absolute;
@@ -52,7 +54,7 @@ body {
   .split-layout .split-layout-right {
     flex: 1 1 auto;
     width: 50%;
-    padding: 0 10px; }
+    padding-left: 10px; }
 
 .ace-editor {
   position: relative;
@@ -61,3 +63,265 @@ body {
 .preview-container {
   height: 100%;
   overflow-y: scroll; }
+
+.preview-content {
+  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                           Copyright 2016 Chuan Ji                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ }
+  .preview-content table {
+    background: #fff;
+    margin-bottom: 1.25em;
+    border: solid 1px #dedede; }
+  .preview-content table thead,
+  .preview-content table tfoot {
+    background: #f7f8f7;
+    font-weight: bold; }
+  .preview-content table thead tr th,
+  .preview-content table thead tr td,
+  .preview-content table tfoot tr th,
+  .preview-content table tfoot tr td {
+    padding: 0.5em 0.625em 0.625em;
+    font-size: inherit;
+    color: rgba(0, 0, 0, 0.8);
+    text-align: left; }
+  .preview-content table tr th,
+  .preview-content table tr td {
+    padding: 0.5625em 0.625em;
+    font-size: inherit;
+    color: rgba(0, 0, 0, 0.8); }
+  .preview-content table tr.even,
+  .preview-content table tr.alt,
+  .preview-content table tr:nth-of-type(even) {
+    background: #f8f8f7; }
+  .preview-content table thead tr th,
+  .preview-content table tfoot tr th,
+  .preview-content table tbody tr td,
+  .preview-content table tr td,
+  .preview-content table tfoot tr td {
+    display: table-cell;
+    line-height: 1.6; }
+  .preview-content table.tableblock {
+    max-width: 100%;
+    border-collapse: separate; }
+  .preview-content table.tableblock td > .paragraph:last-child p > p:last-child,
+  .preview-content table.tableblock th > p:last-child,
+  .preview-content table.tableblock td > p:last-child {
+    margin-bottom: 0; }
+  .preview-content table.tableblock,
+  .preview-content th.tableblock,
+  .preview-content td.tableblock {
+    border: 0 solid #dedede; }
+  .preview-content table.grid-all th.tableblock,
+  .preview-content table.grid-all td.tableblock {
+    border-width: 0 1px 1px 0; }
+  .preview-content table.grid-all tfoot > tr > th.tableblock,
+  .preview-content table.grid-all tfoot > tr > td.tableblock {
+    border-width: 1px 1px 0 0; }
+  .preview-content table.grid-cols th.tableblock,
+  .preview-content table.grid-cols td.tableblock {
+    border-width: 0 1px 0 0; }
+  .preview-content table.grid-all * > tr > .tableblock:last-child,
+  .preview-content table.grid-cols * > tr > .tableblock:last-child {
+    border-right-width: 0; }
+  .preview-content table.grid-rows th.tableblock,
+  .preview-content table.grid-rows td.tableblock {
+    border-width: 0 0 1px 0; }
+  .preview-content table.grid-all tbody > tr:last-child > th.tableblock,
+  .preview-content table.grid-all tbody > tr:last-child > td.tableblock,
+  .preview-content table.grid-all thead:last-child > tr > th.tableblock,
+  .preview-content table.grid-rows tbody > tr:last-child > th.tableblock,
+  .preview-content table.grid-rows tbody > tr:last-child > td.tableblock,
+  .preview-content table.grid-rows thead:last-child > tr > th.tableblock {
+    border-bottom-width: 0; }
+  .preview-content table.grid-rows tfoot > tr > th.tableblock,
+  .preview-content table.grid-rows tfoot > tr > td.tableblock {
+    border-width: 1px 0 0 0; }
+  .preview-content table.frame-all {
+    border-width: 1px; }
+  .preview-content table.frame-sides {
+    border-width: 0 1px; }
+  .preview-content table.frame-topbot {
+    border-width: 1px 0; }
+  .preview-content th.halign-left,
+  .preview-content td.halign-left {
+    text-align: left; }
+  .preview-content th.halign-right,
+  .preview-content td.halign-right {
+    text-align: right; }
+  .preview-content th.halign-center,
+  .preview-content td.halign-center {
+    text-align: center; }
+  .preview-content th.valign-top,
+  .preview-content td.valign-top {
+    vertical-align: top; }
+  .preview-content th.valign-bottom,
+  .preview-content td.valign-bottom {
+    vertical-align: bottom; }
+  .preview-content th.valign-middle,
+  .preview-content td.valign-middle {
+    vertical-align: middle; }
+  .preview-content table thead th,
+  .preview-content table tfoot th {
+    font-weight: bold; }
+  .preview-content tbody tr th {
+    display: table-cell;
+    line-height: 1.6;
+    background: #f7f8f7; }
+  .preview-content tbody tr th,
+  .preview-content tbody tr th p,
+  .preview-content tfoot tr th,
+  .preview-content tfoot tr th p {
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: bold; }
+  .preview-content p.tableblock > code:only-child {
+    background: none;
+    padding: 0; }
+  .preview-content p.tableblock {
+    font-size: 1em; }
+  .preview-content td > div.verse {
+    white-space: pre; }
+  .preview-content .hdlist > table,
+  .preview-content .colist > table {
+    border: 0;
+    background: none; }
+  .preview-content .hdlist > table > tbody > tr,
+  .preview-content .colist > table > tbody > tr {
+    background: none; }
+  .preview-content td.hdlist1,
+  .preview-content td.hdlist2 {
+    vertical-align: top;
+    padding: 0 0.625em; }
+  .preview-content td.hdlist1 {
+    font-weight: bold;
+    padding-bottom: 1.25em; }
+  .preview-content blockquote {
+    margin: 0 0 1.25em;
+    padding: 0.5625em 1.25em 0 1.1875em;
+    border-left: 1px solid #ddd; }
+  .preview-content blockquote cite {
+    display: block;
+    font-size: 0.9375em;
+    color: rgba(0, 0, 0, 0.6); }
+  .preview-content blockquote cite:before {
+    content: '\2014 \0020'; }
+  .preview-content blockquote cite a,
+  .preview-content blockquote cite a:visited {
+    color: rgba(0, 0, 0, 0.6); }
+  .preview-content blockquote,
+  .preview-content blockquote p {
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.85); }
+  .preview-content .quoteblock {
+    margin: 0 1em 1.25em 1.5em;
+    display: table; }
+  .preview-content .quoteblock > .title {
+    margin-left: -1.5em;
+    margin-bottom: 0.75em; }
+  .preview-content .quoteblock blockquote,
+  .preview-content .quoteblock blockquote p {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: inherit;
+    line-height: 1.75;
+    word-spacing: 0.1em;
+    letter-spacing: 0;
+    font-style: italic;
+    text-align: justify; }
+  .preview-content .quoteblock blockquote {
+    margin: 0;
+    padding: 0;
+    border: 0; }
+  .preview-content .quoteblock blockquote:before {
+    content: '\201c';
+    float: left;
+    font-size: 2.75em;
+    font-weight: bold;
+    line-height: 0.6em;
+    margin-left: -0.6em;
+    color: rgba(0, 0, 0, 0.6);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+  .preview-content .quoteblock blockquote > .paragraph:last-child p {
+    margin-bottom: 0; }
+  .preview-content .quoteblock .attribution {
+    margin-top: 0.5em;
+    margin-right: 0.5ex;
+    text-align: right; }
+  .preview-content .quoteblock .quoteblock {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.5em 0;
+    border-left: 3px solid rgba(0, 0, 0, 0.6); }
+  .preview-content .quoteblock .quoteblock blockquote {
+    padding: 0 0 0 0.75em; }
+  .preview-content .quoteblock .quoteblock blockquote:before {
+    display: none; }
+  .preview-content .quoteblock .attribution,
+  .preview-content .verseblock .attribution {
+    font-size: 0.9375em;
+    line-height: 1.45;
+    font-style: italic; }
+  .preview-content .quoteblock .attribution br,
+  .preview-content .verseblock .attribution br {
+    display: none; }
+  .preview-content .quoteblock .attribution cite,
+  .preview-content .verseblock .attribution cite {
+    display: block;
+    letter-spacing: -0.025em;
+    color: rgba(0, 0, 0, 0.6); }
+  .preview-content .quoteblock.abstract {
+    margin: 0 0 1.25em 0;
+    display: block; }
+  .preview-content .quoteblock.abstract blockquote,
+  .preview-content .quoteblock.abstract blockquote p {
+    text-align: left;
+    word-spacing: 0; }
+  .preview-content .quoteblock.abstract blockquote:before,
+  .preview-content .quoteblock.abstract blockquote p:first-of-type:before {
+    display: none; }
+  .preview-content ul.unstyled,
+  .preview-content ol.unnumbered,
+  .preview-content ul.checklist,
+  .preview-content ul.none {
+    list-style-type: none; }
+  .preview-content ul.unstyled,
+  .preview-content ol.unnumbered,
+  .preview-content ul.checklist {
+    margin-left: 0.625em; }
+  .preview-content ul.checklist li > p:first-child > .fa-square-o:first-child,
+  .preview-content ul.checklist li > p:first-child > .fa-check-square-o:first-child {
+    width: 1em;
+    font-size: 0.85em; }
+  .preview-content ul.checklist li > p:first-child > input[type='checkbox']:first-child {
+    width: 1em;
+    position: relative;
+    top: 1px; }
+  .preview-content ul.inline {
+    margin: 0 auto 0.625em auto;
+    margin-left: -1.375em;
+    margin-right: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden; }
+  .preview-content ul.inline > li {
+    list-style: none;
+    float: left;
+    margin-left: 1.375em;
+    display: block; }
+  .preview-content ul.inline > li > * {
+    display: block; }
+  .preview-content .unstyled dl dt {
+    font-weight: 400;
+    font-style: normal; }
+  .preview-content ol.arabic {
+    list-style-type: decimal; }
+  .preview-content ol.decimal {
+    list-style-type: decimal-leading-zero; }
+  .preview-content ol.loweralpha {
+    list-style-type: lower-alpha; }
+  .preview-content ol.upperalpha {
+    list-style-type: upper-alpha; }
+  .preview-content ol.lowerroman {
+    list-style-type: lower-roman; }
+  .preview-content ol.upperroman {
+    list-style-type: upper-roman; }
+  .preview-content ol.lowergreek {
+    list-style-type: lower-greek; }
