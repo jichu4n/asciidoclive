@@ -2,7 +2,21 @@ html,
 body {
   height: 100%;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  background-color: white !important; }
+
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px; }
+
+::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  background: #ccc; }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #bbb; }
+  ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:hover {
+    border: 3px solid transparent;
+    background-clip: content-box; }
 
 #doc-title-editor {
   position: absolute;
@@ -62,7 +76,8 @@ body {
 
 .preview-container {
   height: 100%;
-  overflow-y: scroll; }
+  overflow-y: scroll;
+  word-break: break-word; }
 
 .preview-content {
   /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

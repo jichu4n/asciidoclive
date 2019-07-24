@@ -3,4 +3,25 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: white !important;
+}
+
+$scrollbar-width: 15px;
+
+::-webkit-scrollbar {
+  width: $scrollbar-width;
+  height: $scrollbar-width;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: $scrollbar-width;
+  background: #ccc;
+  &:hover {
+    background: #bbb;
+  }
+  &,
+  &:hover {
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
 }
