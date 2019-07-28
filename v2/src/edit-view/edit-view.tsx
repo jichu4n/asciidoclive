@@ -4,6 +4,7 @@ import {fromPromise, IPromiseBasedObservable} from 'mobx-utils';
 import * as React from 'react';
 import DocManager from 'src/document/doc-manager';
 import AceEditorView, {Size} from '../ace-editor-view/ace-editor-view';
+import HeaderView from '../header-view/header-view';
 import PreviewView from '../preview-view/preview-view';
 import SplitLayoutView from '../split-layout-view/split-layout-view';
 
@@ -13,21 +14,24 @@ class EditView extends React.Component {
     return this.docManager.case({
       pending: () => <div />,
       fulfilled: (docManager) => (
-        <SplitLayoutView
-          left={
-            <AceEditorView
-              size={this.aceEditorSize}
-              initialBody={docManager.doc.body}
-              onBodyChange={docManager.setBody.bind(this.docManager)}
-            />
-          }
-          right={<PreviewView compiledBody={docManager.doc.compiledBody} />}
-          className="edit-split-layout"
-          onResize={(d) => {
-            this.aceEditorSize.width = d.leftPaneWidth;
-            this.aceEditorSize.height = d.height;
-          }}
-        />
+        <>
+          <HeaderView />
+          <SplitLayoutView
+            left={
+              <AceEditorView
+                size={this.aceEditorSize}
+                initialBody={docManager.doc.body}
+                onBodyChange={docManager.setBody.bind(this.docManager)}
+              />
+            }
+            right={<PreviewView compiledBody={docManager.doc.compiledBody} />}
+            className="edit-split-layout"
+            onResize={(d) => {
+              this.aceEditorSize.width = d.leftPaneWidth;
+              this.aceEditorSize.height = d.height;
+            }}
+          />
+        </>
       ),
     });
   }

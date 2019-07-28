@@ -20,22 +20,23 @@ body {
 
 #doc-title-editor {
   position: absolute;
-  top: 0;
+  top: 64px;
   height: 50px;
   left: 0;
   right: 0; }
+  @media (max-width: 600px) {
+    #doc-title-editor {
+      top: 48px; } }
 
 .edit-split-layout {
   position: absolute;
-  top: 50px;
+  top: 114px;
   bottom: 0;
   left: 0;
-  right: 0;
-  /*
-  @media (max-width: $grid-float-breakpoint) {
-    top: $navbar-height-collapsed;
-  }
-  */ }
+  right: 0; }
+  @media (max-width: 600px) {
+    .edit-split-layout {
+      top: 98px; } }
 
 .split-layout {
   display: flex;
