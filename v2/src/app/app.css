@@ -18,6 +18,13 @@ body {
     border: 3px solid transparent;
     background-clip: content-box; }
 
+.header-logo {
+  height: 24px;
+  margin-left: -6px; }
+  @media (max-width: 600px) {
+    .header-logo {
+      height: 20px; } }
+
 #doc-title-editor {
   position: absolute;
   top: 64px;
