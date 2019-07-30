@@ -21,7 +21,7 @@ class EditView extends React.Component {
               <AceEditorView
                 size={this.aceEditorSize}
                 initialBody={docManager.doc.body}
-                onBodyChange={docManager.setBody.bind(this.docManager)}
+                onBodyChange={docManager.setBody.bind(docManager)}
               />
             }
             right={<PreviewView compiledBody={docManager.doc.compiledBody} />}
@@ -37,7 +37,12 @@ class EditView extends React.Component {
   }
 
   private async doInitialLoad() {
-    let body = await (await fetch('/assets/scratch.txt')).text();
+    let body = '';
+    try {
+      body = await (await fetch('/assets/scratch.txt')).text();
+    } catch (e) {
+      console.error(`Error fetching initial document body`, e);
+    }
     let docManager = new DocManager();
     docManager.setBody(body);
     return docManager;
