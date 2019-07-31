@@ -13,6 +13,10 @@ class EditView extends React.Component {
   render() {
     return this.docManager.case({
       pending: () => <div />,
+      rejected: (e) => {
+        console.error(e);
+        return <div />;
+      },
       fulfilled: (docManager) => (
         <>
           <HeaderView />

@@ -2,7 +2,7 @@ import {action, observable} from 'mobx';
 import {AsyncAsciidocCompiler} from './asciidoc-compiler';
 import {OutputType} from './compiler';
 import {CompilerClient} from './compiler-client';
-import Doc from './doc';
+import {Doc} from './doc';
 
 export default class DocManager {
   public doc = observable.object(new Doc());
