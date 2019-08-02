@@ -19,11 +19,17 @@ body {
     background-clip: content-box; }
 
 .header-logo {
-  height: 24px;
-  margin-left: -6px; }
+  height: 24px; }
   @media (max-width: 600px) {
     .header-logo {
       height: 20px; } }
+
+.header-spacer {
+  flex-grow: 1; }
+
+.header-padding {
+  width: 20px;
+  height: 64px; }
 
 #doc-title-editor {
   position: absolute;

@@ -1,3 +1,8 @@
+import IconButton from '@material-ui/core/IconButton';
+import OpenIcon from '@material-ui/icons/FolderOpen';
+import HelpIcon from '@material-ui/icons/Help';
+import SaveIcon from '@material-ui/icons/Save';
+import SettingsIcon from '@material-ui/icons/Settings';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 import {fromPromise, IPromiseBasedObservable} from 'mobx-utils';
@@ -19,7 +24,7 @@ class EditView extends React.Component {
       },
       fulfilled: (docManager) => (
         <>
-          <HeaderView />
+          <HeaderView right={this.renderHeaderRight()} />
           <SplitLayoutView
             left={
               <AceEditorView
@@ -38,6 +43,25 @@ class EditView extends React.Component {
         </>
       ),
     });
+  }
+
+  private renderHeaderRight() {
+    return (
+      <>
+        <IconButton color="inherit">
+          <OpenIcon />
+        </IconButton>
+        <IconButton color="inherit">
+          <SaveIcon />
+        </IconButton>
+        <IconButton color="inherit">
+          <SettingsIcon />
+        </IconButton>
+        <IconButton color="inherit">
+          <HelpIcon />
+        </IconButton>
+      </>
+    );
   }
 
   private async doInitialLoad() {
