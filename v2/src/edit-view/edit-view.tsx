@@ -1,7 +1,11 @@
+import ComputerIcon from '@material-ui/icons/Computer';
 import OpenIcon from '@material-ui/icons/FolderOpen';
 import HelpIcon from '@material-ui/icons/Help';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import SaveIcon from '@material-ui/icons/Save';
 import SettingsIcon from '@material-ui/icons/Settings';
+import DropboxIcon from 'mdi-material-ui/Dropbox';
+import GoogleDriveIcon from 'mdi-material-ui/GoogleDrive';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 import {fromPromise, IPromiseBasedObservable} from 'mobx-utils';
@@ -12,7 +16,6 @@ import HeaderView from '../header-view/header-view';
 import PreviewView from '../preview-view/preview-view';
 import SplitLayoutView from '../split-layout-view/split-layout-view';
 import MenuIconView from './menu-icon-view';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 @observer
 class EditView extends React.Component {
@@ -56,7 +59,9 @@ class EditView extends React.Component {
             {item: 'New Document', icon: <InsertDriveFileIcon />},
             'divider',
             {subheader: 'Open from'},
-            {item: 'Dropbox'},
+            {item: 'Dropbox', icon: <DropboxIcon />},
+            {item: 'Google Drive', icon: <GoogleDriveIcon />},
+            {item: 'Local file', icon: <ComputerIcon />},
           ]}
         />
         <MenuIconView tooltipLabel="Save" icon={<SaveIcon />} />
