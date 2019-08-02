@@ -1,5 +1,3 @@
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import OpenIcon from '@material-ui/icons/FolderOpen';
 import HelpIcon from '@material-ui/icons/Help';
 import SaveIcon from '@material-ui/icons/Save';
@@ -13,6 +11,8 @@ import AceEditorView, {Size} from '../ace-editor-view/ace-editor-view';
 import HeaderView from '../header-view/header-view';
 import PreviewView from '../preview-view/preview-view';
 import SplitLayoutView from '../split-layout-view/split-layout-view';
+import MenuIconView from './menu-icon-view';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 @observer
 class EditView extends React.Component {
@@ -49,26 +49,19 @@ class EditView extends React.Component {
   private renderHeaderRight() {
     return (
       <>
-        <Tooltip title="Open">
-          <IconButton color="inherit">
-            <OpenIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Save">
-          <IconButton color="inherit">
-            <SaveIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Settings">
-          <IconButton color="inherit">
-            <SettingsIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Help">
-          <IconButton color="inherit">
-            <HelpIcon />
-          </IconButton>
-        </Tooltip>
+        <MenuIconView
+          tooltipLabel="Open"
+          icon={<OpenIcon />}
+          menuItems={[
+            {item: 'New Document', icon: <InsertDriveFileIcon />},
+            'divider',
+            {subheader: 'Open from'},
+            {item: 'Dropbox'},
+          ]}
+        />
+        <MenuIconView tooltipLabel="Save" icon={<SaveIcon />} />
+        <MenuIconView tooltipLabel="Settings" icon={<SettingsIcon />} />
+        <MenuIconView tooltipLabel="Help" icon={<HelpIcon />} />
       </>
     );
   }
