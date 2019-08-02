@@ -1,4 +1,5 @@
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import OpenIcon from '@material-ui/icons/FolderOpen';
 import HelpIcon from '@material-ui/icons/Help';
 import SaveIcon from '@material-ui/icons/Save';
@@ -48,18 +49,26 @@ class EditView extends React.Component {
   private renderHeaderRight() {
     return (
       <>
-        <IconButton color="inherit">
-          <OpenIcon />
-        </IconButton>
-        <IconButton color="inherit">
-          <SaveIcon />
-        </IconButton>
-        <IconButton color="inherit">
-          <SettingsIcon />
-        </IconButton>
-        <IconButton color="inherit">
-          <HelpIcon />
-        </IconButton>
+        <Tooltip title="Open">
+          <IconButton color="inherit">
+            <OpenIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Save">
+          <IconButton color="inherit">
+            <SaveIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Settings">
+          <IconButton color="inherit">
+            <SettingsIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Help">
+          <IconButton color="inherit">
+            <HelpIcon />
+          </IconButton>
+        </Tooltip>
       </>
     );
   }
