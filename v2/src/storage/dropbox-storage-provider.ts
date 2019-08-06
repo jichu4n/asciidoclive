@@ -1,3 +1,4 @@
+import debug from 'debug';
 import {Dropbox} from 'dropbox';
 import environment from '../environment/environment';
 import StorageProvider from './storage-provider';
@@ -9,10 +10,10 @@ class DropboxStorageProvider extends StorageProvider {
   constructor() {
     super();
     if (this.isEnabled) {
-      console.info('Dropbox storage provider enabled');
+      this.log('Enabled');
       this.init();
     } else {
-      console.warn('Dropbox storage provider disabled');
+      this.log('Disabled');
     }
     Dropbox;
   }
@@ -44,11 +45,13 @@ class DropboxStorageProvider extends StorageProvider {
       window['Dropbox'].save
     ) {
       this.isReady = true;
-      console.info('Dropbox storage provider ready');
+      this.log('Ready');
     } else {
       setTimeout(this.checkIsReady.bind(this), 100);
     }
   }
+
+  private readonly log = debug('DropboxStorageProvider');
 }
 
 export default DropboxStorageProvider;

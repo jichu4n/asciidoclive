@@ -1,3 +1,4 @@
+import debug from 'debug';
 import {Compiler, CompileRequest, CompileResult, OutputType} from './compiler';
 
 export interface ClientCompileRequest {
@@ -63,10 +64,7 @@ export class CompilerClient {
       .then((result) => this.onCompileDone(request, result));
   }
 
-  private log(request: CompileRequest, message: string) {
-    console.log(`[CompilerClient] [${request.requestId}] ${message}`);
-  }
-
+  private readonly log = debug('CompilerClient');
   /** Request sequence ID. */
   private seq = 0;
   /** The currently executing request. */

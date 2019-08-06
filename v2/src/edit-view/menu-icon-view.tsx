@@ -52,17 +52,20 @@ class MenuIconView extends React.Component<Props, State> {
           transformOrigin={{vertical: 'top', horizontal: 'right'}}
         >
           {this.props.menuItems &&
-            this.props.menuItems.map((item) => {
+            this.props.menuItems.map((item, idx) => {
               if (item === 'divider') {
-                return <Divider />;
+                return <Divider key={idx} />;
               }
               if (item.subheader) {
-                return <ListSubheader>{item.subheader}</ListSubheader>;
+                return (
+                  <ListSubheader key={idx}>{item.subheader}</ListSubheader>
+                );
               }
               if (item.item) {
                 return (
                   <MenuItem
                     onClick={this.onMenuItemClick.bind(this, item.onClick)}
+                    key={idx}
                   >
                     {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
                     {item.item}

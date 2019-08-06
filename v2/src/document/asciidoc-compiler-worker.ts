@@ -1,6 +1,6 @@
-import { CompileRequest } from './compiler';
-import { asciidocCompile } from './asciidoc-compiler';
-// declare var global: any;
+import {IDebug} from 'debug';
+import asciidocCompile from './asciidoc-compile';
+import {CompileRequest} from './compiler';
 
 // We would ideally use the real type for "self", but this requires --lib
 // WebWorker which conflicts with the DOM type library. Even though this file is
@@ -8,6 +8,9 @@ import { asciidocCompile } from './asciidoc-compiler';
 // transpilation of the main bundle when running in parallel in development :-/
 // declare var self: DedicatedWorkerGlobalScope;
 declare var self: any;
+
+// Provided by loader.
+declare var debug: IDebug;
 
 class AsciidocCompilerWorker {
   constructor() {
@@ -23,9 +26,7 @@ class AsciidocCompilerWorker {
     self.postMessage(result);
   }
 
-  private log(message: string) {
-    self.console && self.console.info(`[AsciidocCompilerWorker] ${message}`);
-  }
+  private readonly log = debug('AsciidocCompilerWorker');
 }
 
 self['asciidocCompilerWorker'] = new AsciidocCompilerWorker();
