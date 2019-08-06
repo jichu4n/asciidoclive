@@ -3,7 +3,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {createMuiTheme} from '@material-ui/core/styles';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import * as React from 'react';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EditView from '../edit-view/edit-view';
+import DropboxAuthSuccessView from '../storage/dropbox-auth-success-view';
 import './app.css';
 
 const THEME = createMuiTheme({
@@ -17,7 +19,15 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={THEME}>
         <CssBaseline />
-        <EditView />;
+        <Router>
+          <Switch>
+            <Route
+              path="/dropbox-auth-success"
+              component={DropboxAuthSuccessView}
+            />
+            <Route component={EditView} />
+          </Switch>
+        </Router>
       </ThemeProvider>
     );
   }

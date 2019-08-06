@@ -15,6 +15,8 @@ import AceEditorView, {Size} from '../ace-editor-view/ace-editor-view';
 import HeaderView from '../header-view/header-view';
 import PreviewView from '../preview-view/preview-view';
 import SplitLayoutView from '../split-layout-view/split-layout-view';
+import storageManager from '../storage/storage-manager';
+import StorageType from '../storage/storage-type';
 import MenuIconView from './menu-icon-view';
 
 @observer
@@ -59,7 +61,13 @@ class EditView extends React.Component {
             {item: 'New Document', icon: <InsertDriveFileIcon />},
             'divider',
             {subheader: 'Open from'},
-            {item: 'Dropbox', icon: <DropboxIcon />},
+            {
+              item: 'Dropbox',
+              icon: <DropboxIcon />,
+              onClick() {
+                storageManager.getStorageProvider(StorageType.DROPBOX).open();
+              },
+            },
             {item: 'Google Drive', icon: <GoogleDriveIcon />},
             {item: 'Local file', icon: <ComputerIcon />},
           ]}

@@ -18,7 +18,7 @@ abstract class StorageProvider {
   /** Prompt the user to open a document from this provider.
    * Returns a Promise that yields a StorageSpec.
    */
-  // abstract open(): Promise<DocData>;
+  abstract open(): Promise<DocData | null>;
 
   /** Open a file at the given path from this provider.
    * Returns a PromiseObject that yields the selected doc.

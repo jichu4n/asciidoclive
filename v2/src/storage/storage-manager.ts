@@ -5,20 +5,22 @@ import StorageType from './storage-type';
 
 const STORAGE_PROVIDERS = [DropboxStorageProvider];
 
-class Storage {
+class StorageManager {
   constructor() {
     this.storageProviders = STORAGE_PROVIDERS.map(
       (storageProviderClass) => new storageProviderClass()
     );
   }
 
-  getStorageProvider(storageType: StorageType) {
+  getStorageProvider<T extends StorageProvider = StorageProvider>(
+    storageType: StorageType
+  ) {
     let storageProvider = _.find(this.storageProviders, [
       'storageType',
       storageType,
     ]);
     if (storageProvider) {
-      return storageProvider;
+      return storageProvider as T;
     } else {
       throw Error(`Unknown storage provider ${storageType}`);
     }
@@ -27,5 +29,5 @@ class Storage {
   private storageProviders: Array<StorageProvider>;
 }
 
-const storage = new Storage();
-export default storage;
+const storageManager = new StorageManager();
+export default storageManager;

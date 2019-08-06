@@ -1,10 +1,16 @@
 import debug from 'debug';
-import {Dropbox} from 'dropbox';
+import {Dropbox as DropboxSdk} from 'dropbox';
+import {DocData} from '../document/doc';
 import environment from '../environment/environment';
 import StorageProvider from './storage-provider';
 import StorageType from './storage-type';
+import popupCentered from 'popup-centered';
 
 const SCRIPT_ELEMENT_ID = 'dropboxjs';
+const POPUP_ID = 'dropbox-oauth';
+const OAUTH_TOKEN_STORAGE_KEY = 'dropbox-access-token';
+
+let DropboxDropIns: any;
 
 class DropboxStorageProvider extends StorageProvider {
   constructor() {
@@ -15,7 +21,6 @@ class DropboxStorageProvider extends StorageProvider {
     } else {
       this.log('Disabled');
     }
-    Dropbox;
   }
 
   get storageType() {
@@ -26,7 +31,33 @@ class DropboxStorageProvider extends StorageProvider {
     return !!environment.dropboxApiKey;
   }
 
+  async open(): Promise<DocData | null> {
+    if (!(await this.auth())) {
+      return null;
+    }
+    return (null as any) as DocData;
+  }
+
+  async processOauthRedirectUrl(location: Location) {
+    let {hash} = location;
+    if (!hash || !hash.startsWith('#')) {
+      this.log('No URL hash');
+      return false;
+    }
+    let params = new URLSearchParams(hash.substring(1));
+    let accessToken = params.get('access_token');
+    if (!accessToken) {
+      this.log('No valid access_token parameter in URL hash');
+      return false;
+    }
+    this.log(`Storing access_token extracted from URL hash: ${accessToken}`);
+    this.accessToken = accessToken;
+    await this.initSdk();
+    return !!this.accessToken;
+  }
+
   private init() {
+    // Initialize drop-ins library.
     let existingScriptEl = document.getElementById(SCRIPT_ELEMENT_ID);
     if (!existingScriptEl) {
       let scriptEl = document.createElement('script');
@@ -35,23 +66,110 @@ class DropboxStorageProvider extends StorageProvider {
       scriptEl.dataset['appKey'] = environment.dropboxApiKey!;
       document.body.appendChild(scriptEl);
     }
-    this.checkIsReady();
+    this.checkDropIns();
+    // Initialize SDK.
+    this.initSdk();
   }
 
-  private checkIsReady() {
+  private checkDropIns() {
     if (
       window['Dropbox'] &&
-      window['Dropbox'].choose &&
-      window['Dropbox'].save
+      window['Dropbox']['choose'] &&
+      window['Dropbox']['save']
     ) {
       this.isReady = true;
-      this.log('Ready');
+      this.log('Drop-ins ready');
+      DropboxDropIns = window['Dropbox'];
     } else {
-      setTimeout(this.checkIsReady.bind(this), 100);
+      setTimeout(this.checkDropIns.bind(this), 100);
+    }
+  }
+
+  private async initSdk() {
+    let {accessToken} = this;
+    if (accessToken) {
+      this.log('Constructing authenticated Dropbox SDK client');
+      this.dbx = new DropboxSdk({
+        clientId: environment.dropboxApiKey,
+        accessToken,
+        fetch,
+      });
+      this.log(`Validating access token ${accessToken}`);
+      try {
+        await this.dbx.filesListFolder({
+          path: '',
+          limit: 1,
+        });
+        this.log(`Access token is valid: ${accessToken}`);
+        return;
+      } catch (e) {
+        this.log(`Access token is invalid, clearing: ${accessToken}`);
+        this.accessToken = null;
+      }
+    }
+
+    this.log('Constructing unauthenticated Dropbox SDK client');
+    this.dbx = new DropboxSdk({
+      clientId: environment.dropboxApiKey,
+      fetch,
+    });
+  }
+
+  private async auth(): Promise<boolean> {
+    this.log('Starting OAuth flow');
+    let oauthUrl = this.dbx.getAuthenticationUrl(
+      environment.getAbsoluteUrl('dropbox-auth-success'),
+      '',
+      'token'
+    );
+    let oauthWindow = popupCentered(oauthUrl, POPUP_ID, {
+      width: 900,
+      height: 900,
+    });
+    if (!oauthWindow) {
+      this.log('Unable to open OAuth window!');
+      return false;
+    }
+    return new Promise((resolve) => {
+      this.checkOauthWindowClosed(oauthWindow, resolve);
+    });
+  }
+
+  private async checkOauthWindowClosed(
+    oauthWindow: Window,
+    resolve: (value: boolean) => void
+  ) {
+    if (oauthWindow.closed) {
+      if (this.accessToken) {
+        this.log(`Obtained OAuth token from OAuth window: ${this.accessToken}`);
+        await this.initSdk();
+        resolve(!!this.accessToken);
+      } else {
+        this.log('Could not obtain OAuth token from OAuth window');
+        resolve(false);
+      }
+    } else {
+      setTimeout(
+        this.checkOauthWindowClosed.bind(this, oauthWindow, resolve),
+        100
+      );
+    }
+  }
+
+  get accessToken(): string | null {
+    return localStorage.getItem(OAUTH_TOKEN_STORAGE_KEY);
+  }
+
+  set accessToken(accessToken: string | null) {
+    if (accessToken) {
+      localStorage.setItem(OAUTH_TOKEN_STORAGE_KEY, accessToken);
+    } else {
+      localStorage.removeItem(OAUTH_TOKEN_STORAGE_KEY);
     }
   }
 
   private readonly log = debug('DropboxStorageProvider');
+  private dbx: DropboxSdk;
 }
 
 export default DropboxStorageProvider;

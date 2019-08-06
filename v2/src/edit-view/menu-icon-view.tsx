@@ -1,7 +1,7 @@
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -48,7 +48,6 @@ class MenuIconView extends React.Component<Props, State> {
           anchorEl={this.iconButtonRef.current}
           open={this.state.isMenuOpen}
           onClose={this.closeMenu.bind(this)}
-          anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
           transformOrigin={{vertical: 'top', horizontal: 'right'}}
         >
           {this.props.menuItems &&
@@ -87,7 +86,7 @@ class MenuIconView extends React.Component<Props, State> {
     this.setState({isMenuOpen: false});
   }
 
-  private onMenuItemClick(onClick?: () => void) {
+  private onMenuItemClick(onClick: () => void | undefined) {
     this.closeMenu();
     onClick && onClick();
   }
