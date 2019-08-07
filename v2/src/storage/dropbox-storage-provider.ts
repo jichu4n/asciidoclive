@@ -80,11 +80,6 @@ class DropboxStorageProvider extends StorageProvider {
   }
 
   async open(): Promise<DocData | null> {
-    if (!this.isAuthenticated) {
-      if (!(await this.auth())) {
-        return null;
-      }
-    }
     return new Promise((resolve) => {
       this.log('Opening Dropbox chooser');
       DropboxDropIns.choose({
