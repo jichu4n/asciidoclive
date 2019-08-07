@@ -18,9 +18,24 @@ import SplitLayoutView from '../split-layout-view/split-layout-view';
 import storageManager from '../storage/storage-manager';
 import StorageType from '../storage/storage-type';
 import MenuIconView from './menu-icon-view';
+import StorageAuthView from './storage-auth-view';
+
+interface State {
+  storageAuthViewIsOpen: boolean;
+  storageAuthViewStorageType: StorageType | null;
+  storageAuthViewAuthSuccessAction: (() => void) | null;
+  storageAuthViewAuthSuccessActionLabel: string | null;
+}
 
 @observer
-class EditView extends React.Component {
+class EditView extends React.Component<{}, State> {
+  state: State = {
+    storageAuthViewIsOpen: false,
+    storageAuthViewStorageType: null,
+    storageAuthViewAuthSuccessAction: null,
+    storageAuthViewAuthSuccessActionLabel: null,
+  };
+
   render() {
     return this.docManager.case({
       pending: () => <div />,
@@ -46,6 +61,15 @@ class EditView extends React.Component {
               this.aceEditorSize.height = d.height;
             }}
           />
+          <StorageAuthView
+            isOpen={this.state.storageAuthViewIsOpen}
+            onClose={() => this.setState({storageAuthViewIsOpen: false})}
+            storageType={this.state.storageAuthViewStorageType}
+            authSuccessAction={this.state.storageAuthViewAuthSuccessAction}
+            authSuccessActionLabel={
+              this.state.storageAuthViewAuthSuccessActionLabel
+            }
+          />
         </>
       ),
     });
@@ -64,9 +88,7 @@ class EditView extends React.Component {
             {
               item: 'Dropbox',
               icon: <DropboxIcon />,
-              onClick() {
-                storageManager.getStorageProvider(StorageType.DROPBOX).open();
-              },
+              onClick: this.onOpen.bind(this, StorageType.DROPBOX),
             },
             {item: 'Google Drive', icon: <GoogleDriveIcon />},
             {item: 'Local file', icon: <ComputerIcon />},
@@ -89,6 +111,22 @@ class EditView extends React.Component {
     let docManager = new DocManager();
     docManager.setBody(body);
     return docManager;
+  }
+
+  private onOpen(storageType: StorageType) {
+    let storageProvider = storageManager.getStorageProvider(storageType);
+    if (storageProvider.isAuthenticated) {
+      storageProvider.open();
+    } else {
+      this.setState({
+        storageAuthViewIsOpen: true,
+        storageAuthViewStorageType: storageType,
+        storageAuthViewAuthSuccessAction: () => storageProvider.open(),
+        storageAuthViewAuthSuccessActionLabel: `select a document from ${
+          storageProvider.displayName
+        }`,
+      });
+    }
   }
 
   @observable

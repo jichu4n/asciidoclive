@@ -8,6 +8,9 @@ class Environment {
   getAbsoluteUrl(path: string) {
     return new URL(path, this.rootUrl).toString();
   }
+  get siteDisplayName() {
+    return process.env.REACT_APP_SITE_DISPLAY_NAME;
+  }
 }
 
 const environment = new Environment();

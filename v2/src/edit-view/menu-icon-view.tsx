@@ -27,10 +27,7 @@ interface State {
 }
 
 class MenuIconView extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {isMenuOpen: false};
-  }
+  state: State = {isMenuOpen: false};
 
   render() {
     return (

@@ -6,12 +6,6 @@ import StorageType from './storage-type';
 const STORAGE_PROVIDERS = [DropboxStorageProvider];
 
 class StorageManager {
-  constructor() {
-    this.storageProviders = STORAGE_PROVIDERS.map(
-      (storageProviderClass) => new storageProviderClass()
-    );
-  }
-
   getStorageProvider<T extends StorageProvider = StorageProvider>(
     storageType: StorageType
   ) {
@@ -26,7 +20,11 @@ class StorageManager {
     }
   }
 
-  private storageProviders: Array<StorageProvider>;
+  private readonly storageProviders: Array<
+    StorageProvider
+  > = STORAGE_PROVIDERS.map(
+    (storageProviderClass) => new storageProviderClass()
+  );
 }
 
 const storageManager = new StorageManager();

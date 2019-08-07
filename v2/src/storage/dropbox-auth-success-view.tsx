@@ -9,12 +9,9 @@ interface State {
 }
 
 class DropboxAuthSuccessView extends React.Component<{}, State> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      isSuccessful: null,
-    };
-  }
+  state: State = {
+    isSuccessful: null,
+  };
 
   render() {
     return (

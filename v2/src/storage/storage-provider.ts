@@ -7,13 +7,23 @@ abstract class StorageProvider {
   /** The storage type correponding to this provider. */
   abstract get storageType(): StorageType;
 
+  /** Display name of this provider. */
+  abstract get displayName(): string;
+
   /** Whether this storage provider is enabled in the current environment. */
   abstract get isEnabled(): boolean;
 
+  /** Whether this storage provider is authenticated in the current environment. */
+  abstract get isAuthenticated(): boolean;
+
   /** The FontAwesome icon corresponding to this provider. */
   // storageTypeIcon: null,
+
   /** Whether necessary initialization has completed. */
   @observable isReady = false;
+
+  /** Starts the provider's auth flow. */
+  abstract auth(): Promise<boolean>;
 
   /** Prompt the user to open a document from this provider.
    * Returns a Promise that yields a StorageSpec.
