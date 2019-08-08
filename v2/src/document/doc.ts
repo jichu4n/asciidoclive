@@ -15,7 +15,7 @@ export interface DocSource {
 export interface DocData {
   title: string;
   body: string;
-  source: DocSource;
+  source?: DocSource;
 }
 
 /** Document being edited in an editor session. */

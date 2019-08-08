@@ -23,6 +23,7 @@ import StorageProvider from '../storage/storage-provider';
 import StorageType from '../storage/storage-type';
 import MenuIconView from './menu-icon-view';
 import StorageActionView, {Stage} from './storage-action-view';
+import {DocData} from 'src/document/doc';
 
 interface State {
   storageActionViewState: {
@@ -103,7 +104,11 @@ class EditView extends React.Component<{}, State> {
           tooltipLabel="Open"
           icon={<OpenIcon />}
           menuItems={[
-            {item: 'New Document', icon: <InsertDriveFileIcon />},
+            {
+              item: 'New Document',
+              icon: <InsertDriveFileIcon />,
+              onClick: this.onNewDocClick.bind(this),
+            },
             'divider',
             {subheader: 'Open from'},
             {
@@ -123,19 +128,26 @@ class EditView extends React.Component<{}, State> {
   }
 
   private async doInitialLoad() {
-    let body = '';
     try {
-      body = await (await fetch('/assets/scratch.txt')).text();
+      this.scratchText = await (await fetch('/assets/scratch.txt')).text();
     } catch (e) {
       console.error(`Error fetching initial document body`, e);
     }
     let docManager = new DocManager();
-    docManager.setBody(body);
+    docManager.setBody(this.scratchText);
     return docManager;
   }
 
   private onBodyChange(docManager: DocManager, newBody: string) {
     docManager.setBody(newBody).setIsDirty(true);
+  }
+
+  private async onNewDocClick() {
+    let docData: DocData = {
+      title: '',
+      body: this.scratchText,
+    };
+    (await this.docManager).setDocData(docData).setIsDirty(false);
   }
 
   private onOpenClick(storageType: StorageType) {
@@ -186,16 +198,15 @@ class EditView extends React.Component<{}, State> {
   }
 
   private readonly log = debug('EditView');
-
   @observable
   private aceEditorSize: Size = {
     width: 0,
     height: 0,
   };
-
   private docManager: IPromiseBasedObservable<DocManager> = fromPromise(
     this.doInitialLoad()
   );
+  private scratchText: string;
 }
 
 export default EditView;
