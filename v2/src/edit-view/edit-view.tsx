@@ -11,8 +11,10 @@ import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 import {fromPromise, IPromiseBasedObservable} from 'mobx-utils';
 import * as React from 'react';
+import {Helmet} from 'react-helmet';
 import DocManager from 'src/document/doc-manager';
 import AceEditorView, {Size} from '../ace-editor-view/ace-editor-view';
+import environment from '../environment/environment';
 import HeaderView from '../header-view/header-view';
 import PreviewView from '../preview-view/preview-view';
 import SplitLayoutView from '../split-layout-view/split-layout-view';
@@ -56,13 +58,21 @@ class EditView extends React.Component<{}, State> {
       },
       fulfilled: (docManager) => (
         <>
+          {(docManager.doc.title || docManager.doc.isDirty) && (
+            <Helmet>
+              <title>
+                {`${docManager.doc.isDirty ? '*' : ''}${docManager.doc.title ||
+                  'Untitled'} - ${environment.siteTitle}`}
+              </title>
+            </Helmet>
+          )}
           <HeaderView right={this.renderHeaderRight()} />
           <SplitLayoutView
             left={
               <AceEditorView
                 size={this.aceEditorSize}
                 body={docManager.doc.body}
-                onBodyChange={docManager.setBody.bind(docManager)}
+                onBodyChange={this.onBodyChange.bind(this, docManager)}
               />
             }
             right={<PreviewView compiledBody={docManager.doc.compiledBody} />}
@@ -124,6 +134,10 @@ class EditView extends React.Component<{}, State> {
     return docManager;
   }
 
+  private onBodyChange(docManager: DocManager, newBody: string) {
+    docManager.setBody(newBody).setIsDirty(true);
+  }
+
   private onOpenClick(storageType: StorageType) {
     let storageProvider = storageManager.getStorageProvider(storageType);
     if (storageProvider.isAuthenticated) {
@@ -158,7 +172,7 @@ class EditView extends React.Component<{}, State> {
       return;
     }
     this.log('Loading new doc data', docData);
-    (await this.docManager).setDocData(docData);
+    (await this.docManager).setDocData(docData).setIsDirty(false);
     this.onStorageAuthViewClose();
   }
 

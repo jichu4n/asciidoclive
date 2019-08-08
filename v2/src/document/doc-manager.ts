@@ -19,11 +19,21 @@ export default class DocManager {
   @action
   setDocData(docData: DocData) {
     Object.assign(this.doc, docData);
+    return this;
   }
 
   @action
   setBody(body: string) {
     this.doc.body = body;
+    return this;
+  }
+
+  @action
+  setIsDirty(isDirty: boolean) {
+    if (this.doc.isDirty != isDirty) {
+      this.doc.isDirty = isDirty;
+    }
+    return this;
   }
 
   @action
