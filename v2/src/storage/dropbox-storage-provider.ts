@@ -1,7 +1,7 @@
 import debug from 'debug';
 import {Dropbox as DropboxSdk} from 'dropbox';
 import popupCentered from 'popup-centered';
-import {DocData} from '../document/doc';
+import {DocData, StorageSpec} from '../document/doc';
 import environment from '../environment/environment';
 import StorageProvider from './storage-provider';
 import StorageType from './storage-type';
@@ -24,6 +24,11 @@ interface DropboxChooserResult {
   thumbnailLink?: string;
   /** Boolean, whether or not the file is actually a directory */
   isDir: boolean;
+}
+
+interface DropboxStorageSpec extends StorageSpec {
+  /** Unique ID for the file, compatible with Dropbox API v2. */
+  id: string;
 }
 
 const SCRIPT_ELEMENT_ID = 'dropboxjs';
@@ -83,7 +88,7 @@ class DropboxStorageProvider extends StorageProvider {
     return new Promise((resolve) => {
       this.log('Opening Dropbox chooser');
       DropboxDropIns.choose({
-        async success(files: Array<DropboxChooserResult>) {
+        success: async (files: Array<DropboxChooserResult>) => {
           if (!files || !files.length) {
             this.log('No result from Dropbox chooser');
             resolve(null);
@@ -91,9 +96,25 @@ class DropboxStorageProvider extends StorageProvider {
           }
           let file = files[0];
           this.log(`Got result from Dropbox chooser`, file);
-          resolve(null);
+          let storageSpec: DropboxStorageSpec = {id: file.id};
+          if (!file.link) {
+            this.log('No document content link provided');
+            resolve(null);
+            return;
+          }
+          this.log(`Getting document content from ${file.link}`);
+          let body = await (await fetch(file.link)).text();
+          this.log(`Fetched document content from ${file.link}`);
+          resolve({
+            title: file.name,
+            body,
+            source: {
+              storageType: this.storageType,
+              storageSpec,
+            },
+          });
         },
-        cancel() {
+        cancel: () => {
           this.log('Dropbox chooser canceled');
           resolve(null);
         },

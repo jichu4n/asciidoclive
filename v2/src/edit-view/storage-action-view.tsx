@@ -9,21 +9,31 @@ import environment from '../environment/environment';
 import storageManager from '../storage/storage-manager';
 import StorageType from '../storage/storage-type';
 
+export type Stage =
+  | 'auth-prompt'
+  | 'auth-pending'
+  | 'action-prompt'
+  | 'action-pending';
+
+const DEFAULT_STAGE: Stage = 'auth-prompt';
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   storageType: StorageType | null;
-  authSuccessAction: (() => void) | null;
-  authSuccessActionLabel: string | null;
+  action: (() => Promise<void>) | null;
+  actionLabel: string | null;
+  actionTitle: string | null;
+  initialStage: Stage | null;
 }
 
 interface State {
-  stage: 'auth-prompt' | 'auth-pending' | 'action';
+  stage: Stage;
 }
 
-class StorageAuthView extends React.Component<Props, State> {
+class StorageActionView extends React.Component<Props, State> {
   state: State = {
-    stage: 'auth-prompt',
+    stage: DEFAULT_STAGE,
   };
 
   render() {
@@ -36,6 +46,8 @@ class StorageAuthView extends React.Component<Props, State> {
         open={this.props.isOpen}
         onClose={this.onClose.bind(this)}
         fullWidth={true}
+        disableBackdropClick={true}
+        disableEscapeKeyDown={true}
       >
         {this.state.stage == 'auth-prompt' && (
           <>
@@ -71,7 +83,7 @@ class StorageAuthView extends React.Component<Props, State> {
             </DialogContent>
           </>
         )}
-        {this.state.stage == 'action' && (
+        {this.state.stage == 'action-prompt' && (
           <>
             <DialogTitle>Logged in to {displayName}</DialogTitle>
             <DialogContent>
@@ -79,7 +91,7 @@ class StorageAuthView extends React.Component<Props, State> {
                 You have successfully logged in to your {displayName} account.
               </DialogContentText>
               <DialogContentText>
-                Press CONTINUE to {this.props.authSuccessActionLabel}.
+                Press CONTINUE to {this.props.actionLabel}.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -89,30 +101,44 @@ class StorageAuthView extends React.Component<Props, State> {
             </DialogActions>
           </>
         )}
+        {this.state.stage == 'action-pending' && (
+          <>
+            <DialogTitle>{this.props.actionTitle}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Waiting for {displayName}...
+              </DialogContentText>
+            </DialogContent>
+          </>
+        )}
       </Dialog>
     );
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.isOpen && !prevProps.isOpen) {
+      this.setState({stage: this.props.initialStage || 'auth-prompt'});
+    }
+  }
+
   private onClose() {
     this.props.onClose();
-    setTimeout(() => {
-      this.setState({stage: 'auth-prompt'});
-    }, 1000);
   }
 
   private async onAuthClick() {
     this.setState({stage: 'auth-pending'});
     let authResult = await this.storageProvider!.auth();
     if (authResult) {
-      this.setState({stage: 'action'});
+      this.setState({stage: 'action-prompt'});
     } else {
       this.onClose();
     }
   }
 
   private async onActionClick() {
+    this.setState({stage: 'action-pending'});
+    this.props.action && (await this.props.action());
     this.onClose();
-    this.props.authSuccessAction && this.props.authSuccessAction();
   }
 
   private get storageProvider() {
@@ -123,4 +149,4 @@ class StorageAuthView extends React.Component<Props, State> {
   }
 }
 
-export default StorageAuthView;
+export default StorageActionView;

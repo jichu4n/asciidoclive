@@ -3,6 +3,7 @@ import 'ace-builds/webpack-resolver';
 import * as $ from 'jquery';
 import {autorun} from 'mobx';
 import * as React from 'react';
+import debug from 'debug';
 
 export interface Size {
   height: number;
@@ -11,7 +12,7 @@ export interface Size {
 
 export interface Props {
   size: Size;
-  initialBody: string;
+  body: string;
   onBodyChange: (newBody: string) => any;
 }
 
@@ -25,7 +26,7 @@ class AceEditorView extends React.Component<Props> {
       aceEditorSession: this.aceEditorSession,
     });
 
-    this.body = this.props.initialBody;
+    this.body = this.props.body;
     this.aceEditorSession.setValue(this.body);
 
     this.aceEditorSession
@@ -45,6 +46,14 @@ class AceEditorView extends React.Component<Props> {
 
   render() {
     return <div className="ace-editor" ref={this.containerEl} />;
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.body !== prevProps.body && this.props.body !== this.body) {
+      this.log('Body updated by parent');
+      this.body = this.props.body;
+      this.aceEditor.setValue(this.body);
+    }
   }
 
   private onSizeChange() {
@@ -80,6 +89,7 @@ class AceEditorView extends React.Component<Props> {
     }
   }
 
+  private log = debug('AceEditorView');
   private containerEl: React.RefObject<HTMLDivElement> = React.createRef();
   private aceEditor: Ace.Editor;
   private aceEditorSession: Ace.EditSession;

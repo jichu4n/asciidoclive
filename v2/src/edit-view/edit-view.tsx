@@ -4,6 +4,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import SaveIcon from '@material-ui/icons/Save';
 import SettingsIcon from '@material-ui/icons/Settings';
+import debug from 'debug';
 import DropboxIcon from 'mdi-material-ui/Dropbox';
 import GoogleDriveIcon from 'mdi-material-ui/GoogleDrive';
 import {observable} from 'mobx';
@@ -16,27 +17,37 @@ import HeaderView from '../header-view/header-view';
 import PreviewView from '../preview-view/preview-view';
 import SplitLayoutView from '../split-layout-view/split-layout-view';
 import storageManager from '../storage/storage-manager';
+import StorageProvider from '../storage/storage-provider';
 import StorageType from '../storage/storage-type';
 import MenuIconView from './menu-icon-view';
-import StorageAuthView from './storage-auth-view';
+import StorageActionView, {Stage} from './storage-action-view';
 
 interface State {
-  storageAuthViewIsOpen: boolean;
-  storageAuthViewStorageType: StorageType | null;
-  storageAuthViewAuthSuccessAction: (() => void) | null;
-  storageAuthViewAuthSuccessActionLabel: string | null;
+  storageActionViewState: {
+    isOpen: boolean;
+    storageType: StorageType | null;
+    action: (() => Promise<void>) | null;
+    actionLabel: string | null;
+    actionTitle: string | null;
+    initialStage: Stage | null;
+  };
 }
 
 @observer
 class EditView extends React.Component<{}, State> {
   state: State = {
-    storageAuthViewIsOpen: false,
-    storageAuthViewStorageType: null,
-    storageAuthViewAuthSuccessAction: null,
-    storageAuthViewAuthSuccessActionLabel: null,
+    storageActionViewState: {
+      isOpen: false,
+      storageType: null,
+      action: null,
+      actionLabel: null,
+      actionTitle: null,
+      initialStage: null,
+    },
   };
 
   render() {
+    let {storageActionViewState} = this.state;
     return this.docManager.case({
       pending: () => <div />,
       rejected: (e) => {
@@ -50,7 +61,7 @@ class EditView extends React.Component<{}, State> {
             left={
               <AceEditorView
                 size={this.aceEditorSize}
-                initialBody={docManager.doc.body}
+                body={docManager.doc.body}
                 onBodyChange={docManager.setBody.bind(docManager)}
               />
             }
@@ -61,14 +72,14 @@ class EditView extends React.Component<{}, State> {
               this.aceEditorSize.height = d.height;
             }}
           />
-          <StorageAuthView
-            isOpen={this.state.storageAuthViewIsOpen}
-            onClose={() => this.setState({storageAuthViewIsOpen: false})}
-            storageType={this.state.storageAuthViewStorageType}
-            authSuccessAction={this.state.storageAuthViewAuthSuccessAction}
-            authSuccessActionLabel={
-              this.state.storageAuthViewAuthSuccessActionLabel
-            }
+          <StorageActionView
+            isOpen={storageActionViewState.isOpen}
+            onClose={this.onStorageAuthViewClose.bind(this)}
+            storageType={storageActionViewState.storageType}
+            action={storageActionViewState.action}
+            actionLabel={storageActionViewState.actionLabel}
+            actionTitle={storageActionViewState.actionTitle}
+            initialStage={storageActionViewState.initialStage}
           />
         </>
       ),
@@ -88,7 +99,7 @@ class EditView extends React.Component<{}, State> {
             {
               item: 'Dropbox',
               icon: <DropboxIcon />,
-              onClick: this.onOpen.bind(this, StorageType.DROPBOX),
+              onClick: this.onOpenClick.bind(this, StorageType.DROPBOX),
             },
             {item: 'Google Drive', icon: <GoogleDriveIcon />},
             {item: 'Local file', icon: <ComputerIcon />},
@@ -113,21 +124,54 @@ class EditView extends React.Component<{}, State> {
     return docManager;
   }
 
-  private onOpen(storageType: StorageType) {
+  private onOpenClick(storageType: StorageType) {
     let storageProvider = storageManager.getStorageProvider(storageType);
     if (storageProvider.isAuthenticated) {
-      storageProvider.open();
+      this.doOpen(storageProvider);
     } else {
       this.setState({
-        storageAuthViewIsOpen: true,
-        storageAuthViewStorageType: storageType,
-        storageAuthViewAuthSuccessAction: () => storageProvider.open(),
-        storageAuthViewAuthSuccessActionLabel: `select a document from ${
-          storageProvider.displayName
-        }`,
+        storageActionViewState: {
+          isOpen: true,
+          storageType: storageType,
+          action: () => this.doOpen(storageProvider),
+          actionLabel: `select a document from ${storageProvider.displayName}`,
+          actionTitle: `Open from ${storageProvider.displayName}`,
+          initialStage: 'auth-prompt',
+        },
       });
     }
   }
+
+  private async doOpen(storageProvider: StorageProvider) {
+    this.setState({
+      storageActionViewState: {
+        isOpen: true,
+        storageType: storageProvider.storageType,
+        action: null,
+        actionLabel: null,
+        actionTitle: `Open from ${storageProvider.displayName}`,
+        initialStage: 'action-pending',
+      },
+    });
+    let docData = await storageProvider.open();
+    if (!docData) {
+      return;
+    }
+    this.log('Loading new doc data', docData);
+    (await this.docManager).setDocData(docData);
+    this.onStorageAuthViewClose();
+  }
+
+  private onStorageAuthViewClose() {
+    this.setState({
+      storageActionViewState: {
+        ...this.state.storageActionViewState,
+        isOpen: false,
+      },
+    });
+  }
+
+  private readonly log = debug('EditView');
 
   @observable
   private aceEditorSize: Size = {
