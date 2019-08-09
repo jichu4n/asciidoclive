@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import * as React from 'react';
 
-type MenuItemSpec =
+export type MenuItemSpec =
   | {
       item?: string;
       subheader?: string;

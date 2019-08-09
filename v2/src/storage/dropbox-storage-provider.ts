@@ -1,5 +1,6 @@
 import debug from 'debug';
 import {Dropbox as DropboxSdk} from 'dropbox';
+import DropboxIcon from 'mdi-material-ui/Dropbox';
 import popupCentered from 'popup-centered';
 import {DocData, StorageSpec} from '../document/doc';
 import environment from '../environment/environment';
@@ -50,6 +51,10 @@ class DropboxStorageProvider extends StorageProvider {
 
   get storageType() {
     return StorageType.DROPBOX;
+  }
+
+  get storageTypeIcon() {
+    return DropboxIcon;
   }
 
   get displayName() {
@@ -119,9 +124,29 @@ class DropboxStorageProvider extends StorageProvider {
           resolve(null);
         },
         linkType: 'direct',
-        log: this.log,
       });
     });
+  }
+
+  async save(docData: DocData) {
+    if (!docData.source || docData.source.storageType !== this.storageType) {
+      this.log('Invalid docData: ', docData);
+      return false;
+    }
+    let {id} = docData.source.storageSpec as DropboxStorageSpec;
+    this.log(`Saving to Dropbox file ${id}`);
+    try {
+      let result = await this.dbx.filesUpload({
+        path: id,
+        contents: docData.body,
+        mode: {'.tag': 'overwrite'},
+      });
+      this.log(`Successfully saved to Dropbox file ${id}`, result);
+      return true;
+    } catch (e) {
+      this.log(`Failed to save to Dropbox file ${id}: `, e);
+      return false;
+    }
   }
 
   async processOauthRedirectUrl(location: Location) {

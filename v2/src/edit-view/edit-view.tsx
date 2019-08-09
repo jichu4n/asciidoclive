@@ -12,7 +12,8 @@ import {observer} from 'mobx-react';
 import {fromPromise, IPromiseBasedObservable} from 'mobx-utils';
 import * as React from 'react';
 import {Helmet} from 'react-helmet';
-import DocManager from 'src/document/doc-manager';
+import DocManager from '../document/doc-manager';
+import {Doc, DocData} from '..//document/doc';
 import AceEditorView, {Size} from '../ace-editor-view/ace-editor-view';
 import environment from '../environment/environment';
 import HeaderView from '../header-view/header-view';
@@ -21,9 +22,8 @@ import SplitLayoutView from '../split-layout-view/split-layout-view';
 import storageManager from '../storage/storage-manager';
 import StorageProvider from '../storage/storage-provider';
 import StorageType from '../storage/storage-type';
-import MenuIconView from './menu-icon-view';
+import MenuIconView, {MenuItemSpec} from './menu-icon-view';
 import StorageActionView, {Stage} from './storage-action-view';
-import {DocData} from 'src/document/doc';
 
 interface State {
   storageActionViewState: {
@@ -67,7 +67,7 @@ class EditView extends React.Component<{}, State> {
               </title>
             </Helmet>
           )}
-          <HeaderView right={this.renderHeaderRight()} />
+          <HeaderView right={this.renderHeaderRight(docManager)} />
           <SplitLayoutView
             left={
               <AceEditorView
@@ -85,7 +85,7 @@ class EditView extends React.Component<{}, State> {
           />
           <StorageActionView
             isOpen={storageActionViewState.isOpen}
-            onClose={this.onStorageAuthViewClose.bind(this)}
+            onClose={this.onStorageActionViewClose.bind(this)}
             storageType={storageActionViewState.storageType}
             action={storageActionViewState.action}
             actionLabel={storageActionViewState.actionLabel}
@@ -97,7 +97,15 @@ class EditView extends React.Component<{}, State> {
     });
   }
 
-  private renderHeaderRight() {
+  private renderHeaderRight(docManager: DocManager) {
+    let {doc} = docManager;
+    let docStorageProvider =
+      doc.source && doc.source.storageType
+        ? storageManager.getStorageProvider(doc.source.storageType)
+        : null;
+    let DocStorageProviderIcon = docStorageProvider
+      ? docStorageProvider.storageTypeIcon
+      : null;
     return (
       <>
         <MenuIconView
@@ -120,7 +128,22 @@ class EditView extends React.Component<{}, State> {
             {item: 'Local file', icon: <ComputerIcon />},
           ]}
         />
-        <MenuIconView tooltipLabel="Save" icon={<SaveIcon />} />
+        <MenuIconView
+          tooltipLabel="Save"
+          icon={<SaveIcon />}
+          menuItems={[
+            ...(docStorageProvider && DocStorageProviderIcon
+              ? ([
+                  {
+                    item: doc.title,
+                    icon: <DocStorageProviderIcon />,
+                    onClick: this.doSave.bind(this, docStorageProvider),
+                  },
+                  'divider',
+                ] as Array<MenuItemSpec>)
+              : []),
+          ]}
+        />
         <MenuIconView tooltipLabel="Settings" icon={<SettingsIcon />} />
         <MenuIconView tooltipLabel="Help" icon={<HelpIcon />} />
       </>
@@ -185,10 +208,26 @@ class EditView extends React.Component<{}, State> {
     }
     this.log('Loading new doc data', docData);
     (await this.docManager).setDocData(docData).setIsDirty(false);
-    this.onStorageAuthViewClose();
+    this.onStorageActionViewClose();
   }
 
-  private onStorageAuthViewClose() {
+  private async doSave(storageProvider: StorageProvider) {
+    this.setState({
+      storageActionViewState: {
+        isOpen: true,
+        storageType: storageProvider.storageType,
+        action: null,
+        actionLabel: null,
+        actionTitle: `Save to ${storageProvider.displayName}`,
+        initialStage: 'action-pending',
+      },
+    });
+    await storageProvider.save((await this.docManager).doc);
+    (await this.docManager).setIsDirty(false);
+    this.onStorageActionViewClose();
+  }
+
+  private onStorageActionViewClose() {
     this.setState({
       storageActionViewState: {
         ...this.state.storageActionViewState,

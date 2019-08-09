@@ -7,6 +7,9 @@ abstract class StorageProvider {
   /** The storage type correponding to this provider. */
   abstract get storageType(): StorageType;
 
+  /** The icon component corresponding to this provider. */
+  abstract get storageTypeIcon(): React.ComponentType;
+
   /** Display name of this provider. */
   abstract get displayName(): string;
 
@@ -15,9 +18,6 @@ abstract class StorageProvider {
 
   /** Whether this storage provider is authenticated in the current environment. */
   abstract get isAuthenticated(): boolean;
-
-  /** The FontAwesome icon corresponding to this provider. */
-  // storageTypeIcon: null,
 
   /** Whether necessary initialization has completed. */
   @observable isReady = false;
@@ -38,7 +38,7 @@ abstract class StorageProvider {
   /** Save a document back to the provider.
    * Returns a promise that resolves when the document is saved.
    */
-  // abstract save(docData: DocData): Promise<void>;
+  abstract save(docData: DocData): Promise<boolean>;
 
   /** Prompt the user to save a document to this provider.
    * Returns a promise that resolves when the document is saved.
