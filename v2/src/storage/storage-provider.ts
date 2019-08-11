@@ -1,5 +1,5 @@
 import {observable} from 'mobx';
-import {DocData} from '../document/doc';
+import {DocData, DocSource} from '../document/doc';
 import StorageType from './storage-type';
 
 /** Abtract base class of storage backends. */
@@ -33,7 +33,7 @@ abstract class StorageProvider {
   /** Open a file at the given path from this provider.
    * Returns a PromiseObject that yields the selected doc.
    */
-  // abstract load(storagePath: string): Promise<DocData>;
+  abstract load(source: DocSource): Promise<DocData | null>;
 
   /** Save a document back to the provider.
    * Returns a promise that resolves when the document is saved.

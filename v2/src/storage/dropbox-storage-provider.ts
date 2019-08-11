@@ -2,7 +2,7 @@ import debug from 'debug';
 import {Dropbox as DropboxSdk} from 'dropbox';
 import DropboxIcon from 'mdi-material-ui/Dropbox';
 import popupCentered from 'popup-centered';
-import {DocData, StorageSpec} from '../document/doc';
+import {DocData, DocSource, StorageSpec} from '../document/doc';
 import environment from '../environment/environment';
 import StorageProvider from './storage-provider';
 import StorageType from './storage-type';
@@ -128,10 +128,41 @@ class DropboxStorageProvider extends StorageProvider {
     });
   }
 
+  async load(source: DocSource): Promise<DocData | null> {
+    if (source.storageType !== this.storageType) {
+      this.log('Invalid docSource: ', source);
+      throw Error('Invalid docSource');
+    }
+    let {id} = source.storageSpec as DropboxStorageSpec;
+    let downloadUrl: string;
+    let title: string;
+    try {
+      this.log(`Getting download info for file ${id}`);
+      let result = await this.dbx.filesGetTemporaryLink({
+        path: id,
+      });
+      this.log(`Successfully got download info for file ${id}:`, result);
+      downloadUrl = result.link;
+      title = result.metadata.name;
+    } catch (e) {
+      this.log(`Failed to get download info for file ${id}:`, e);
+      return null;
+    }
+    try {
+      this.log(`Getting content for file ${id} at ${downloadUrl}`);
+      let body = await (await fetch(downloadUrl)).text();
+      this.log(`Successfully fetched content for file ${id} at ${downloadUrl}`);
+      return {title, body, source};
+    } catch (e) {
+      this.log(`Failed to fetch content for file ${id} at ${downloadUrl}:`, e);
+      return null;
+    }
+  }
+
   async save(docData: DocData) {
     if (!docData.source || docData.source.storageType !== this.storageType) {
       this.log('Invalid docData: ', docData);
-      return false;
+      throw Error('Invalid docData');
     }
     let {id} = docData.source.storageSpec as DropboxStorageSpec;
     this.log(`Saving to Dropbox file ${id}`);
