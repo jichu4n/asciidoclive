@@ -142,6 +142,14 @@ class EditView extends React.Component<{}, State> {
                   'divider',
                 ] as Array<MenuItemSpec>)
               : []),
+            {subheader: 'Save to'},
+            {
+              item: 'Dropbox',
+              icon: <DropboxIcon />,
+              onClick: this.onSaveAsClick.bind(this, StorageType.DROPBOX),
+            },
+            {item: 'Google Drive', icon: <GoogleDriveIcon />},
+            {item: 'Local file', icon: <ComputerIcon />},
           ]}
         />
         <MenuIconView tooltipLabel="Settings" icon={<SettingsIcon />} />
@@ -211,6 +219,43 @@ class EditView extends React.Component<{}, State> {
     this.onStorageActionViewClose();
   }
 
+  private onSaveAsClick(storageType: StorageType) {
+    let storageProvider = storageManager.getStorageProvider(storageType);
+    if (storageProvider.isAuthenticated) {
+      this.doSaveAs(storageProvider);
+    } else {
+      this.setState({
+        storageActionViewState: {
+          isOpen: true,
+          storageType: storageType,
+          action: () => this.doSaveAs(storageProvider),
+          actionLabel: `save this document to ${storageProvider.displayName}`,
+          actionTitle: `Save to ${storageProvider.displayName}`,
+          initialStage: 'auth-prompt',
+        },
+      });
+    }
+  }
+
+  private async doSaveAs(storageProvider: StorageProvider) {
+    this.setState({
+      storageActionViewState: {
+        isOpen: true,
+        storageType: storageProvider.storageType,
+        action: null,
+        actionLabel: null,
+        actionTitle: `Save to ${storageProvider.displayName}`,
+        initialStage: 'action-pending',
+      },
+    });
+    let docData = await storageProvider.saveAs((await this.docManager).doc);
+    if (docData) {
+      this.log('Switching to saved doc data', docData);
+      (await this.docManager).setDocData(docData).setIsDirty(false);
+    }
+    this.onStorageActionViewClose();
+  }
+
   private async doSave(storageProvider: StorageProvider) {
     this.setState({
       storageActionViewState: {
@@ -222,8 +267,9 @@ class EditView extends React.Component<{}, State> {
         initialStage: 'action-pending',
       },
     });
-    await storageProvider.save((await this.docManager).doc);
-    (await this.docManager).setIsDirty(false);
+    if (await storageProvider.save((await this.docManager).doc)) {
+      (await this.docManager).setIsDirty(false);
+    }
     this.onStorageActionViewClose();
   }
 

@@ -43,7 +43,7 @@ abstract class StorageProvider {
   /** Prompt the user to save a document to this provider.
    * Returns a promise that resolves when the document is saved.
    */
-  // abstract saveAs(docData: DocData): Promise<void>;
+  abstract saveAs(docData: DocData): Promise<DocData | null>;
 
   /** Rename a file to the new title inside the doc.
    * Returns a promise that resolves with the new StorageSpec when the file

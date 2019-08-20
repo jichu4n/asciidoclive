@@ -1,5 +1,7 @@
+import * as cryptoJs from 'crypto-js';
 import debug from 'debug';
-import {Dropbox as DropboxSdk} from 'dropbox';
+import {Dropbox as DropboxSdk, files} from 'dropbox';
+import * as _ from 'lodash';
 import DropboxIcon from 'mdi-material-ui/Dropbox';
 import popupCentered from 'popup-centered';
 import {DocData, DocSource, StorageSpec} from '../document/doc';
@@ -37,6 +39,22 @@ const POPUP_ID = 'dropbox-oauth';
 const OAUTH_TOKEN_STORAGE_KEY = 'dropbox-access-token';
 
 let DropboxDropIns: any;
+
+/** Compute Dropbox content hash.
+ *
+ * Sources:
+ *   - https://www.dropbox.com/developers/reference/content-hash
+ *   - https://stackoverflow.com/a/47663702
+ */
+function computeContentHash(body: string): string {
+  const BLOCK_SIZE = 4 * 1024 * 1024;
+  let hash = cryptoJs.algo.SHA256.create();
+  for (let i = 0; i < body.length; i += BLOCK_SIZE) {
+    let chunk = body.substr(i, BLOCK_SIZE);
+    hash.update(cryptoJs.SHA256(chunk));
+  }
+  return hash.finalize().toString();
+}
 
 class DropboxStorageProvider extends StorageProvider {
   constructor() {
@@ -157,6 +175,59 @@ class DropboxStorageProvider extends StorageProvider {
       this.log(`Failed to fetch content for file ${id} at ${downloadUrl}:`, e);
       return null;
     }
+  }
+
+  async saveAs(docData: DocData) {
+    let cursor: string;
+    let contentHash: string;
+    let contentUrl = `data:text/plain,${encodeURIComponent(docData.body)}`;
+    let result = new Promise<DocData | null>((resolve) => {
+      DropboxDropIns.save({
+        files: [{url: contentUrl, filename: docData.title || 'Untitled.adoc'}],
+        success: async () => {
+          this.log('Dropbox saver success');
+          let {entries} = await this.dbx.filesListFolderContinue({cursor});
+          this.log('Entries since initial cursor: ', entries);
+          let entry = _.find(entries, {
+            content_hash: contentHash,
+            '.tag': 'file',
+          }) as files.FileMetadataReference | undefined;
+          if (entry) {
+            this.log(`Found matching entry: `, entry);
+            let newDocData: DocData = {
+              ...docData,
+              title: entry.name,
+              source: {
+                storageType: this.storageType,
+                storageSpec: {
+                  id: entry.id,
+                },
+              },
+            };
+            resolve(newDocData);
+          } else {
+            this.log(`No matching entry found `);
+            resolve(null);
+          }
+        },
+        cancel: () => {
+          this.log('Dropbox saver canceled');
+          resolve(null);
+        },
+        error: (message: string) => {
+          this.log(`Dropbox saver error: ${message}`);
+          resolve(null);
+        },
+      });
+    });
+    contentHash = computeContentHash(docData.body);
+    this.log(`Content hash: ${contentHash}`);
+    ({cursor} = await this.dbx.filesListFolderGetLatestCursor({
+      path: '',
+      recursive: true,
+    }));
+    this.log(`Initial cursor at Dropbox saver open: ${cursor}`);
+    return result;
   }
 
   async save(docData: DocData) {
