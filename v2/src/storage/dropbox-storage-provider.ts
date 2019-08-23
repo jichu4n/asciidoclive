@@ -264,12 +264,18 @@ class DropboxStorageProvider extends StorageProvider {
     let {id} = docData.source.storageSpec as DropboxStorageSpec;
     this.log(`Renaming file ${id} to '${newTitle}'`);
     try {
+      let currentPath = (await this.dbx.filesGetMetadata({path: id}))
+        .path_display!;
+      this.log(`Current path of file ${id} is '${currentPath}'`);
+      let newPath =
+        currentPath.substr(0, currentPath.lastIndexOf('/') + 1) + newTitle;
+      this.log(`Renaming file ${id} to '${newPath}'`);
       let result = await this.dbx.filesMoveV2({
         from_path: id,
-        // TODO: get path prefix from path_display
-        to_path: newTitle,
+        to_path: newPath,
         autorename: true,
       });
+      this.log(`Successfully renamed to ${result.metadata.path_display}`);
       return {...docData, title: result.metadata.name};
     } catch (e) {
       this.log(`Failed to save to Dropbox file ${id}: `, e);
