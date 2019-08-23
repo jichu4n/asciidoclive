@@ -4,7 +4,12 @@ import {Dropbox as DropboxSdk, files} from 'dropbox';
 import * as _ from 'lodash';
 import DropboxIcon from 'mdi-material-ui/Dropbox';
 import popupCentered from 'popup-centered';
-import {DocData, DocSource, StorageSpec} from '../document/doc';
+import {
+  DocData,
+  DocSource,
+  StorageSpec,
+  getTitleOrDefault,
+} from '../document/doc';
 import environment from '../environment/environment';
 import StorageProvider from './storage-provider';
 import StorageType from './storage-type';
@@ -183,7 +188,7 @@ class DropboxStorageProvider extends StorageProvider {
     let contentUrl = `data:text/plain,${encodeURIComponent(docData.body)}`;
     let result = new Promise<DocData | null>((resolve) => {
       DropboxDropIns.save({
-        files: [{url: contentUrl, filename: docData.title || 'Untitled.adoc'}],
+        files: [{url: contentUrl, filename: getTitleOrDefault(docData)}],
         success: async () => {
           this.log('Dropbox saver success');
           let {entries} = await this.dbx.filesListFolderContinue({cursor});

@@ -23,3 +23,9 @@ $doc-title-editor-height: 50px;
     top: ($header-collapsed-height + $doc-title-editor-height);
   }
 }
+
+.edit-title {
+  position: absolute;
+  top: $header-height;
+  height: $doc-title-editor-height;
+}

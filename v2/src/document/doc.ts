@@ -18,6 +18,12 @@ export interface DocData {
   source?: DocSource;
 }
 
+export const DEFAULT_TITLE = 'Untitled.txt';
+
+export function getTitleOrDefault(docData: DocData) {
+  return docData.title || DEFAULT_TITLE;
+}
+
 /** Document being edited in an editor session. */
 export class Doc implements DocData {
   title = '';

@@ -12,9 +12,9 @@ import {observer} from 'mobx-react';
 import {fromPromise, IPromiseBasedObservable} from 'mobx-utils';
 import * as React from 'react';
 import {Helmet} from 'react-helmet';
-import DocManager from '../document/doc-manager';
-import {Doc, DocData} from '..//document/doc';
+import {DocData, getTitleOrDefault} from '..//document/doc';
 import AceEditorView, {Size} from '../ace-editor-view/ace-editor-view';
+import DocManager from '../document/doc-manager';
 import environment from '../environment/environment';
 import HeaderView from '../header-view/header-view';
 import PreviewView from '../preview-view/preview-view';
@@ -24,6 +24,7 @@ import StorageProvider from '../storage/storage-provider';
 import StorageType from '../storage/storage-type';
 import MenuIconView, {MenuItemSpec} from './menu-icon-view';
 import StorageActionView, {Stage} from './storage-action-view';
+import TitleView from '../title-view/title-view';
 
 interface State {
   storageActionViewState: {
@@ -62,12 +63,14 @@ class EditView extends React.Component<{}, State> {
           {(docManager.doc.title || docManager.doc.isDirty) && (
             <Helmet>
               <title>
-                {`${docManager.doc.isDirty ? '*' : ''}${docManager.doc.title ||
-                  'Untitled'} - ${environment.siteTitle}`}
+                {`${docManager.doc.isDirty ? '*' : ''}${getTitleOrDefault(
+                  docManager.doc
+                )} - ${environment.siteTitle}`}
               </title>
             </Helmet>
           )}
           <HeaderView right={this.renderHeaderRight(docManager)} />
+          <TitleView docManager={docManager} className="edit-title" />
           <SplitLayoutView
             left={
               <AceEditorView
@@ -177,6 +180,7 @@ class EditView extends React.Component<{}, State> {
     let docData: DocData = {
       title: '',
       body: this.scratchText,
+      source: undefined,
     };
     (await this.docManager).setDocData(docData).setIsDirty(false);
   }

@@ -51,6 +51,11 @@ body {
     .edit-split-layout {
       top: 98px; } }
 
+.edit-title {
+  position: absolute;
+  top: 64px;
+  height: 50px; }
+
 .split-layout {
   display: flex;
   flex-direction: row;
@@ -362,3 +367,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center; }
+
+.title-container {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  width: 100%;
+  border-bottom: 1px solid #ddd; }
