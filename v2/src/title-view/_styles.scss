@@ -4,4 +4,10 @@
   padding: 0 10px;
   width: 100%;
   border-bottom: 1px solid #ddd;
+
+  .title-text {
+    fieldset {
+      border-color: transparent;
+    }
+  }
 }

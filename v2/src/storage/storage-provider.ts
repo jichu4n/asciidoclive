@@ -49,7 +49,7 @@ abstract class StorageProvider {
    * Returns a promise that resolves with the new StorageSpec when the file
    * has been renamed.
    */
-  // abstract rename(docData: DocData): Promise<void>;
+  abstract rename(docData: DocData, newTitle: string): Promise<DocData | null>;
 }
 
 export default StorageProvider;

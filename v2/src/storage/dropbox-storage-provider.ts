@@ -153,8 +153,8 @@ class DropboxStorageProvider extends StorageProvider {
 
   async load(source: DocSource): Promise<DocData | null> {
     if (source.storageType !== this.storageType) {
-      this.log('Invalid docSource: ', source);
-      throw Error('Invalid docSource');
+      this.log('Invalid DocSource: ', source);
+      throw Error('Invalid DocSource');
     }
     let {id} = source.storageSpec as DropboxStorageSpec;
     let downloadUrl: string;
@@ -253,6 +253,27 @@ class DropboxStorageProvider extends StorageProvider {
     } catch (e) {
       this.log(`Failed to save to Dropbox file ${id}: `, e);
       return false;
+    }
+  }
+
+  async rename(docData: DocData, newTitle: string): Promise<DocData | null> {
+    if (!docData.source || docData.source.storageType !== this.storageType) {
+      this.log('Invalid docData: ', docData);
+      throw Error('Invalid docData');
+    }
+    let {id} = docData.source.storageSpec as DropboxStorageSpec;
+    this.log(`Renaming file ${id} to '${newTitle}'`);
+    try {
+      let result = await this.dbx.filesMoveV2({
+        from_path: id,
+        // TODO: get path prefix from path_display
+        to_path: newTitle,
+        autorename: true,
+      });
+      return {...docData, title: result.metadata.name};
+    } catch (e) {
+      this.log(`Failed to save to Dropbox file ${id}: `, e);
+      return null;
     }
   }
 
