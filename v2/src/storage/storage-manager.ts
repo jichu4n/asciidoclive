@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
 import DropboxStorageProvider from './dropbox-storage-provider';
+import GoogleDriveStorageProvider from './google-drive-storage-provider';
 import StorageProvider from './storage-provider';
 import StorageType from './storage-type';
 
-const STORAGE_PROVIDERS = [DropboxStorageProvider];
+const STORAGE_PROVIDERS = [DropboxStorageProvider, GoogleDriveStorageProvider];
 
 class StorageManager {
   getStorageProvider<T extends StorageProvider = StorageProvider>(

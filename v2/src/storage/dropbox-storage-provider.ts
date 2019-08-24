@@ -39,7 +39,7 @@ interface DropboxStorageSpec extends StorageSpec {
   id: string;
 }
 
-const SCRIPT_ELEMENT_ID = 'dropboxjs';
+const DROP_INS_SCRIPT_ELEMENT_ID = 'dropbox-drop-ins-js';
 const POPUP_ID = 'dropbox-oauth';
 const OAUTH_TOKEN_STORAGE_KEY = 'dropbox-access-token';
 
@@ -303,11 +303,11 @@ class DropboxStorageProvider extends StorageProvider {
 
   private init() {
     // Initialize drop-ins library.
-    let existingScriptEl = document.getElementById(SCRIPT_ELEMENT_ID);
+    let existingScriptEl = document.getElementById(DROP_INS_SCRIPT_ELEMENT_ID);
     if (!existingScriptEl) {
       let scriptEl = document.createElement('script');
       scriptEl.src = 'https://www.dropbox.com/static/api/2/dropins.js';
-      scriptEl.id = SCRIPT_ELEMENT_ID;
+      scriptEl.id = DROP_INS_SCRIPT_ELEMENT_ID;
       scriptEl.dataset['appKey'] = environment.dropboxApiKey!;
       document.body.appendChild(scriptEl);
     }

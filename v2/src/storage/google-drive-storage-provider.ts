@@ -1,3 +1,4 @@
+import debug from 'debug';
 import GoogleDriveIcon from 'mdi-material-ui/GoogleDrive';
 import {observable} from 'mobx';
 import {DocData, DocSource} from '../document/doc';
@@ -5,7 +6,19 @@ import environment from '../environment/environment';
 import StorageProvider from './storage-provider';
 import StorageType from './storage-type';
 
+const API_SCRIPT_ELEMENT_ID = 'google-api-js';
+
 class GoogleDriveStorageProvider extends StorageProvider {
+  constructor() {
+    super();
+    if (this.isEnabled) {
+      this.log('Enabled');
+      this.init();
+    } else {
+      this.log('Disabled');
+    }
+  }
+
   get storageType() {
     return StorageType.GOOGLE_DRIVE;
   }
@@ -23,7 +36,7 @@ class GoogleDriveStorageProvider extends StorageProvider {
   }
 
   get isAuthenticated(): boolean {
-    return false;
+    return this.isReady && gapi.auth2.getAuthInstance().isSignedIn.get();
   }
 
   /** Whether necessary initialization has completed. */
@@ -69,6 +82,46 @@ class GoogleDriveStorageProvider extends StorageProvider {
   rename(docData: DocData, newTitle: string): Promise<DocData | null> {
     return Promise.reject();
   }
+
+  private init() {
+    let existingScriptEl = document.getElementById(API_SCRIPT_ELEMENT_ID);
+    if (!existingScriptEl) {
+      let scriptEl = document.createElement('script');
+      scriptEl.src = 'https://apis.google.com/js/api.js';
+      scriptEl.id = API_SCRIPT_ELEMENT_ID;
+      document.body.appendChild(scriptEl);
+    }
+    this.checkGoogleApiClient();
+  }
+
+  private checkGoogleApiClient() {
+    if (window['gapi'] && window['gapi']['load']) {
+      this.log('Google API client script loaded');
+      gapi.load('client:auth2', () => this.onGoogleApiClientReady());
+    } else {
+      setTimeout(this.checkGoogleApiClient.bind(this), 100);
+    }
+  }
+
+  private async onGoogleApiClientReady() {
+    this.log('Google API auth2 module loaded');
+    await gapi.client.init({
+      apiKey: environment.googleDriveApiKey,
+      clientId: environment.googleDriveClientId,
+      discoveryDocs: [
+        'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+      ],
+      scope: 'https://www.googleapis.com/auth/drive.file',
+    });
+    this.isReady = true;
+    this.log(
+      `Google API client ready; user is ${
+        this.isAuthenticated ? '' : 'not '
+      }authenticated`
+    );
+  }
+
+  private readonly log = debug('GoogleDriveStorageProvider');
 }
 
 export default GoogleDriveStorageProvider;
