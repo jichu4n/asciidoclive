@@ -21,9 +21,11 @@ class StorageManager {
     }
   }
 
-  private readonly storageProviders: Array<
-    StorageProvider
-  > = STORAGE_PROVIDERS.map(
+  get storageTypes() {
+    return _.map(this.storageProviders, 'storageType');
+  }
+
+  readonly storageProviders: Array<StorageProvider> = STORAGE_PROVIDERS.map(
     (storageProviderClass) => new storageProviderClass()
   );
 }

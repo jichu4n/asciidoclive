@@ -122,12 +122,13 @@ class EditView extends React.Component<{}, State> {
             },
             'divider',
             {subheader: 'Open from'},
-            {
-              item: 'Dropbox',
-              icon: <DropboxIcon />,
-              onClick: this.onOpenClick.bind(this, StorageType.DROPBOX),
-            },
-            {item: 'Google Drive', icon: <GoogleDriveIcon />},
+            ...storageManager.storageProviders.map(
+              ({storageType, displayName, storageTypeIcon: Icon}) => ({
+                item: displayName,
+                icon: <Icon />,
+                onClick: this.onOpenClick.bind(this, storageType),
+              })
+            ),
             {item: 'Local file', icon: <ComputerIcon />},
           ]}
         />

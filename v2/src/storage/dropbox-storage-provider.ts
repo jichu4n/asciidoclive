@@ -39,7 +39,8 @@ interface DropboxStorageSpec extends StorageSpec {
   id: string;
 }
 
-const DROP_INS_SCRIPT_ELEMENT_ID = 'dropbox-drop-ins-js';
+const DROP_INS_SCRIPT_ELEMENT_ID = 'dropboxjs'; // This is NOT customizable!
+
 const POPUP_ID = 'dropbox-oauth';
 const OAUTH_TOKEN_STORAGE_KEY = 'dropbox-access-token';
 

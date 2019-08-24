@@ -368,6 +368,12 @@ body {
   justify-content: center;
   align-items: center; }
 
+.picker.picker-dialog-bg {
+  z-index: 2000; }
+
+.picker.picker-dialog {
+  z-index: 2001; }
+
 .title-container {
   display: flex;
   align-items: center;

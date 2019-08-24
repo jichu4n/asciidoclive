@@ -35,22 +35,41 @@ class GoogleDriveStorageProvider extends StorageProvider {
     return !!environment.googleDriveApiKey && !!environment.googleDriveClientId;
   }
 
-  get isAuthenticated(): boolean {
+  get isAuthenticated() {
     return this.isReady && gapi.auth2.getAuthInstance().isSignedIn.get();
   }
 
-  /** Whether necessary initialization has completed. */
   @observable isReady = false;
 
-  /** Starts the provider's auth flow. */
-  auth(): Promise<boolean> {
-    return Promise.reject();
+  async auth(): Promise<boolean> {
+    this.log('Starting auth flow');
+    try {
+      let user = await gapi.auth2.getAuthInstance().signIn();
+      this.log('Logged in!', user);
+      return true;
+    } catch ({error}) {
+      this.log('Log in failed: ', error);
+      return false;
+    }
   }
 
-  /** Prompt the user to open a document from this provider.
-   * Returns a Promise that yields a StorageSpec.
-   */
-  open(): Promise<DocData | null> {
+  async open(): Promise<DocData | null> {
+    this.log('Opening picker');
+    let authResponse = gapi.auth2
+      .getAuthInstance()
+      .currentUser.get()
+      .getAuthResponse();
+    this.log('Using auth response: ', authResponse);
+    let pickerResult = await new Promise((resolve) => {
+      let picker = new google.picker.PickerBuilder()
+        .addView(google.picker.ViewId.DOCS)
+        .setDeveloperKey(environment.googleDriveApiKey!)
+        .setOAuthToken(authResponse.access_token)
+        .setCallback(resolve)
+        .build();
+      picker.setVisible(true);
+    });
+    this.log('Picker result: ', pickerResult);
     return Promise.reject();
   }
 
@@ -97,7 +116,7 @@ class GoogleDriveStorageProvider extends StorageProvider {
   private checkGoogleApiClient() {
     if (window['gapi'] && window['gapi']['load']) {
       this.log('Google API client script loaded');
-      gapi.load('client:auth2', () => this.onGoogleApiClientReady());
+      gapi.load('client:auth2:picker', () => this.onGoogleApiClientReady());
     } else {
       setTimeout(this.checkGoogleApiClient.bind(this), 100);
     }

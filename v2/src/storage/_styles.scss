@@ -6,3 +6,11 @@
   justify-content: center;
   align-items: center;
 }
+
+// Make Google Drive picker show ABOVE Material-UI modal.
+.picker.picker-dialog-bg {
+  z-index: 2000;
+}
+.picker.picker-dialog {
+  z-index: 2001;
+}

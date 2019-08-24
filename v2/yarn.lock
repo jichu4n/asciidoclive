@@ -151,6 +151,11 @@
   resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.39.tgz#bc7fa8cd0cb175b36e3609790fb2ed73a33f6881"
   integrity sha512-R1TZeZbvvbIC60DBJMhuOEivQHzOQtzl3uMDOOENTYQTSSDB6oEMpJo8HVPOTWivdUTbyEcB5qQOVr/JCKRlCQ==
 
+"@types/google.picker@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@types/google.picker/-/google.picker-0.0.33.tgz#87033fc23e52fa63c3c23809ccd9e475647a8fe1"
+  integrity sha512-7+AlLXX7LAkFUuAUPB8R6qCoB56iMiElyqP9BoilEXL2jJIUMGdfIMvP/UAb4ORfkfjcb/BsN4lahD34OMg8Dw==
+
 "@types/history@*":
   version "4.7.2"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.2.tgz#0e670ea254d559241b6eeb3894f8754991e73220"

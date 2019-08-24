@@ -45,6 +45,7 @@
     "@types/debug": "^4.1.4",
     "@types/gapi": "^0.0.39",
     "@types/gapi.auth2": "^0.0.50",
+    "@types/google.picker": "^0.0.33",
     "@types/jest": "^24.0.15",
     "@types/jquery": "^3.3.22",
     "@types/lodash": "^4.14.118",
