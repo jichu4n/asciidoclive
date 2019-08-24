@@ -1,21 +1,28 @@
-import FileIcon from 'mdi-material-ui/FileDocumentOutline';
-import {observer} from 'mobx-react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import delay from 'delay';
+import FileIcon from 'mdi-material-ui/FileDocumentOutline';
+import {computed, observable, reaction} from 'mobx';
+import {observer} from 'mobx-react';
 import * as React from 'react';
 import {getTitleOrDefault} from '..//document/doc';
 import DocManager from '../document/doc-manager';
 import storageManager from '../storage/storage-manager';
+
+const RENAME_STATE_RESULT_VISIBLE_MS = 2000;
+const RENAME_STATE_OPACITY_TRANSITION_MS = 500;
 
 interface Props {
   docManager: DocManager;
   className?: string;
 }
 
+type RenameState = 'none' | 'in-progress' | 'success' | 'failed';
+
 interface State {
-  pendingTitle: string | null;
   titleWidth: number;
-  renameState: 'none' | 'in-progress' | 'success' | 'failed';
+  renameState: RenameState;
+  renameStateOpacity: number;
 }
 
 @observer
@@ -23,10 +30,15 @@ class TitleView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      pendingTitle: null,
       titleWidth: 0,
       renameState: 'none',
+      renameStateOpacity: 0,
     };
+
+    reaction(
+      () => this.displayedTitle,
+      () => requestAnimationFrame(() => this.resizeTitle())
+    );
   }
 
   render() {
@@ -34,7 +46,6 @@ class TitleView extends React.Component<Props, State> {
       ? storageManager.getStorageProvider(this.doc.source.storageType)
           .storageTypeIcon
       : FileIcon;
-    let displayedTitle = this.getDisplayedTitle();
     return (
       <div className={`title-container ${this.props.className}`}>
         <Icon />
@@ -44,13 +55,19 @@ class TitleView extends React.Component<Props, State> {
             className="title-text"
             variant="outlined"
             margin="dense"
-            value={displayedTitle}
+            value={this.displayedTitle}
             onChange={this.onTitleChange.bind(this)}
             onKeyPress={this.onTitleKeyPress.bind(this)}
             onBlur={this.onTitleBlur.bind(this)}
-            disabled={this.state.renameState !== 'none'}
+            disabled={this.state.renameState === 'in-progress'}
             fullWidth={true}
           />
+        </div>
+        <div
+          className="rename-status"
+          style={{opacity: this.state.renameStateOpacity}}
+        >
+          <Typography variant="overline">{this.renameStateLabel}</Typography>
         </div>
         <div
           className="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
@@ -58,11 +75,11 @@ class TitleView extends React.Component<Props, State> {
             width: 'auto',
             whiteSpace: 'pre',
             position: 'absolute',
-            right: 0,
+            right: '100%',
           }}
           ref={this.measurementDivRef}
         >
-          <Typography variant="body1">{displayedTitle}</Typography>
+          <Typography variant="body1">{this.displayedTitle}</Typography>
         </div>
       </div>
     );
@@ -72,14 +89,8 @@ class TitleView extends React.Component<Props, State> {
     this.resizeTitle();
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.getDisplayedTitle() !== this.getDisplayedTitle(prevState)) {
-      this.resizeTitle();
-    }
-  }
-
   private onTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({pendingTitle: event.target.value});
+    this.pendingTitle = event.target.value;
   }
 
   private resizeTitle() {
@@ -99,14 +110,13 @@ class TitleView extends React.Component<Props, State> {
   }
 
   private onTitleBlur(event: React.FocusEvent<HTMLInputElement>) {
-    let {pendingTitle} = this.state;
     let {title} = this.doc;
-    if (pendingTitle === null) {
+    if (this.pendingTitle === null) {
       return;
     }
-    let newTitle = pendingTitle.trim();
+    let newTitle = this.pendingTitle.trim();
     if (!newTitle || newTitle == title) {
-      this.setState({pendingTitle: null});
+      this.pendingTitle = null;
       return;
     }
 
@@ -114,42 +124,57 @@ class TitleView extends React.Component<Props, State> {
   }
 
   private async doRename(newTitle: string) {
-    let storageProvider = this.getStorageProvider();
-    if (!storageProvider) {
+    if (!this.storageProvider) {
       this.doc.title = newTitle;
-      this.setState({pendingTitle: null});
+      this.pendingTitle = null;
       return;
     }
-    this.setState({renameState: 'in-progress'});
-    let newDocData = await storageProvider.rename(this.doc, newTitle);
+    this.setState({renameState: 'in-progress', renameStateOpacity: 1});
+    let newDocData = await this.storageProvider.rename(this.doc, newTitle);
+    this.pendingTitle = null;
     if (newDocData) {
-      this.setState({renameState: 'success', pendingTitle: null});
+      this.setState({renameState: 'success'});
       this.props.docManager.setDocData(newDocData);
     } else {
       this.setState({renameState: 'failed'});
     }
+    await delay(RENAME_STATE_RESULT_VISIBLE_MS);
+    this.setState({renameStateOpacity: 0});
+    await delay(RENAME_STATE_OPACITY_TRANSITION_MS);
+    this.setState({renameState: 'none'});
   }
 
   private get doc() {
     return this.props.docManager.doc;
   }
 
-  private getDisplayedTitle(state?: State) {
-    if (!state) {
-      state = this.state;
-    }
-    return state.pendingTitle === null
+  @computed
+  private get displayedTitle() {
+    return this.pendingTitle === null
       ? getTitleOrDefault(this.doc)
-      : state.pendingTitle;
+      : this.pendingTitle;
   }
 
-  private getStorageProvider() {
+  private get storageProvider() {
     return this.doc.source
       ? storageManager.getStorageProvider(this.doc.source.storageType)
       : null;
   }
 
+  private get renameStateLabel() {
+    const LABELS: {[key in RenameState]: string} = {
+      none: 'none',
+      'in-progress': 'renaming...',
+      success: 'renamed',
+      failed: 'rename error',
+    };
+    return LABELS[this.state.renameState] || '';
+  }
+
   private measurementDivRef = React.createRef<HTMLDivElement>();
+
+  @observable
+  private pendingTitle: string | null = null;
 }
 
 export default TitleView;

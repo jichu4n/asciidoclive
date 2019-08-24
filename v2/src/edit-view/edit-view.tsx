@@ -215,11 +215,10 @@ class EditView extends React.Component<{}, State> {
       },
     });
     let docData = await storageProvider.open();
-    if (!docData) {
-      return;
+    if (docData) {
+      this.log('Loading new doc data', docData);
+      (await this.docManager).setDocData(docData).setIsDirty(false);
     }
-    this.log('Loading new doc data', docData);
-    (await this.docManager).setDocData(docData).setIsDirty(false);
     this.onStorageActionViewClose();
   }
 

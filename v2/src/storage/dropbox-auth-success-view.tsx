@@ -1,8 +1,11 @@
-import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
+import delay from 'delay';
+import * as React from 'react';
+import DropboxStorageProvider from './dropbox-storage-provider';
 import storageManager from './storage-manager';
 import StorageType from './storage-type';
-import DropboxStorageProvider from './dropbox-storage-provider';
+
+const CLOSE_WINDOW_DELAY_MS = 1000;
 
 interface State {
   isSuccessful: boolean | null;
@@ -40,7 +43,8 @@ class DropboxAuthSuccessView extends React.Component<{}, State> {
     } else {
       this.setState({isSuccessful: false});
     }
-    setTimeout(() => window.close(), 2000);
+    await delay(CLOSE_WINDOW_DELAY_MS);
+    window.close();
   }
 }
 
