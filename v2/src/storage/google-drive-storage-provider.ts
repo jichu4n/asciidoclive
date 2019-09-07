@@ -19,7 +19,7 @@ interface PickerLoadedEvent {
 }
 
 interface PickerCancelledEvent {
-  action: 'cancelled';
+  action: 'cancel';
 }
 
 /** Partial definition for a document returned from picker. */
@@ -130,7 +130,18 @@ class GoogleDriveStorageProvider extends StorageProvider {
     let docSource = await docSourcePromise;
     window.removeEventListener('message', onMessageFn, false);
     this.log(`Result from picker window: `, docSource);
-    return docSource ? this.load(docSource) : null;
+    if (!docSource) {
+      return null;
+    }
+    let docData = await this.load(docSource);
+    if (!docData) {
+      throw new Error(
+        `Failed to load Google Drive document with storage spec ${JSON.stringify(
+          docSource.storageSpec
+        )}`
+      );
+    }
+    return docData;
   }
 
   /** Open a file at the given path from this provider.
@@ -142,15 +153,28 @@ class GoogleDriveStorageProvider extends StorageProvider {
       throw Error('Invalid DocSource');
     }
     let {id} = source.storageSpec as GoogleDriveStorageSpec;
-    let getFileRequest = gapi.client.drive.files.get({fileId: id});
+    let getFileContentRequest = gapi.client.drive.files.get({
+      fileId: id,
+      alt: 'media',
+    });
+    let getFileMetadataRequest = gapi.client.drive.files.get({
+      fileId: id,
+    });
     try {
-      let resp = await getFileRequest;
-      this.log('resp:', resp);
+      let [getFileContentResponse, getFileMetadataResponse] = await Promise.all(
+        [getFileContentRequest, getFileMetadataRequest]
+      );
+      this.log('File content response:', getFileContentResponse);
+      this.log('File metadata response:', getFileMetadataResponse);
+      return {
+        source,
+        title: getFileMetadataResponse.result.name || '',
+        body: getFileContentResponse.body,
+      };
     } catch (error) {
-      this.log('Failed to get file: ', error);
+      this.log('Failed to load file: ', error);
       return null;
     }
-    return Promise.reject();
   }
 
   /** Save a document back to the provider.
@@ -204,7 +228,7 @@ class GoogleDriveStorageProvider extends StorageProvider {
                 storageSpec,
               });
               break;
-            case 'cancelled':
+            case 'cancel':
               resolve(null);
               break;
             default:
