@@ -188,6 +188,7 @@ class GoogleDriveStorageProvider extends StorageProvider {
       let picker = new google.picker.PickerBuilder()
         .addView(view)
         .setDeveloperKey(environment.googleDriveApiKey!)
+        .setAppId(environment.googleDriveAppId!)
         .setOAuthToken(authResponse.access_token)
         .setCallback((event: PickerEvent) => {
           this.log('Picker callback: ', event);

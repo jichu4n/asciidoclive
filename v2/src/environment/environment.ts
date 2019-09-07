@@ -1,6 +1,6 @@
 class Environment {
   get rootUrl() {
-    return process.env.REACT_APP_ROOT_URL;
+    return window.location.origin;
   }
   getAbsoluteUrl(path: string) {
     return new URL(path, this.rootUrl).toString();
@@ -19,6 +19,9 @@ class Environment {
   }
   get googleDriveApiKey() {
     return process.env.REACT_APP_GOOGLE_DRIVE_API_KEY;
+  }
+  get googleDriveAppId() {
+    return this.googleDriveClientId && this.googleDriveClientId.split('-')[0];
   }
 }
 
