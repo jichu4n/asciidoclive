@@ -8,6 +8,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EditView from '../edit-view/edit-view';
 import environment from '../environment/environment';
 import DropboxAuthSuccessView from '../storage/dropbox-auth-success-view';
+import GoogleDrivePickerView from '../storage/google-drive-picker-view';
 import './app.css';
 
 const THEME = createMuiTheme({
@@ -30,6 +31,10 @@ class App extends React.Component {
               <Route
                 path="/dropbox-auth-success"
                 component={DropboxAuthSuccessView}
+              />
+              <Route
+                path="/google-drive-picker"
+                component={GoogleDrivePickerView}
               />
               <Route component={EditView} />
             </Switch>

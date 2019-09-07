@@ -146,15 +146,22 @@
   dependencies:
     "@types/gapi" "*"
 
+"@types/gapi.client.drive@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.3.tgz#38fbdfaf467f648802a175bb9c9a61fe4dacff30"
+  integrity sha512-GUN5rtApaacAT6OAZekIHfyh4z3pzRptyuBLD4sxyR58SkJLR7A2lGFFSY4GfgkMAoRnyf5wqETg6WBcAVFubQ==
+  dependencies:
+    "@types/gapi.client" "*"
+
+"@types/gapi.client@*":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client/-/gapi.client-1.0.1.tgz#620860ae183d849e513d44b4f0422c89b8a1fc91"
+  integrity sha512-/SjoU65jvBZlDQtw12OB9YCrqKQrrAdG4YpVTH4AJaJDCOkFdGXcDA2IFTm3d2UCeQwmqM/o6tNlyjKINO6MNg==
+
 "@types/gapi@*", "@types/gapi@^0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.39.tgz#bc7fa8cd0cb175b36e3609790fb2ed73a33f6881"
   integrity sha512-R1TZeZbvvbIC60DBJMhuOEivQHzOQtzl3uMDOOENTYQTSSDB6oEMpJo8HVPOTWivdUTbyEcB5qQOVr/JCKRlCQ==
-
-"@types/google.picker@^0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@types/google.picker/-/google.picker-0.0.33.tgz#87033fc23e52fa63c3c23809ccd9e475647a8fe1"
-  integrity sha512-7+AlLXX7LAkFUuAUPB8R6qCoB56iMiElyqP9BoilEXL2jJIUMGdfIMvP/UAb4ORfkfjcb/BsN4lahD34OMg8Dw==
 
 "@types/history@*":
   version "4.7.2"
