@@ -13,7 +13,8 @@ export type Stage =
   | 'auth-prompt'
   | 'auth-pending'
   | 'action-prompt'
-  | 'action-pending';
+  | 'action-pending'
+  | 'action-error';
 
 const DEFAULT_STAGE: Stage = 'auth-prompt';
 
@@ -21,19 +22,22 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   storageType: StorageType | null;
+  initialStage: Stage | null;
   action: (() => Promise<void>) | null;
   actionLabel: string | null;
   actionTitle: string | null;
-  initialStage: Stage | null;
+  actionResultPromise: Promise<any> | null;
 }
 
 interface State {
   stage: Stage;
+  actionErrorMessage: string | null;
 }
 
 class StorageActionView extends React.Component<Props, State> {
   state: State = {
     stage: DEFAULT_STAGE,
+    actionErrorMessage: null,
   };
 
   render() {
@@ -111,13 +115,42 @@ class StorageActionView extends React.Component<Props, State> {
             </DialogContent>
           </>
         )}
+        {this.state.stage == 'action-error' && (
+          <>
+            <DialogTitle>{this.props.actionTitle}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                An error occurred while communicating with {displayName}. Please
+                try again or report the error.
+              </DialogContentText>
+              {this.state.actionErrorMessage && (
+                <DialogContentText>
+                  Error message: {this.state.actionErrorMessage}
+                </DialogContentText>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.onClose.bind(this)} color="primary">
+                OK
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     );
   }
 
-  componentDidUpdate(prevProps: Props) {
-    if (this.props.isOpen && !prevProps.isOpen) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    let didOpen = this.props.isOpen && !prevProps.isOpen;
+    if (didOpen) {
       this.setState({stage: this.props.initialStage || 'auth-prompt'});
+    }
+    if (
+      this.state.stage === 'action-pending' &&
+      (didOpen || prevState.stage !== 'action-pending') &&
+      this.props.actionResultPromise
+    ) {
+      this.watchActionResult();
     }
   }
 
@@ -139,6 +172,16 @@ class StorageActionView extends React.Component<Props, State> {
     this.setState({stage: 'action-pending'});
     this.props.action && (await this.props.action());
     this.onClose();
+  }
+
+  private async watchActionResult() {
+    try {
+      await this.props.actionResultPromise;
+      this.onClose();
+    } catch (e) {
+      let message = (e && e.message) || null;
+      this.setState({stage: 'action-error', actionErrorMessage: message});
+    }
   }
 
   private get storageProvider() {

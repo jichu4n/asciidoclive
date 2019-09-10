@@ -34,6 +34,7 @@ interface State {
     actionLabel: string | null;
     actionTitle: string | null;
     initialStage: Stage | null;
+    actionResultPromise: Promise<any> | null;
   };
 }
 
@@ -47,6 +48,7 @@ class EditView extends React.Component<{}, State> {
       actionLabel: null,
       actionTitle: null,
       initialStage: null,
+      actionResultPromise: null,
     },
   };
 
@@ -94,6 +96,7 @@ class EditView extends React.Component<{}, State> {
             actionLabel={storageActionViewState.actionLabel}
             actionTitle={storageActionViewState.actionTitle}
             initialStage={storageActionViewState.initialStage}
+            actionResultPromise={storageActionViewState.actionResultPromise}
           />
         </>
       ),
@@ -152,7 +155,11 @@ class EditView extends React.Component<{}, State> {
               icon: <DropboxIcon />,
               onClick: this.onSaveAsClick.bind(this, StorageType.DROPBOX),
             },
-            {item: 'Google Drive', icon: <GoogleDriveIcon />},
+            {
+              item: 'Google Drive',
+              icon: <GoogleDriveIcon />,
+              onClick: this.onSaveAsClick.bind(this, StorageType.GOOGLE_DRIVE),
+            },
             {item: 'Local file', icon: <ComputerIcon />},
           ]}
         />
@@ -199,12 +206,14 @@ class EditView extends React.Component<{}, State> {
           actionLabel: `select a document from ${storageProvider.displayName}`,
           actionTitle: `Open from ${storageProvider.displayName}`,
           initialStage: 'auth-prompt',
+          actionResultPromise: null,
         },
       });
     }
   }
 
   private async doOpen(storageProvider: StorageProvider) {
+    let resultPromise = storageProvider.open();
     this.setState({
       storageActionViewState: {
         isOpen: true,
@@ -213,14 +222,14 @@ class EditView extends React.Component<{}, State> {
         actionLabel: null,
         actionTitle: `Open from ${storageProvider.displayName}`,
         initialStage: 'action-pending',
+        actionResultPromise: resultPromise,
       },
     });
-    let docData = await storageProvider.open();
+    let docData = await resultPromise;
     if (docData) {
       this.log('Loading new doc data', docData);
       (await this.docManager).setDocData(docData).setIsDirty(false);
     }
-    this.onStorageActionViewClose();
   }
 
   private onSaveAsClick(storageType: StorageType) {
@@ -236,12 +245,14 @@ class EditView extends React.Component<{}, State> {
           actionLabel: `save this document to ${storageProvider.displayName}`,
           actionTitle: `Save to ${storageProvider.displayName}`,
           initialStage: 'auth-prompt',
+          actionResultPromise: null,
         },
       });
     }
   }
 
   private async doSaveAs(storageProvider: StorageProvider) {
+    let resultPromise = storageProvider.saveAs((await this.docManager).doc);
     this.setState({
       storageActionViewState: {
         isOpen: true,
@@ -250,17 +261,18 @@ class EditView extends React.Component<{}, State> {
         actionLabel: null,
         actionTitle: `Save to ${storageProvider.displayName}`,
         initialStage: 'action-pending',
+        actionResultPromise: resultPromise,
       },
     });
-    let docData = await storageProvider.saveAs((await this.docManager).doc);
+    let docData = await resultPromise;
     if (docData) {
       this.log('Switching to saved doc data', docData);
       (await this.docManager).setDocData(docData).setIsDirty(false);
     }
-    this.onStorageActionViewClose();
   }
 
   private async doSave(storageProvider: StorageProvider) {
+    let resultPromise = storageProvider.save((await this.docManager).doc);
     this.setState({
       storageActionViewState: {
         isOpen: true,
@@ -269,12 +281,12 @@ class EditView extends React.Component<{}, State> {
         actionLabel: null,
         actionTitle: `Save to ${storageProvider.displayName}`,
         initialStage: 'action-pending',
+        actionResultPromise: resultPromise,
       },
     });
-    if (await storageProvider.save((await this.docManager).doc)) {
+    if (await resultPromise) {
       (await this.docManager).setIsDirty(false);
     }
-    this.onStorageActionViewClose();
   }
 
   private onStorageActionViewClose() {
