@@ -177,10 +177,14 @@ class GoogleDriveStorageProvider extends StorageProvider {
     }
   }
 
-  /** Save a document back to the provider.
-   * Returns a promise that resolves when the document is saved.
-   */
   save(docData: DocData): Promise<boolean> {
+    if (!docData.source || docData.source.storageType !== this.storageType) {
+      this.log('Invalid docData: ', docData);
+      throw Error('Invalid docData');
+    }
+    let {id} = docData.source.storageSpec as GoogleDriveStorageSpec;
+    this.log(`Saving to Google Drive file ${id}`);
+    // TODO
     return Promise.reject();
   }
 
@@ -191,12 +195,25 @@ class GoogleDriveStorageProvider extends StorageProvider {
     return Promise.reject();
   }
 
-  /** Rename a file to the new title inside the doc.
-   * Returns a promise that resolves with the new StorageSpec when the file
-   * has been renamed.
-   */
-  rename(docData: DocData, newTitle: string): Promise<DocData | null> {
-    return Promise.reject();
+  async rename(docData: DocData, newTitle: string): Promise<DocData | null> {
+    if (!docData.source || docData.source.storageType !== this.storageType) {
+      this.log('Invalid docData: ', docData);
+      throw Error('Invalid docData');
+    }
+    let {id} = docData.source.storageSpec as GoogleDriveStorageSpec;
+    this.log(`Renaming file ${id} to '${newTitle}'`);
+    try {
+      let response = await gapi.client.drive.files.update({
+        fileId: id,
+        resource: {
+          name: newTitle,
+        },
+      } as any);
+      return {...docData, title: response.result.name!};
+    } catch (error) {
+      this.log(`Failed to rename Google Drive file: ${id}`, error);
+      return null;
+    }
   }
 
   async openWithPickerInPopup() {

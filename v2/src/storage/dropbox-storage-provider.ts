@@ -279,7 +279,7 @@ class DropboxStorageProvider extends StorageProvider {
       this.log(`Successfully renamed to ${result.metadata.path_display}`);
       return {...docData, title: result.metadata.name};
     } catch (e) {
-      this.log(`Failed to save to Dropbox file ${id}: `, e);
+      this.log(`Failed to rename Dropbox file ${id}: `, e);
       return null;
     }
   }
