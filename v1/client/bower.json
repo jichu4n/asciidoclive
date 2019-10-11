@@ -1,0 +1,16 @@
+{
+  "name": "amoya",
+  "dependencies": {
+    "bootstrap-sass": "~3.3.7",
+    "font-awesome": "~4.7.0",
+    "jquery-ui": "jqueryui#~1.11.4",
+    "ace-builds": "~1.2.6",
+    "asciidoctor.js": "^1.5.5-1",
+    "dropbox": "dropbox-build#*",
+    "js-cookie": "~2.1.4",
+    "js-base64": "~2.1.9",
+    "seiyria-bootstrap-slider": "^7.0.3",
+    "highlightjs": "^9.10.0",
+    "js-beautify": "^1.6.12"
+  }
+}

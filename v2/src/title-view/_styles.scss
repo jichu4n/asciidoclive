@@ -1,0 +1,21 @@
+.title-container {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+
+  .title-text {
+    margin-top: 5px;
+    fieldset {
+      border-color: transparent;
+    }
+  }
+
+  .rename-status {
+    margin-left: 20px;
+    margin-top: 3px;
+    color: #777;
+    transition: opacity 0.5s;
+  }
+}

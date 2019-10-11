@@ -1,0 +1,107 @@
+Welcome to AsciiDocLIVE!
+------------------------
+
+AsciiDocLIVE is a *free online http://www.methods.co.nz/asciidoc/[AsciiDoc^]
+editor*.
+
+* Just type AsciiDoc source text into the *left* pane,
+* ...and the live preview appears in the *right* pane!
+
+What's AsciiDoc?
+~~~~~~~~~~~~~~~~~
+
+AsciiDoc is a human-readable text document format for writing notes,
+documentation, articles, books, ebooks, slideshows, web pages, man pages and
+blogs, and more. AsciiDoc files can be translated to many formats including
+HTML, PDF, EPUB, and man page.
+
+To learn more, visit the AsciiDoc home page at
+http://www.methods.co.nz/asciidoc/[^].
+
+About AsciiDocLIVE
+~~~~~~~~~~~~~~~~~~
+AsciiDocLIVE is currently in *beta* stage. This means there are likely a _lot_
+of bugs, and even more ways to make it better.
+
+If you have any questions, suggestions or other feedback, please
+feel free to
+https://github.com/jichu4n/asciidoclive/issues/new[create an issue on pass:[<i class="fa fa-github"></i>] GitHub^].
+Hope
+to hear from you soon!
+
+
+[[cheat-sheet]]
+AsciiDoc Mini Cheat Sheet
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To help you get started, here're some snippets from the
+http://powerman.name/doc/asciidoc[AsciiDoc Cheet Sheet^]. Feel free to poke
+around :)
+
+Text Styles
+^^^^^^^^^^^
+* normal, _italic_, *bold*, +mono+.
+* ``double quoted'', `single quoted'.
+* normal, ^super^, ~sub~.
+* `passthru *bold*`
+
+Tables
+^^^^^^
+.An example table
+[options="header,footer"]
+|=======================
+|Col 1|Col 2      |Col 3
+|1    |Item 1     |a
+|2    |Item 2     |b
+|3    |Item 3     |c
+|6    |Three items|d
+|=======================
+
+Lists
+^^^^^
+
+* Q: How did the programmer die in the shower?
+  A: He read the shampoo instructions:
+
+  . Lather, rinse.
+  . Repeat.
+
+* There are only 10 kinds of people in this world:
+  - Those who understand binary.
+  - Those who don't.
+
+Misc
+^^^^
+
+* Code listings:
++
+[source,python]
+-----------------
+#!/usr/bin/env python
+import antigravity
+try:
+  antigravity.fly()
+except FlytimeError as e:
+  # um...not sure what to do now.
+  pass
+-----------------
+
+* Quotes:
++
+[quote,"Charles Dickens","A Tale of Two Cities"]
+It was the best of times, it was the worst of times, it was the age of wisdom,
+it was the age of foolishness...
+
+* Links:
+** http://asciidoclive.com/[AsciiDocLIVE^] is awesome!
+
+* Images:
++
+image:https://i.imgur.com/AEkqoRn.jpg[alt="not bad.",width=128,height=128]
+
+* Videos:
++
+video::th_H1gixMEE[youtube]
+
+* Pass-through: pass:[<div align="center"><b>pass through content</b></div>]
+

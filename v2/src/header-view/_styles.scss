@@ -1,0 +1,20 @@
+$header-height: 64px;
+$header-collapsed-height: 48px;
+$header-collapsed-breakpoint: 600px;
+
+.header-logo {
+  height: 24px;
+
+  @media (max-width: $header-collapsed-breakpoint) {
+    height: 20px;
+  }
+}
+
+.header-spacer {
+  flex-grow: 1;
+}
+
+.header-padding {
+  width: 20px;
+  height: $header-height;
+}

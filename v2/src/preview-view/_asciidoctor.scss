@@ -1,0 +1,339 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                           Copyright 2016 Chuan Ji                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+// Selected styles copied from asciidoctor.css.
+
+// Table styles.
+table {
+  background: #fff;
+  margin-bottom: 1.25em;
+  border: solid 1px #dedede;
+}
+table thead,
+table tfoot {
+  background: #f7f8f7;
+  font-weight: bold;
+}
+table thead tr th,
+table thead tr td,
+table tfoot tr th,
+table tfoot tr td {
+  padding: 0.5em 0.625em 0.625em;
+  font-size: inherit;
+  color: rgba(0, 0, 0, 0.8);
+  text-align: left;
+}
+table tr th,
+table tr td {
+  padding: 0.5625em 0.625em;
+  font-size: inherit;
+  color: rgba(0, 0, 0, 0.8);
+}
+table tr.even,
+table tr.alt,
+table tr:nth-of-type(even) {
+  background: #f8f8f7;
+}
+table thead tr th,
+table tfoot tr th,
+table tbody tr td,
+table tr td,
+table tfoot tr td {
+  display: table-cell;
+  line-height: 1.6;
+}
+table.tableblock {
+  max-width: 100%;
+  border-collapse: separate;
+}
+table.tableblock td > .paragraph:last-child p > p:last-child,
+table.tableblock th > p:last-child,
+table.tableblock td > p:last-child {
+  margin-bottom: 0;
+}
+table.tableblock,
+th.tableblock,
+td.tableblock {
+  border: 0 solid #dedede;
+}
+table.grid-all th.tableblock,
+table.grid-all td.tableblock {
+  border-width: 0 1px 1px 0;
+}
+table.grid-all tfoot > tr > th.tableblock,
+table.grid-all tfoot > tr > td.tableblock {
+  border-width: 1px 1px 0 0;
+}
+table.grid-cols th.tableblock,
+table.grid-cols td.tableblock {
+  border-width: 0 1px 0 0;
+}
+table.grid-all * > tr > .tableblock:last-child,
+table.grid-cols * > tr > .tableblock:last-child {
+  border-right-width: 0;
+}
+table.grid-rows th.tableblock,
+table.grid-rows td.tableblock {
+  border-width: 0 0 1px 0;
+}
+table.grid-all tbody > tr:last-child > th.tableblock,
+table.grid-all tbody > tr:last-child > td.tableblock,
+table.grid-all thead:last-child > tr > th.tableblock,
+table.grid-rows tbody > tr:last-child > th.tableblock,
+table.grid-rows tbody > tr:last-child > td.tableblock,
+table.grid-rows thead:last-child > tr > th.tableblock {
+  border-bottom-width: 0;
+}
+table.grid-rows tfoot > tr > th.tableblock,
+table.grid-rows tfoot > tr > td.tableblock {
+  border-width: 1px 0 0 0;
+}
+table.frame-all {
+  border-width: 1px;
+}
+table.frame-sides {
+  border-width: 0 1px;
+}
+table.frame-topbot {
+  border-width: 1px 0;
+}
+th.halign-left,
+td.halign-left {
+  text-align: left;
+}
+th.halign-right,
+td.halign-right {
+  text-align: right;
+}
+th.halign-center,
+td.halign-center {
+  text-align: center;
+}
+th.valign-top,
+td.valign-top {
+  vertical-align: top;
+}
+th.valign-bottom,
+td.valign-bottom {
+  vertical-align: bottom;
+}
+th.valign-middle,
+td.valign-middle {
+  vertical-align: middle;
+}
+table thead th,
+table tfoot th {
+  font-weight: bold;
+}
+tbody tr th {
+  display: table-cell;
+  line-height: 1.6;
+  background: #f7f8f7;
+}
+tbody tr th,
+tbody tr th p,
+tfoot tr th,
+tfoot tr th p {
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+}
+p.tableblock > code:only-child {
+  background: none;
+  padding: 0;
+}
+p.tableblock {
+  font-size: 1em;
+}
+td > div.verse {
+  white-space: pre;
+}
+.hdlist > table,
+.colist > table {
+  border: 0;
+  background: none;
+}
+.hdlist > table > tbody > tr,
+.colist > table > tbody > tr {
+  background: none;
+}
+td.hdlist1,
+td.hdlist2 {
+  vertical-align: top;
+  padding: 0 0.625em;
+}
+td.hdlist1 {
+  font-weight: bold;
+  padding-bottom: 1.25em;
+}
+
+// Quotes.
+blockquote {
+  margin: 0 0 1.25em;
+  padding: 0.5625em 1.25em 0 1.1875em;
+  border-left: 1px solid #ddd;
+}
+blockquote cite {
+  display: block;
+  font-size: 0.9375em;
+  color: rgba(0, 0, 0, 0.6);
+}
+blockquote cite:before {
+  content: '\2014 \0020';
+}
+blockquote cite a,
+blockquote cite a:visited {
+  color: rgba(0, 0, 0, 0.6);
+}
+blockquote,
+blockquote p {
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.85);
+}
+.quoteblock {
+  margin: 0 1em 1.25em 1.5em;
+  display: table;
+}
+.quoteblock > .title {
+  margin-left: -1.5em;
+  margin-bottom: 0.75em;
+}
+.quoteblock blockquote,
+.quoteblock blockquote p {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: inherit;
+  line-height: 1.75;
+  word-spacing: 0.1em;
+  letter-spacing: 0;
+  font-style: italic;
+  text-align: justify;
+}
+.quoteblock blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.quoteblock blockquote:before {
+  content: '\201c';
+  float: left;
+  font-size: 2.75em;
+  font-weight: bold;
+  line-height: 0.6em;
+  margin-left: -0.6em;
+  color: rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.quoteblock blockquote > .paragraph:last-child p {
+  margin-bottom: 0;
+}
+.quoteblock .attribution {
+  margin-top: 0.5em;
+  margin-right: 0.5ex;
+  text-align: right;
+}
+.quoteblock .quoteblock {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.5em 0;
+  border-left: 3px solid rgba(0, 0, 0, 0.6);
+}
+.quoteblock .quoteblock blockquote {
+  padding: 0 0 0 0.75em;
+}
+.quoteblock .quoteblock blockquote:before {
+  display: none;
+}
+.quoteblock .attribution,
+.verseblock .attribution {
+  font-size: 0.9375em;
+  line-height: 1.45;
+  font-style: italic;
+}
+.quoteblock .attribution br,
+.verseblock .attribution br {
+  display: none;
+}
+.quoteblock .attribution cite,
+.verseblock .attribution cite {
+  display: block;
+  letter-spacing: -0.025em;
+  color: rgba(0, 0, 0, 0.6);
+}
+.quoteblock.abstract {
+  margin: 0 0 1.25em 0;
+  display: block;
+}
+.quoteblock.abstract blockquote,
+.quoteblock.abstract blockquote p {
+  text-align: left;
+  word-spacing: 0;
+}
+.quoteblock.abstract blockquote:before,
+.quoteblock.abstract blockquote p:first-of-type:before {
+  display: none;
+}
+
+// Lists.
+ul.unstyled,
+ol.unnumbered,
+ul.checklist,
+ul.none {
+  list-style-type: none;
+}
+ul.unstyled,
+ol.unnumbered,
+ul.checklist {
+  margin-left: 0.625em;
+}
+ul.checklist li > p:first-child > .fa-square-o:first-child,
+ul.checklist li > p:first-child > .fa-check-square-o:first-child {
+  width: 1em;
+  font-size: 0.85em;
+}
+ul.checklist li > p:first-child > input[type='checkbox']:first-child {
+  width: 1em;
+  position: relative;
+  top: 1px;
+}
+ul.inline {
+  margin: 0 auto 0.625em auto;
+  margin-left: -1.375em;
+  margin-right: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+ul.inline > li {
+  list-style: none;
+  float: left;
+  margin-left: 1.375em;
+  display: block;
+}
+ul.inline > li > * {
+  display: block;
+}
+.unstyled dl dt {
+  font-weight: 400;
+  font-style: normal;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.decimal {
+  list-style-type: decimal-leading-zero;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+ol.lowergreek {
+  list-style-type: lower-greek;
+}

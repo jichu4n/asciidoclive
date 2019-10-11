@@ -1,0 +1,1 @@
+../../../src/document/asciidoc-compiler-worker-loader.js

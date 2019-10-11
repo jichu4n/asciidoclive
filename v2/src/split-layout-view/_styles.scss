@@ -1,0 +1,40 @@
+.split-layout {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+
+  .split-layout-left {
+    flex: 0 0 auto;
+    width: 50%;
+  }
+
+  .split-layout-resize-handle {
+    flex: 0 0 auto;
+    width: 5px;
+    background: #ddd;
+    cursor: col-resize;
+  }
+
+  .split-layout-right {
+    flex: 1 1 auto;
+    width: 50%;
+    padding-left: 10px;
+  }
+
+  /*
+  .preview-pane {
+    overflow-y: auto;
+    word-break: break-word;
+
+    @import 'app/styles/asciidoctor';
+  }
+
+  .html-preview-pane {
+    border: none;
+    border-radius: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    margin: 0;
+  }
+  */
+}

@@ -1,0 +1,9 @@
+.preview-container {
+  height: 100%;
+  overflow-y: scroll;
+  word-break: break-word;
+}
+
+.preview-content {
+  @import 'preview-view/asciidoctor';
+}

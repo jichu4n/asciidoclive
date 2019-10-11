@@ -1,0 +1,31 @@
+$doc-title-editor-height: 60px;
+
+#doc-title-editor {
+  position: absolute;
+  top: $header-height;
+  height: $doc-title-editor-height;
+  left: 0;
+  right: 0;
+
+  @media (max-width: $header-collapsed-breakpoint) {
+    top: $header-collapsed-height;
+  }
+}
+
+.edit-split-layout {
+  position: absolute;
+  top: ($header-height + $doc-title-editor-height);
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  @media (max-width: $header-collapsed-breakpoint) {
+    top: ($header-collapsed-height + $doc-title-editor-height);
+  }
+}
+
+.edit-title {
+  position: absolute;
+  top: $header-height;
+  height: $doc-title-editor-height;
+}
