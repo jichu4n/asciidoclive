@@ -1,6 +1,5 @@
 import ComputerIcon from '@material-ui/icons/Computer';
 import OpenIcon from '@material-ui/icons/FolderOpen';
-import HelpIcon from '@material-ui/icons/Help';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import SaveIcon from '@material-ui/icons/Save';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -25,6 +24,7 @@ import StorageType from '../storage/storage-type';
 import MenuIconView, {MenuItemSpec} from './menu-icon-view';
 import StorageActionView, {Stage} from './storage-action-view';
 import TitleView from '../title-view/title-view';
+import HelpMenuView from './help-menu-view';
 
 interface State {
   storageActionViewState: {
@@ -164,7 +164,7 @@ class EditView extends React.Component<{}, State> {
           ]}
         />
         <MenuIconView tooltipLabel="Settings" icon={<SettingsIcon />} />
-        <MenuIconView tooltipLabel="Help" icon={<HelpIcon />} />
+        <HelpMenuView/>
       </>
     );
   }
