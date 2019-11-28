@@ -83,7 +83,7 @@ class MenuIconView extends React.Component<Props, State> {
     this.setState({isMenuOpen: false});
   }
 
-  private onMenuItemClick(onClick: () => void | void) {
+  private onMenuItemClick(onClick: (() => void) | void) {
     this.closeMenu();
     onClick && onClick();
   }

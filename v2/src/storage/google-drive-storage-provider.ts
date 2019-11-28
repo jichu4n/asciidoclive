@@ -161,9 +161,10 @@ class GoogleDriveStorageProvider extends StorageProvider {
       fileId: id,
     });
     try {
-      let [getFileContentResponse, getFileMetadataResponse] = await Promise.all(
-        [getFileContentRequest, getFileMetadataRequest]
-      );
+      let [
+        getFileContentResponse,
+        getFileMetadataResponse,
+      ] = await Promise.all([getFileContentRequest, getFileMetadataRequest]);
       this.log('File content response:', getFileContentResponse);
       this.log('File metadata response:', getFileMetadataResponse);
       return {
@@ -235,7 +236,7 @@ class GoogleDriveStorageProvider extends StorageProvider {
           this.log('Picker callback: ', event);
           switch (event.action) {
             case 'picked':
-              if (event.docs.length != 1) {
+              if (event.docs.length !== 1) {
                 this.log(`Unexpected number of results: `, event.docs);
               }
               let doc = event.docs[0];
@@ -300,7 +301,7 @@ class GoogleDriveStorageProvider extends StorageProvider {
       ],
       scope: 'https://www.googleapis.com/auth/drive.file',
     });
-    google = window['google'];
+    google = window['google' as any];
     this.isReady = true;
     this.log(
       `Google API client ready; user is ${

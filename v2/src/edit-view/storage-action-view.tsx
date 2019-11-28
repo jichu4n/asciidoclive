@@ -53,7 +53,7 @@ class StorageActionView extends React.Component<Props, State> {
         disableBackdropClick={true}
         disableEscapeKeyDown={true}
       >
-        {this.state.stage == 'auth-prompt' && (
+        {this.state.stage === 'auth-prompt' && (
           <>
             <DialogTitle>Log in to {displayName}</DialogTitle>
             <DialogContent>
@@ -77,7 +77,7 @@ class StorageActionView extends React.Component<Props, State> {
             </DialogActions>
           </>
         )}
-        {this.state.stage == 'auth-pending' && (
+        {this.state.stage === 'auth-pending' && (
           <>
             <DialogTitle>Log in to {displayName}</DialogTitle>
             <DialogContent>
@@ -87,7 +87,7 @@ class StorageActionView extends React.Component<Props, State> {
             </DialogContent>
           </>
         )}
-        {this.state.stage == 'action-prompt' && (
+        {this.state.stage === 'action-prompt' && (
           <>
             <DialogTitle>Logged in to {displayName}</DialogTitle>
             <DialogContent>
@@ -105,7 +105,7 @@ class StorageActionView extends React.Component<Props, State> {
             </DialogActions>
           </>
         )}
-        {this.state.stage == 'action-pending' && (
+        {this.state.stage === 'action-pending' && (
           <>
             <DialogTitle>{this.props.actionTitle}</DialogTitle>
             <DialogContent>
@@ -115,7 +115,7 @@ class StorageActionView extends React.Component<Props, State> {
             </DialogContent>
           </>
         )}
-        {this.state.stage == 'action-error' && (
+        {this.state.stage === 'action-error' && (
           <>
             <DialogTitle>{this.props.actionTitle}</DialogTitle>
             <DialogContent>
@@ -185,7 +185,7 @@ class StorageActionView extends React.Component<Props, State> {
   }
 
   private get storageProvider() {
-    if (this.props.storageType == null) {
+    if (this.props.storageType === null) {
       return null;
     }
     return storageManager.getStorageProvider(this.props.storageType);

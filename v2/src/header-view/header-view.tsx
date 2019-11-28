@@ -12,7 +12,7 @@ class HeaderView extends React.Component<Props> {
       <AppBar position="fixed">
         <Toolbar disableGutters={true}>
           <div className="header-padding" />
-          <img src="/assets/logo.svg" className="header-logo" />
+          <img src="/assets/logo.svg" className="header-logo" alt="logo" />
           <div className="header-spacer">&nbsp;</div>
           {this.props.right}
           <div className="header-padding" />

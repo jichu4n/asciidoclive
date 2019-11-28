@@ -164,7 +164,7 @@ class EditView extends React.Component<{}, State> {
           ]}
         />
         <MenuIconView tooltipLabel="Settings" icon={<SettingsIcon />} />
-        <HelpMenuView/>
+        <HelpMenuView />
       </>
     );
   }
@@ -307,7 +307,7 @@ class EditView extends React.Component<{}, State> {
   private docManager: IPromiseBasedObservable<DocManager> = fromPromise(
     this.doInitialLoad()
   );
-  private scratchText: string;
+  private scratchText: string = '';
 }
 
 export default EditView;
