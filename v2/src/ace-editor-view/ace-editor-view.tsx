@@ -1,9 +1,9 @@
 import {Ace, edit} from 'ace-builds';
 import 'ace-builds/webpack-resolver';
-import * as $ from 'jquery';
+import debug from 'debug';
+import $ from 'jquery';
 import {autorun} from 'mobx';
 import * as React from 'react';
-import debug from 'debug';
 
 export interface Size {
   height: number;
@@ -41,7 +41,7 @@ class AceEditorView extends React.Component<Props> {
   }
 
   componentWillUnmount() {
-    this.disposeOnSizeChangeFn();
+    this.disposeOnSizeChangeFn!();
   }
 
   render() {
@@ -52,7 +52,7 @@ class AceEditorView extends React.Component<Props> {
     if (this.props.body !== prevProps.body && this.props.body !== this.body) {
       this.log('Body updated by parent');
       this.body = this.props.body;
-      this.aceEditor.setValue(this.body);
+      this.aceEditor!.setValue(this.body);
     }
   }
 
@@ -82,7 +82,7 @@ class AceEditorView extends React.Component<Props> {
   private update() {
     this.debounceState.lastUpdateTs = new Date().getTime();
     this.debounceState.nextUpdate = null;
-    let newBody = this.aceEditorSession.getValue();
+    let newBody = this.aceEditorSession!.getValue();
     if (this.body !== newBody) {
       this.body = newBody;
       this.props.onBodyChange(newBody);
@@ -91,10 +91,10 @@ class AceEditorView extends React.Component<Props> {
 
   private log = debug('AceEditorView');
   private containerEl: React.RefObject<HTMLDivElement> = React.createRef();
-  private aceEditor: Ace.Editor;
-  private aceEditorSession: Ace.EditSession;
-  private body: string;
-  private disposeOnSizeChangeFn: () => any;
+  private aceEditor?: Ace.Editor;
+  private aceEditorSession?: Ace.EditSession;
+  private body?: string;
+  private disposeOnSizeChangeFn?: () => any;
   private debounceState = {
     debounceMs: 100,
     lastUpdateTs: 0,

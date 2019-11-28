@@ -7,7 +7,7 @@ self.importScripts(
 self.importScripts(
   '/assets/debug/debug.js',
   '/assets/asciidoctor/asciidoctor.min.js',
-  '/assets/highlightjs/highlight.pack.min.js'
+  '/assets/highlight.js/highlight.pack.min.js'
 );
 // js-beautify.
 self.global = {};

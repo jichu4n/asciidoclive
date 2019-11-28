@@ -115,7 +115,7 @@ class TitleView extends React.Component<Props, State> {
       return;
     }
     let newTitle = this.pendingTitle.trim();
-    if (!newTitle || newTitle == title) {
+    if (!newTitle || newTitle === title) {
       this.pendingTitle = null;
       return;
     }

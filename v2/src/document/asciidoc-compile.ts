@@ -12,15 +12,15 @@ let asciidoctor: {
 export default function asciidocCompile(
   request: CompileRequest
 ): CompileResult {
-  const isInline = request.outputType == OutputType.PREVIEW;
+  const isInline = request.outputType === OutputType.PREVIEW;
   const shouldBeautify =
-    request.outputType == OutputType.DISPLAY_HTML ||
-    request.outputType == OutputType.EXPORT_HTML;
+    request.outputType === OutputType.DISPLAY_HTML ||
+    request.outputType === OutputType.EXPORT_HTML;
   const beautifyOptions = {
     indent_size: 2,
     wrap_line_length: 80,
   };
-  const shouldHighlight = request.outputType == OutputType.DISPLAY_HTML;
+  const shouldHighlight = request.outputType === OutputType.DISPLAY_HTML;
 
   if (asciidoctor === undefined) {
     asciidoctor = Asciidoctor();

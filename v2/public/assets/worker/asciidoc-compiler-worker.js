@@ -66,14 +66,14 @@ System.register("asciidoc-compile", ["compiler"], function (exports_2, context_2
     var compiler_1, asciidoctor;
     var __moduleName = context_2 && context_2.id;
     function asciidocCompile(request) {
-        var isInline = request.outputType == compiler_1.OutputType.PREVIEW;
-        var shouldBeautify = request.outputType == compiler_1.OutputType.DISPLAY_HTML ||
-            request.outputType == compiler_1.OutputType.EXPORT_HTML;
+        var isInline = request.outputType === compiler_1.OutputType.PREVIEW;
+        var shouldBeautify = request.outputType === compiler_1.OutputType.DISPLAY_HTML ||
+            request.outputType === compiler_1.OutputType.EXPORT_HTML;
         var beautifyOptions = {
             indent_size: 2,
             wrap_line_length: 80
         };
-        var shouldHighlight = request.outputType == compiler_1.OutputType.DISPLAY_HTML;
+        var shouldHighlight = request.outputType === compiler_1.OutputType.DISPLAY_HTML;
         if (asciidoctor === undefined) {
             asciidoctor = Asciidoctor();
         }

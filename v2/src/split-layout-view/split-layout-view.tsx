@@ -1,4 +1,4 @@
-import * as $ from 'jquery';
+import $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui';
 import * as _ from 'lodash';
 import * as React from 'react';

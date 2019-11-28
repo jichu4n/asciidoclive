@@ -2,10 +2,10 @@ import {action, autorun, observable} from 'mobx';
 import {AsyncAsciidocCompiler} from './asciidoc-compiler';
 import {OutputType} from './compiler';
 import {CompilerClient} from './compiler-client';
-import {Doc, DocData} from './doc';
+import {createDoc, DocData} from './doc';
 
 export default class DocManager {
-  public doc = observable.object(new Doc());
+  public doc = observable.object(createDoc());
 
   constructor() {
     autorun(() => {
@@ -30,7 +30,7 @@ export default class DocManager {
 
   @action
   setIsDirty(isDirty: boolean) {
-    if (this.doc.isDirty != isDirty) {
+    if (this.doc.isDirty !== isDirty) {
       this.doc.isDirty = isDirty;
     }
     return this;

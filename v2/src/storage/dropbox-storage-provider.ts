@@ -95,7 +95,7 @@ class DropboxStorageProvider extends StorageProvider {
 
   async auth(): Promise<boolean> {
     this.log('Starting OAuth flow');
-    let oauthUrl = this.dbx.getAuthenticationUrl(
+    let oauthUrl = this.dbx!.getAuthenticationUrl(
       environment.getAbsoluteUrl('dropbox-auth-success'),
       '',
       'token'
@@ -162,7 +162,7 @@ class DropboxStorageProvider extends StorageProvider {
     let title: string;
     try {
       this.log(`Getting download info for file ${id}`);
-      let result = await this.dbx.filesGetTemporaryLink({
+      let result = await this.dbx!.filesGetTemporaryLink({
         path: id,
       });
       this.log(`Successfully got download info for file ${id}:`, result);
@@ -192,7 +192,7 @@ class DropboxStorageProvider extends StorageProvider {
         files: [{url: contentUrl, filename: getTitleOrDefault(docData)}],
         success: async () => {
           this.log('Dropbox saver success');
-          let {entries} = await this.dbx.filesListFolderContinue({cursor});
+          let {entries} = await this.dbx!.filesListFolderContinue({cursor});
           this.log('Entries since initial cursor: ', entries);
           let entry = _.find(entries, {
             content_hash: contentHash,
@@ -228,7 +228,7 @@ class DropboxStorageProvider extends StorageProvider {
     });
     contentHash = computeContentHash(docData.body);
     this.log(`Content hash: ${contentHash}`);
-    ({cursor} = await this.dbx.filesListFolderGetLatestCursor({
+    ({cursor} = await this.dbx!.filesListFolderGetLatestCursor({
       path: '',
       recursive: true,
     }));
@@ -244,7 +244,7 @@ class DropboxStorageProvider extends StorageProvider {
     let {id} = docData.source.storageSpec as DropboxStorageSpec;
     this.log(`Saving to Dropbox file ${id}`);
     try {
-      let result = await this.dbx.filesUpload({
+      let result = await this.dbx!.filesUpload({
         path: id,
         contents: docData.body,
         mode: {'.tag': 'overwrite'},
@@ -265,13 +265,13 @@ class DropboxStorageProvider extends StorageProvider {
     let {id} = docData.source.storageSpec as DropboxStorageSpec;
     this.log(`Renaming file ${id} to '${newTitle}'`);
     try {
-      let currentPath = (await this.dbx.filesGetMetadata({path: id}))
+      let currentPath = (await this.dbx!.filesGetMetadata({path: id}))
         .path_display!;
       this.log(`Current path of file ${id} is '${currentPath}'`);
       let newPath =
         currentPath.substr(0, currentPath.lastIndexOf('/') + 1) + newTitle;
       this.log(`Renaming file ${id} to '${newPath}'`);
-      let result = await this.dbx.filesMoveV2({
+      let result = await this.dbx!.filesMoveV2({
         from_path: id,
         to_path: newPath,
         autorename: true,
@@ -318,14 +318,11 @@ class DropboxStorageProvider extends StorageProvider {
   }
 
   private checkDropIns() {
-    if (
-      window['Dropbox'] &&
-      window['Dropbox']['choose'] &&
-      window['Dropbox']['save']
-    ) {
+    let dropboxDropIns: any = window['Dropbox' as any];
+    if (dropboxDropIns && dropboxDropIns['choose'] && dropboxDropIns['save']) {
       this.isReady = true;
       this.log('Drop-ins ready');
-      DropboxDropIns = window['Dropbox'];
+      DropboxDropIns = dropboxDropIns;
     } else {
       setTimeout(this.checkDropIns.bind(this), 100);
     }
@@ -395,7 +392,7 @@ class DropboxStorageProvider extends StorageProvider {
   }
 
   private readonly log = debug('DropboxStorageProvider');
-  private dbx: DropboxSdk;
+  private dbx?: DropboxSdk = undefined;
 }
 
 export default DropboxStorageProvider;

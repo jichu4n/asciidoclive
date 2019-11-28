@@ -25,16 +25,21 @@ export function getTitleOrDefault(docData: DocData) {
 }
 
 /** Document being edited in an editor session. */
-export class Doc implements DocData {
-  title = '';
-  body = '';
-  source: DocSource;
-  compiledBody: string = '';
-  isDirty: boolean = false;
+export interface Doc extends DocData {
+  compiledBody: string;
+  isDirty: boolean;
+}
 
-  constructor(docData?: DocData) {
-    if (docData) {
-      Object.assign(this, docData);
-    }
+export function createDoc(docData?: DocData): Doc {
+  let doc: Doc = {
+    title: '',
+    body: '',
+    source: undefined,
+    compiledBody: '',
+    isDirty: false,
+  };
+  if (docData) {
+    Object.assign(doc, docData);
   }
+  return doc;
 }
