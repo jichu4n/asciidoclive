@@ -35,13 +35,13 @@ AsciiDoc Mini Cheat Sheet
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To help you get started, here're some snippets from the
-http://powerman.name/doc/asciidoc[AsciiDoc Cheet Sheet^]. Feel free to poke
+https://asciidoctor.org/docs/asciidoc-syntax-quick-reference[AsciiDoc Cheet Sheet^]. Feel free to poke
 around :)
 
 Text Styles
 ^^^^^^^^^^^
-* normal, _italic_, *bold*, +mono+.
-* ``double quoted'', `single quoted'.
+* normal, _italic_, *bold*, `monospace`.
+* "`double quoted`", '`single quoted`'.
 * normal, ^super^, ~sub~.
 * `passthru *bold*`
 
