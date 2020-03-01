@@ -22,6 +22,7 @@ import storageManager from '../storage/storage-manager';
 import StorageProvider from '../storage/storage-provider';
 import StorageType from '../storage/storage-type';
 import MenuIconView, {MenuItemSpec} from './menu-icon-view';
+import storageActionController from '../storage-action/storage-action-controller';
 import StorageActionView, {Stage} from './storage-action-view';
 import TitleView from '../title-view/title-view';
 import HelpMenuView from './help-menu-view';
@@ -193,7 +194,13 @@ class EditView extends React.Component<{}, State> {
     (await this.docManager).setDocData(docData).setIsDirty(false);
   }
 
-  private onOpenClick(storageType: StorageType) {
+  private async onOpenClick(storageType: StorageType) {
+    const docData = await storageActionController.open(storageType);
+    if (docData) {
+      this.log('Loading new doc data', docData);
+      (await this.docManager).setDocData(docData).setIsDirty(false);
+    }
+    /*
     let storageProvider = storageManager.getStorageProvider(storageType);
     if (storageProvider.isAuthenticated) {
       this.doOpen(storageProvider);
@@ -210,6 +217,7 @@ class EditView extends React.Component<{}, State> {
         },
       });
     }
+    */
   }
 
   private async doOpen(storageProvider: StorageProvider) {
