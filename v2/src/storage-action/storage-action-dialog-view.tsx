@@ -1,17 +1,17 @@
 import Dialog from '@material-ui/core/Dialog';
 import React from 'react';
 
-interface Props {
-  content: React.ReactNode;
-}
+interface Props {}
 
 interface State {
   isOpen: boolean;
+  content: React.ReactNode;
 }
 
 class StorageActionDialogView extends React.Component<Props, State> {
   state = {
     isOpen: true,
+    content: null,
   };
 
   render() {
@@ -22,17 +22,24 @@ class StorageActionDialogView extends React.Component<Props, State> {
         disableBackdropClick={true}
         disableEscapeKeyDown={true}
       >
-        {this.props.content}
+        {this.state.content}
       </Dialog>
     );
   }
 
+  setContent(content: React.ReactNode) {
+    this.setState({content});
+    return this;
+  }
+
   show() {
     this.setState({isOpen: true});
+    return this;
   }
 
   hide() {
     this.setState({isOpen: false});
+    return this;
   }
 }
 

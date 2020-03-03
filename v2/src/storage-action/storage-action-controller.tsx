@@ -83,7 +83,7 @@ class StorageActionController {
   private showAuthPrompt(storageProvider: StorageProvider): Promise<boolean> {
     this.log(`Showing auth prompt for ${storageProvider.displayName}`);
     return new Promise<boolean>((resolve) => {
-      this.renderDialogView(
+      this.showDialogView(
         <AuthPromptView
           storageProviderDisplayName={storageProvider.displayName}
           onCancel={() => resolve(false)}
@@ -95,7 +95,7 @@ class StorageActionController {
 
   private showAuthPending(storageProvider: StorageProvider): Promise<void> {
     this.log(`Showing auth pending for ${storageProvider.displayName}`);
-    return this.renderDialogView(
+    return this.showDialogView(
       <AuthPendingView
         storageProviderDisplayName={storageProvider.displayName}
       />
@@ -108,7 +108,7 @@ class StorageActionController {
   ): Promise<boolean> {
     this.log(`Showing action prompt for ${storageProvider.displayName}`);
     return new Promise<boolean>((resolve) => {
-      this.renderDialogView(
+      this.showDialogView(
         <ActionPromptView
           storageProviderDisplayName={storageProvider.displayName}
           actionLabel={actionLabel}
@@ -141,7 +141,7 @@ class StorageActionController {
     actionTitle: string
   ): Promise<void> {
     this.log(`Action pending for ${storageProvider.displayName}`);
-    return this.renderDialogView(
+    return this.showDialogView(
       <ActionPendingView
         storageProviderDisplayName={storageProvider.displayName}
         actionTitle={actionTitle}
@@ -156,7 +156,7 @@ class StorageActionController {
   ): Promise<void> {
     this.log(`Showing action error for ${storageProvider.displayName}`);
     return new Promise<void>((resolve) => {
-      this.renderDialogView(
+      this.showDialogView(
         <ActionErrorView
           storageProviderDisplayName={storageProvider.displayName}
           actionTitle={actionTitle}
@@ -167,19 +167,23 @@ class StorageActionController {
     });
   }
 
-  private async renderDialogView(content: React.ReactNode): Promise<void> {
+  private async showDialogView(content: React.ReactNode): Promise<void> {
+    await this.renderDialogView();
+    this.dialogView!.setContent(content).show();
+  }
+
+  private renderDialogView(): Promise<void> {
     if (this.renderDialogViewPromise) {
-      await this.renderDialogViewPromise;
+      return this.renderDialogViewPromise;
     }
     this.renderDialogViewPromise = new Promise<void>((resolve) => {
       ReactDOM.render(
-        <StorageActionDialogView ref={this.dialogViewRef} content={content} />,
+        <StorageActionDialogView ref={this.dialogViewRef} />,
         this.getOrCreateDialogViewElement(),
         resolve
       );
     });
-    await this.renderDialogViewPromise;
-    this.dialogView!.show();
+    return this.renderDialogViewPromise;
   }
 
   private getOrCreateDialogViewElement() {
