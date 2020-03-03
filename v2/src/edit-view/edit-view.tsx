@@ -200,79 +200,13 @@ class EditView extends React.Component<{}, State> {
       this.log('Loading new doc data', docData);
       (await this.docManager).setDocData(docData).setIsDirty(false);
     }
-    /*
-    let storageProvider = storageManager.getStorageProvider(storageType);
-    if (storageProvider.isAuthenticated) {
-      this.doOpen(storageProvider);
-    } else {
-      this.setState({
-        storageActionViewState: {
-          isOpen: true,
-          storageType: storageType,
-          action: () => this.doOpen(storageProvider),
-          actionLabel: `select a document from ${storageProvider.displayName}`,
-          actionTitle: `Open from ${storageProvider.displayName}`,
-          initialStage: 'auth-prompt',
-          actionResultPromise: null,
-        },
-      });
-    }
-    */
   }
 
-  private async doOpen(storageProvider: StorageProvider) {
-    let resultPromise = storageProvider.open();
-    this.setState({
-      storageActionViewState: {
-        isOpen: true,
-        storageType: storageProvider.storageType,
-        action: null,
-        actionLabel: null,
-        actionTitle: `Open from ${storageProvider.displayName}`,
-        initialStage: 'action-pending',
-        actionResultPromise: resultPromise,
-      },
-    });
-    let docData = await resultPromise;
-    if (docData) {
-      this.log('Loading new doc data', docData);
-      (await this.docManager).setDocData(docData).setIsDirty(false);
-    }
-  }
-
-  private onSaveAsClick(storageType: StorageType) {
-    let storageProvider = storageManager.getStorageProvider(storageType);
-    if (storageProvider.isAuthenticated) {
-      this.doSaveAs(storageProvider);
-    } else {
-      this.setState({
-        storageActionViewState: {
-          isOpen: true,
-          storageType: storageType,
-          action: () => this.doSaveAs(storageProvider),
-          actionLabel: `save this document to ${storageProvider.displayName}`,
-          actionTitle: `Save to ${storageProvider.displayName}`,
-          initialStage: 'auth-prompt',
-          actionResultPromise: null,
-        },
-      });
-    }
-  }
-
-  private async doSaveAs(storageProvider: StorageProvider) {
-    let resultPromise = storageProvider.saveAs((await this.docManager).doc);
-    this.setState({
-      storageActionViewState: {
-        isOpen: true,
-        storageType: storageProvider.storageType,
-        action: null,
-        actionLabel: null,
-        actionTitle: `Save to ${storageProvider.displayName}`,
-        initialStage: 'action-pending',
-        actionResultPromise: resultPromise,
-      },
-    });
-    let docData = await resultPromise;
+  private async onSaveAsClick(storageType: StorageType) {
+    const docData = await storageActionController.saveAs(
+      storageType,
+      (await this.docManager).doc
+    );
     if (docData) {
       this.log('Switching to saved doc data', docData);
       (await this.docManager).setDocData(docData).setIsDirty(false);

@@ -37,14 +37,30 @@ class StorageActionController {
     return openPromise;
   }
 
-  /*
   async saveAs(
     storageType: StorageType,
     docData: DocData
   ): Promise<DocData | null> {
-    return null;
+    const storageProvider = storageManager.getStorageProvider(storageType);
+    if (
+      !(await this.doAuth(
+        storageProvider,
+        `save this document to ${storageProvider.displayName}`
+      ))
+    ) {
+      return null;
+    }
+
+    const saveAsPromise = storageProvider.saveAs(docData);
+    this.showActionProgress(
+      storageProvider,
+      `Save to ${storageProvider.displayName}`,
+      saveAsPromise
+    );
+    return saveAsPromise;
   }
 
+  /*
   async save(docData: DocData): Promise<boolean> {
     return null;
   }

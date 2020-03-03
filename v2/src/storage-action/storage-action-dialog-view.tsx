@@ -22,7 +22,7 @@ class StorageActionDialogView extends React.Component<Props, State> {
         disableBackdropClick={true}
         disableEscapeKeyDown={true}
       >
-        {this.state.content}
+        {this.state.content || <div />}
       </Dialog>
     );
   }
