@@ -1,5 +1,5 @@
 AsciiDocLIVE is a free online
-http://www.methods.co.nz/asciidoc/[AsciiDoc pass:[<i class="fa fa-external-link"></i>]^]
+https://asciidoc.org/[AsciiDoc pass:[<i class="fa fa-external-link"></i>]^]
 editor.
 
 pass:[<br>]
