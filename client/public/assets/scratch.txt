@@ -1,7 +1,7 @@
 Welcome to AsciiDocLIVE!
 ------------------------
 
-AsciiDocLIVE is a *free online http://www.methods.co.nz/asciidoc/[AsciiDoc^]
+AsciiDocLIVE is a *free online https://asciidoc.org/[AsciiDoc^]
 editor*.
 
 * Just type AsciiDoc source text into the *left* pane,
@@ -16,7 +16,7 @@ blogs, and more. AsciiDoc files can be translated to many formats including
 HTML, PDF, EPUB, and man page.
 
 To learn more, visit the AsciiDoc home page at
-http://www.methods.co.nz/asciidoc/[^].
+https://asciidoc.org/[^].
 
 About AsciiDocLIVE
 ~~~~~~~~~~~~~~~~~~
