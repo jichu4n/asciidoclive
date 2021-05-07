@@ -2,7 +2,7 @@ AsciiDocLIVE
 ------------
 
 AsciiDocLIVE (https://asciidoclive.com[asciidoclive.com]) is a full-featured
-online http://www.methods.co.nz/asciidoc/[AsciiDoc] editor.
+online https://asciidoc.org/[AsciiDoc] editor.
 
 Main features:
 
